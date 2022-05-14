@@ -69,6 +69,19 @@ void InterruptManager::setTimeInterruptHandler(void (*handler)()) {
     setDescriptor(timeInterruptDescriptor, IRQ0_8259A_MASTER);
 }
 
+bool InterruptManager::getInterruptStatus() {
+    return asm_interrupt_status() ? true: false;
+}
+
+void InterruptManager::setInterruptStatus(bool status) {
+    if(status) {
+        asm_enable_interrupt();
+    }
+    else {
+        asm_disable_interrupt();
+    }
+}
+
 InterruptDescriptor::InterruptDescriptor(uint16 selector, uint32 offset, uint8 p, uint8 dpl, uint8 d) {
     handlerSegmentSelector = selector;
     handlerOffset = offset;
@@ -86,5 +99,5 @@ void emptyHandler() {
 }
 
 void timeInterruptHandler() {
-
+    print("hello, world");
 }

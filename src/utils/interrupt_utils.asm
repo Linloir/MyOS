@@ -2,6 +2,7 @@ extern emptyHandler
 extern timeInterruptHandler
 
 global asm_load_idtr
+global asm_interrupt_status
 global asm_enable_interrupt
 global asm_disable_interrupt
 global asm_empty_handler
@@ -24,6 +25,13 @@ asm_load_idtr:
 
     popad
     pop ebp
+    ret
+
+asm_interrupt_status:
+    xor eax, eax
+    pushfd
+    pop eax
+    and eax, 0x200
     ret
 
 asm_enable_interrupt:

@@ -20,6 +20,8 @@ public:
     void enableTimeInterrupt();
     void disableTimeInterrupt();
     void setTimeInterruptHandler(void (*handler)());
+    bool getInterruptStatus();
+    void setInterruptStatus(bool status);
 };
 
 class InterruptDescriptor{

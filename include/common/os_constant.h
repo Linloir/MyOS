@@ -6,4 +6,6 @@
 #define STACK_SELECTOR 0x18
 #define VEDIO_SELECTOR 0x20
 
+#define IDT_START_ADDR 0x8880
+
 #endif
