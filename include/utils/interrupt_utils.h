@@ -3,11 +3,11 @@
 
 #include "os_type.h"
 
-void asm_load_idtr(uint32* tableAddr, uint16 tableLimit);
-int asm_interrupt_status();
-void asm_enable_interrupt();
-void asm_disable_interrupt();
-void asm_empty_interrupt_handler();
-void asm_time_interrupt_handler();
+extern "C" void asm_load_idtr(uint32* tableAddr, uint16 tableLimit);
+extern "C" int asm_interrupt_status();
+extern "C" void asm_enable_interrupt();
+extern "C" void asm_disable_interrupt();
+extern "C" void asm_empty_interrupt_handler();
+extern "C" void asm_time_interrupt_handler();
 
 #endif

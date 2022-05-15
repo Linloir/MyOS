@@ -1,3 +1,5 @@
+[bits 32]
+
 global asm_ports_write
 global asm_ports_read
 

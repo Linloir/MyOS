@@ -1,3 +1,5 @@
+[bits 32]
+
 extern emptyHandler
 extern timeInterruptHandler
 
@@ -5,7 +7,7 @@ global asm_load_idtr
 global asm_interrupt_status
 global asm_enable_interrupt
 global asm_disable_interrupt
-global asm_empty_handler
+global asm_empty_interrupt_handler
 global asm_time_interrupt_handler
 
 asm_load_idtr:
@@ -15,10 +17,10 @@ asm_load_idtr:
 
     mov ebx, idtr
 
-    mov eax, [ebp + 2 * 8]
+    mov eax, [ebp + 2 * 4]
     mov [ebx + 2], eax
 
-    mov ax, [ebp + 3 * 8]
+    mov ax, [ebp + 3 * 4]
     mov [ebx], ax
 
     lidt [idtr]
@@ -42,30 +44,29 @@ asm_disable_interrupt:
     cli
     ret
 
-asm_empty_handler:
+asm_empty_interrupt_handler:
     pushad
-
-    mov al, 0x20
-    out 0x20, al
-    out 0xA0, al
 
     call emptyHandler
 
     popad
+
+    mov al, 0x20
+    out 0x20, al
+    out 0xA0, al
     iret
 
 asm_time_interrupt_handler:
     pushad
 
-    mov al, 0x20
-    out 0x20, al
-    out 0xA0, al
-
     call timeInterruptHandler
 
     popad
+
+    mov al, 0x20
+    out 0x20, al
+    out 0xA0, al
     iret
 
-idtr:
-    dw 0
-    dd 0
+idtr dw 0
+     dd 0

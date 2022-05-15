@@ -23,14 +23,14 @@ InterruptManager::InterruptManager(uint32* tableAddr) {
     descriptorTable = tableAddr;
 
     //Load default descriptor
-    // InterruptDescriptor defaultDescriptor = InterruptDescriptor(CODE_SELECTOR, (uint32)InterruptHandlers::emptyHandler, 1, 0, 1);
-    InterruptDescriptor defaultDescriptor = InterruptDescriptor(CODE_SELECTOR, (uint32)asm_empty_interrupt_handler, 1, 0, 1);
+    // InterruptDescriptor defaultDescriptor = InterruptDescriptor(CODE_SELECTOR, (uint32*)InterruptHandlers::emptyHandler, 1, 0, 1);
+    InterruptDescriptor defaultDescriptor = InterruptDescriptor(CODE_SELECTOR, asm_empty_interrupt_handler, 1, 0, 1);
     for(int i = 0; i < IDT_MAX_SIZE; i++) {
         setDescriptor(defaultDescriptor, i);
     }
 
     //Load idtr
-    asm_load_idtr(descriptorTable, IDT_MAX_SIZE * 8);
+    asm_load_idtr(descriptorTable, IDT_MAX_SIZE * 8 - 1);
 }
 
 void InterruptManager::setDescriptor(InterruptDescriptor newDescriptor, uint32 id) {
@@ -46,7 +46,7 @@ void InterruptManager::setDescriptor(InterruptDescriptor newDescriptor, uint32 i
     hi |= newDescriptor.handlerOffset & 0xFFFF0000;
     hi |= ((uint32)newDescriptor.pBit << 15) & 0x8000;
     hi |= ((uint32)newDescriptor.dplBits << 13) & 0x6000;
-    hi |= ((uint32)(newDescriptor.dBit | 0x6) << 8) & 0x1F00;
+    hi |= ((((uint32)newDescriptor.dBit << 3) | 0x6) << 8) & 0x0F00;
     //Set descriptor
     descriptorTable[id * 2] = lo;
     descriptorTable[id * 2 + 1] = hi;
@@ -65,7 +65,7 @@ void InterruptManager::disableTimeInterrupt() {
 }
 
 void InterruptManager::setTimeInterruptHandler(void (*handler)()) {
-    InterruptDescriptor timeInterruptDescriptor = InterruptDescriptor(CODE_SELECTOR, (uint32)handler, 1, 0, 1);
+    InterruptDescriptor timeInterruptDescriptor = InterruptDescriptor(CODE_SELECTOR, handler, 1, 0, 1);
     setDescriptor(timeInterruptDescriptor, IRQ0_8259A_MASTER);
 }
 
@@ -82,15 +82,15 @@ void InterruptManager::setInterruptStatus(bool status) {
     }
 }
 
-InterruptDescriptor::InterruptDescriptor(uint16 selector, uint32 offset, uint8 p, uint8 dpl, uint8 d) {
+InterruptDescriptor::InterruptDescriptor(uint16 selector, void (*offset)(), uint8 p, uint8 dpl, uint8 d) {
     handlerSegmentSelector = selector;
-    handlerOffset = offset;
+    handlerOffset = (uint32)offset;
     pBit = p;
     dplBits = dpl;
     dBit = d;
 }
 
-void emptyHandler() {
+extern "C" void emptyHandler() {
     asm_disable_interrupt();
     print("Unhandled interrupt");
     while(true){
@@ -98,6 +98,12 @@ void emptyHandler() {
     }
 }
 
-void timeInterruptHandler() {
-    print("hello, world");
+char time = '0';
+
+extern "C" void timeInterruptHandler() {
+    print(time);
+    time += 1;
+    if(time > '9') {
+        time = '0';
+    }
 }

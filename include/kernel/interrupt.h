@@ -6,6 +6,16 @@
 #include "display_utils.h"
 #include "os_constant.h"
 
+class InterruptDescriptor{
+public:
+    uint16 handlerSegmentSelector;
+    uint32 handlerOffset;
+    uint8 pBit;             // 1 for exist
+    uint8 dplBits;          // Priviledge level; 0 - 3 descending
+    uint8 dBit;             // 1 for 32-bit code
+    InterruptDescriptor(uint16 selector, void (*offset)(), uint8 p, uint8 dpl, uint8 d);
+};
+
 class InterruptManager{
 private:
     uint32* descriptorTable;
@@ -22,16 +32,6 @@ public:
     void setTimeInterruptHandler(void (*handler)());
     bool getInterruptStatus();
     void setInterruptStatus(bool status);
-};
-
-class InterruptDescriptor{
-public:
-    uint16 handlerSegmentSelector;
-    uint32 handlerOffset;
-    uint8 pBit;             // 1 for exist
-    uint8 dplBits;          // Priviledge level; 0 - 3 descending
-    uint8 dBit;             // 1 for 32-bit code
-    InterruptDescriptor(uint16 selector, uint32 offset, uint8 p, uint8 dpl, uint8 d);
 };
 
 extern "C"

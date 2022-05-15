@@ -20,7 +20,7 @@ void disableCursor() {
 }
 
 uint16 getCursor() {
-    uint16 position;
+    uint16 position = 0;
     asm_ports_write(0x03D4, 0x0E);
     position |= (uint16)(asm_ports_read(0x03D5)) << 8;
     asm_ports_write(0x03D4, 0x0F);
@@ -45,7 +45,7 @@ void setCursor(uint8 row, uint8 col) {
 
 void setCursor(uint16 position) {
     uint16 maxPosition = VGA_WIDTH * VGA_HEIGHT;
-    while(position >= position) {
+    while(position >= maxPosition) {
         position -= VGA_WIDTH;
     }
     asm_ports_write(0x03D4, 0x0E);
@@ -81,7 +81,7 @@ void print(uint8 row, uint8 col, char ch, uint8 color) {
     print(ch, color);
 }
 
-void print(char* const string) {
+void print(const char* string) {
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
     uint8 color = 0x0F;
@@ -98,7 +98,7 @@ void print(char* const string) {
     }
 }
 
-void print(char* const string, uint8 color) {
+void print(const char* string, uint8 color) {
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
     for(int i = 0; string[i]; i++) {
@@ -114,12 +114,12 @@ void print(char* const string, uint8 color) {
     }
 }
 
-void print(char* const string, uint8 row, uint8 col) {
+void print(const char* string, uint8 row, uint8 col) {
     setCursor(row, col);
     print(string);
 }
 
-void print(char* const string, uint8 row, uint8 col, uint8 color) {
+void print(const char* string, uint8 row, uint8 col, uint8 color) {
     setCursor(row, col);
     print(string, color);
 }
@@ -140,4 +140,13 @@ void screenScrollUp() {
     for(int i = 0; i < VGA_WIDTH; i++) {
         screen[position] = data;
     }
+}
+
+void clearScreen() {
+    uint16 position = 0;
+    for(; position < VGA_HEIGHT * VGA_WIDTH; position++) {
+        setCursor(position);
+        print(' ');
+    }
+    setCursor(0);
 }

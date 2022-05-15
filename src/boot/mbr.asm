@@ -7,7 +7,7 @@ org 0x7c00
 ; Init registers
 xor ax, ax
 mov ds, ax
-mov cs, ax
+; mov cs, ax
 mov ss, ax
 mov es, ax
 mov fs, ax
@@ -43,8 +43,6 @@ jump_bootloader:
 ; Dead loop
 jmp $
 
-
-
 ; Functions & Variables--------------
 
 ; Read hard disk using LBA28 method
@@ -62,25 +60,35 @@ asm_read_sector:
     .prepare:
         mov ax, [bp + 2 * 2]    ; load sector [15:0] from stack
 
-        out 0x1F3, al           ; sector [7:0]
+        mov dx, 0x1F3
+        out dx, al           ; sector [7:0]
 
-        out 0x1F4, ah           ; sector [15:8]
+        inc dx
+        mov al, ah
+        out dx, al           ; sector [15:8]
         
         mov ax, [bp + 3 * 2]    ; load sector [27:16] from stack
 
-        out 0x1F5, al           ; sector [23:16]
+        inc dx
+        out dx, al           ; sector [23:16]
 
         and ax, 0x0FFF          ; set [31:28] to zero
         or  ax, 0xE000          ; set [31:28] to 0b1110
-        out 0x1F6, ah           ; sector [31:28]
+        inc dx
+        mov al, ah
+        out dx, al           ; sector [31:28]
 
-        out 0x1F2, 0x01         ; read one sector
+        mov dx, 0x1F2
+        mov al, 0x01
+        out dx, al         ; read one sector
 
-        mov al 0x20             ; read command
-        out 0x1F7, al           ; send read command
+        mov al, 0x20             ; read command
+        mov dx, 0x1F7
+        out dx, al           ; send read command
     
     .wait:
-        in  al, 0x1F7            ; read status
+        mov dx, 0x1F7
+        in  al, dx            ; read status
         and al, 0x88            ; ignore bit 0 (err) and bits 1-2, bits 4-6
         cmp al, 0x08            ; judge wheter bit 7 is 0 and bit 3 is 1
         jnz .wait
@@ -90,8 +98,9 @@ asm_read_sector:
         mov cx, 256             ; load loop count
         mov si, 0               ; init offset
         .read_byte:
-            in  ax, 0x1F0       ; read 2 bytes
-            mov [bx + si]       ; write to memory
+            mov dx, 0x1F0
+            in  ax, dx       ; read 2 bytes
+            mov [bx + si], ax       ; write to memory
             add si, 2           ; add 2 to offset
             loop .read_byte
 
@@ -101,4 +110,4 @@ asm_read_sector:
     ret
 
 times 510 - ($ - $$) db 0
-dw 0x55AA
+db 0x55,0xAA

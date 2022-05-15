@@ -18,10 +18,11 @@ void print(char ch);
 void print(char ch, uint8 color);
 void print(uint8 row, uint8 col, char ch);
 void print(uint8 row, uint8 col, char ch, uint8 color);
-void print(char* const string);
-void print(char* const string, uint8 color);
-void print(char* const string, uint8 row, uint8 col);
-void print(char* const string, uint8 row, uint8 col, uint8 color);
+void print(const char* string);
+void print(const char* string, uint8 color);
+void print(const char* string, uint8 row, uint8 col);
+void print(const char* string, uint8 row, uint8 col, uint8 color);
 void screenScrollUp();
+void clearScreen();
 
 #endif
