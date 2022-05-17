@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 21:15:21
+ * LastEditTime : 2022-05-17 21:31:10
  * Description  : 
  */
 #include "interrupt.h"
@@ -10,25 +10,32 @@
 #include "sched.h"
 #include "std_utils.h"
 
+int cheeseBurger = 0;
+
 void firstThread() {
     while(true){
-        printf("hello, world\n");
-        for(int i = 0; i < 200000000; i++){}
     }
 }
 
 void secondThread() {
-    for(int i = 0; i < 50; i++){
-        printf("thread 2\n");
-        for(int i = 0; i < 200000000; i++){}
+    printf("There are %d cheese burgers\n", cheeseBurger);
+    for(int i = 0; i < 200000000; i++){}
+    printf("made 10 cheese burgers\n");
+    printf("now there are %d cheese burgers\n", cheeseBurger);
+    for(int i = 0; i < 200000000; i++){}
+    if(cheeseBurger == 0) {
+        printf("What the ? where are my cheese burgers!");
+    }
+    else {
+        printf("Safe and sound");
     }
 }
 
 void thirdThread() {
-    for(int i = 0; i < 50; i++){
-        printf("thread 3\n");
-        for(int i = 0; i < 200000000; i++){}
-    }
+    for(int i = 0; i < 200000000; i++){}
+    printf("Look what I found! %d burgers!\n", cheeseBurger);
+    for(int i = 0; i < 100000000; i++){}
+    printf("Now there are %d cheese burgers\n", cheeseBurger);
 }
 
 extern "C" void kernel() {
@@ -40,8 +47,8 @@ extern "C" void kernel() {
     InterruptManager::enableTimeInterrupt();
     asm_enable_interrupt();
     Scheduler::executeThread(firstThread, nullptr, 1);
-    Scheduler::executeThread(secondThread, nullptr, 1);
-    Scheduler::executeThread(thirdThread, nullptr, 1);
+    Scheduler::executeThread(secondThread, nullptr, 3);
+    Scheduler::executeThread(thirdThread, nullptr, 3);
     while(true) {
         //Halt
     }
