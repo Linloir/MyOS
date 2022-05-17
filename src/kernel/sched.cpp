@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:48:58
+ * LastEditTime : 2022-05-17 15:50:25
  * Description  : 
  */
 
@@ -23,7 +23,7 @@ PCB* Scheduler::runningThread = 0;
 PCB* allocPCB() {
     for(int i = 0; i < MAX_PROCESS_COUNT; i++) {
         if(!PCBStatus[i]) {
-            PCB* newPCB = (PCB*)&PCBBlock[i];
+            PCB* newPCB = (PCB*)&PCBBlock[i * PCB_MAX_SIZE];
             newPCB->tID = i;
             PCBStatus[i] = true;
             return newPCB;
