@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:34:28
+ * LastEditTime : 2022-05-17 15:48:58
  * Description  : 
  */
 
@@ -18,7 +18,7 @@ PCB* nodeToPCB(ListNode* node) {
 }
 
 List Scheduler::readyTaskList = List();
-PCB* Scheduler::runningThread = nullptr;
+PCB* Scheduler::runningThread = 0;
 
 PCB* allocPCB() {
     for(int i = 0; i < MAX_PROCESS_COUNT; i++) {
@@ -37,8 +37,11 @@ void freePCB(PCB* process) {
 }
 
 void Scheduler::initialize() {
-    runningThread = nullptr;
+    runningThread = 0;
     readyTaskList = List();
+    for(int i = 0; i < MAX_PROCESS_COUNT; i++) {
+        PCBStatus[i] = false;
+    }
 }
 
 void Scheduler::onTimeInterrupt() {
