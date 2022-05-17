@@ -1,5 +1,7 @@
 #include "interrupt.h"
 
+uint32* InterruptManager::descriptorTable = nullptr;
+
 void InterruptManager::set8259A() {
     uint8 ICW1M = 0x11;
     uint8 ICW2M = IRQ0_8259A_MASTER;
