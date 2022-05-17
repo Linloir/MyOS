@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:50:25
+ * LastEditTime : 2022-05-17 15:57:44
  * Description  : 
  */
 
@@ -29,7 +29,7 @@ PCB* allocPCB() {
             return newPCB;
         }
     }
-    return nullptr;
+    return 0;
 }
 
 void freePCB(PCB* process) {
@@ -45,7 +45,7 @@ void Scheduler::initialize() {
 }
 
 void Scheduler::onTimeInterrupt() {
-    if(runningThread == nullptr) {
+    if(runningThread == 0) {
         schedule();
     }
     else {
@@ -64,15 +64,15 @@ void Scheduler::schedule() {
         return;
     }
 
-    PCB* currentThread = nullptr;
-    PCB* nextThread = nullptr;
+    PCB* currentThread = 0;
+    PCB* nextThread = 0;
 
-    if(runningThread != nullptr && runningThread->status == JobStatus::RUNNING) {
+    if(runningThread != 0 && runningThread->status == JobStatus::RUNNING) {
         currentThread = runningThread;
         currentThread->tickRemaining = currentThread->priority * timeQuantum;
         readyTaskList.pushBack(&currentThread->readyTaskListNode);
     }
-    else if(runningThread != nullptr && runningThread->status == JobStatus::DEAD) {
+    else if(runningThread != 0 && runningThread->status == JobStatus::DEAD) {
         currentThread = runningThread;
         freePCB(currentThread);
     }
@@ -90,7 +90,7 @@ void Scheduler::executeThread(void (*function)(), void* parameters, uint32 prior
     asm_disable_interrupt();
 
     PCB* newThread = allocPCB();
-    if(newThread == nullptr) {
+    if(newThread == 0) {
         return;
     }
 
