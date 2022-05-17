@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:06:57
+ * LastEditTime : 2022-05-17 15:34:28
  * Description  : 
  */
 
@@ -34,6 +34,11 @@ PCB* allocPCB() {
 
 void freePCB(PCB* process) {
     PCBStatus[process->tID] = false;
+}
+
+void Scheduler::initialize() {
+    runningThread = nullptr;
+    readyTaskList = List();
 }
 
 void Scheduler::onTimeInterrupt() {

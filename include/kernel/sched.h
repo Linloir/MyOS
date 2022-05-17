@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-17 15:06:55
+ * LastEditTime : 2022-05-17 15:34:14
  * Description  : 
  */
 #ifndef _SCHED_H_
@@ -40,6 +40,7 @@ private:
     static List readyTaskList;
     static PCB* runningThread;
 public:
+    static void initialize();
     static void onTimeInterrupt();
     static void schedule();
     static void executeThread(void (*function)(), void* parameters, uint32 priority);
