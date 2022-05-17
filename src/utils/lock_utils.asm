@@ -1,6 +1,6 @@
 [bits 32]
 
-global asm_atom_exchange
+global asm_atomic_exchange
 
 asm_atomic_exchange:
     ; push &keyA

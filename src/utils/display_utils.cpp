@@ -47,6 +47,7 @@ void setCursor(uint16 position) {
     uint16 maxPosition = VGA_WIDTH * VGA_HEIGHT;
     while(position >= maxPosition) {
         position -= VGA_WIDTH;
+        screenScrollUp();
     }
     asm_ports_write(0x03D4, 0x0E);
     asm_ports_write(0x03D5, (uint8)((position >> 8) & 0xFF));
@@ -56,20 +57,30 @@ void setCursor(uint16 position) {
 
 int print(char ch) {
     uint16 position = getCursor();
+    if(ch == '\n') {
+        setCursor(position / VGA_WIDTH + 1, 0);
+        return 1;
+    }
     uint8 color = 0x0F;
     uint16 data = 0;
     data |= (uint16)(ch & 0xFF);
     data |= ((uint16)color << 8) & 0xFF00;
     screen[position] = data;
+    setCursor(position + 1);
     return 1;
 }
 
 int print(char ch, uint8 color) {
     uint16 position = getCursor();
+    if(ch == '\n') {
+        setCursor(position / VGA_WIDTH + 1, 0);
+        return 1;
+    }
     uint16 data = 0;
     data |= (uint16)(ch & 0xFF);
     data |= ((uint16)color << 8) & 0xFF00;
     screen[position] = data;
+    setCursor(position + 1);
     return 1;
 }
 
@@ -88,7 +99,18 @@ int print(const char* string) {
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
     uint8 color = 0x0F;
+    bool endWithEnter = false;
     for(int i = 0; string[i]; i++) {
+        endWithEnter = false;
+        if(string[i] == '\n') {
+            endWithEnter = true;
+            position = position / VGA_WIDTH * VGA_WIDTH + VGA_WIDTH;
+            if(position >= maxPosition) {
+                screenScrollUp();
+                position -= VGA_WIDTH;
+            }
+            continue;
+        }
         uint16 data = 0;
         data |= (uint16)(string[i] & 0xFF);
         data |= ((uint16)color << 8) & 0xFF00;
@@ -100,6 +122,12 @@ int print(const char* string) {
         }
         count++;
     }
+    if(!endWithEnter) {
+        setCursor(position + 1);
+    }
+    else {
+        setCursor(position);
+    }
     return count;
 }
 
@@ -107,7 +135,18 @@ int print(const char* string, uint8 color) {
     int count = 0;
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
+    bool endWithEnter = false;
     for(int i = 0; string[i]; i++) {
+        endWithEnter = false;
+        if(string[i] == '\n') {
+            endWithEnter = true;
+            position = position / VGA_WIDTH * VGA_WIDTH + VGA_WIDTH;
+            if(position >= maxPosition) {
+                screenScrollUp();
+                position -= VGA_WIDTH;
+            }
+            continue;
+        }
         uint16 data = 0;
         data |= (uint16)(string[i] & 0xFF);
         data |= ((uint16)color << 8) & 0xFF00;
@@ -118,6 +157,12 @@ int print(const char* string, uint8 color) {
             position -= VGA_WIDTH;
         }
         count++;
+    }
+    if(!endWithEnter) {
+        setCursor(position + 1);
+    }
+    else {
+        setCursor(position);
     }
     return count;
 }
@@ -147,6 +192,7 @@ void screenScrollUp() {
     data |= ((uint16)fillColor << 8) & 0xFF00;
     for(int i = 0; i < VGA_WIDTH; i++) {
         screen[position] = data;
+        position += 1;
     }
 }
 

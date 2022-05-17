@@ -1,12 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 20:29:39
- * LastEditTime : 2022-05-17 20:49:19
+ * LastEditTime : 2022-05-17 17:03:55
  * Description  : Temporary standard library
  */
 
 #ifndef _STD_UTILS_H_
 #define _STD_UTILS_H_
+
+#include "os_type.h"
 
 #define INT_SIZE_OF(n) ((sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1))
 #define va_start(ap, v) (ap = (va_list)&v + INT_SIZE_OF(v))

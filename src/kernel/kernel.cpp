@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 20:50:14
+ * LastEditTime : 2022-05-17 21:15:21
  * Description  : 
  */
 #include "interrupt.h"
@@ -11,25 +11,23 @@
 #include "std_utils.h"
 
 void firstThread() {
-    setCursor(0);
-    print("hello, world");
     while(true){
-        printf("hello, world");
-        for(int i = 0; i < 10000000; i++){}
+        printf("hello, world\n");
+        for(int i = 0; i < 200000000; i++){}
     }
 }
 
 void secondThread() {
     for(int i = 0; i < 50; i++){
-        printf("thread 2");
-        for(int i = 0; i < 10000000; i++){}
+        printf("thread 2\n");
+        for(int i = 0; i < 200000000; i++){}
     }
 }
 
 void thirdThread() {
     for(int i = 0; i < 50; i++){
-        printf("thread 3");
-        for(int i = 0; i < 10000000; i++){}
+        printf("thread 3\n");
+        for(int i = 0; i < 200000000; i++){}
     }
 }
 
