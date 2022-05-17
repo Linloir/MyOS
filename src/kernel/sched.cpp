@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:57:44
+ * LastEditTime : 2022-05-17 16:01:55
  * Description  : 
  */
 
@@ -16,9 +16,6 @@ bool PCBStatus[MAX_PROCESS_COUNT];
 PCB* nodeToPCB(ListNode* node) {
     return (PCB*)((uint32)node - (uint32)&((PCB*)0)->readyTaskListNode);
 }
-
-List Scheduler::readyTaskList = List();
-PCB* Scheduler::runningThread = 0;
 
 PCB* allocPCB() {
     for(int i = 0; i < MAX_PROCESS_COUNT; i++) {
@@ -46,6 +43,8 @@ void Scheduler::initialize() {
 
 void Scheduler::onTimeInterrupt() {
     if(runningThread == 0) {
+        setCursor(0);
+        print('c');
         schedule();
     }
     else {
