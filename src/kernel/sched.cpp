@@ -1,11 +1,17 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:00:05
+ * LastEditTime : 2022-05-17 15:06:57
  * Description  : 
  */
 
 #include "sched.h"
+#include "sched_utils.h"
+#include "interrupt.h"
+
+/* Simple malloc here, will be delete afterwards */
+char PCBBlock[PCB_MAX_SIZE * MAX_PROCESS_COUNT];
+bool PCBStatus[MAX_PROCESS_COUNT];
 
 PCB* nodeToPCB(ListNode* node) {
     return (PCB*)((uint32)node - (uint32)&((PCB*)0)->readyTaskListNode);

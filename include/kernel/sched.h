@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-17 14:41:19
+ * LastEditTime : 2022-05-17 15:06:55
  * Description  : 
  */
 #ifndef _SCHED_H_
@@ -10,8 +10,6 @@
 #include "os_constant.h"
 #include "os_type.h"
 #include "structure.h"
-#include "sched_utils.h"
-#include "interrupt.h"
 
 typedef enum JobStatus {
     NEW,
@@ -32,10 +30,6 @@ struct PCB {
 };
 
 PCB* nodeToPCB(ListNode* node);
-
-/* Simple malloc here, will be delete afterwards */
-char PCBBlock[PCB_MAX_SIZE * MAX_PROCESS_COUNT];
-bool PCBStatus[MAX_PROCESS_COUNT];
 
 PCB* allocPCB();
 void freePCB(PCB* process);
