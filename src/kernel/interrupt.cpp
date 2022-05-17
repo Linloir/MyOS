@@ -1,4 +1,5 @@
 #include "interrupt.h"
+#include "sched.h"
 
 uint32* InterruptManager::descriptorTable = nullptr;
 
@@ -103,9 +104,12 @@ extern "C" void emptyHandler() {
 char time = '0';
 
 extern "C" void timeInterruptHandler() {
+    setCursor(VGA_WIDTH - 1);
     print(time);
     time += 1;
     if(time > '9') {
         time = '0';
     }
+
+    Scheduler::onTimeInterrupt();
 }
