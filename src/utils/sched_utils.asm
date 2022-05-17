@@ -1,4 +1,4 @@
-[bits32]
+[bits 32]
 
 global asm_switch_thread
 
