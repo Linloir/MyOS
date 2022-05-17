@@ -59,13 +59,13 @@ asm_empty_interrupt_handler:
 asm_time_interrupt_handler:
     pushad
 
-    call timeInterruptHandler
-
-    popad
-
     mov al, 0x20
     out 0x20, al
     out 0xA0, al
+
+    call timeInterruptHandler
+
+    popad
     iret
 
 idtr dw 0

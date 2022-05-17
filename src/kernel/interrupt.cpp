@@ -104,8 +104,10 @@ extern "C" void emptyHandler() {
 char time = '0';
 
 extern "C" void timeInterruptHandler() {
+    uint32 cursor = getCursor();
     setCursor(VGA_WIDTH - 1);
     print(time);
+    setCursor(cursor);
     time += 1;
     if(time > '9') {
         time = '0';

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-17 15:34:14
+ * LastEditTime : 2022-05-17 16:32:10
  * Description  : 
  */
 #ifndef _SCHED_H_
@@ -36,7 +36,7 @@ void freePCB(PCB* process);
 
 class Scheduler {
 private:
-    static const int timeQuantum = 100;
+    static const int timeQuantum = 30;
     static List readyTaskList;
     static PCB* runningThread;
 public:

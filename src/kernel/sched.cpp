@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 16:01:55
+ * LastEditTime : 2022-05-17 16:33:13
  * Description  : 
  */
 
@@ -33,6 +33,9 @@ void freePCB(PCB* process) {
     PCBStatus[process->tID] = false;
 }
 
+PCB* Scheduler::runningThread;
+List Scheduler::readyTaskList;
+
 void Scheduler::initialize() {
     runningThread = 0;
     readyTaskList = List();
@@ -43,8 +46,6 @@ void Scheduler::initialize() {
 
 void Scheduler::onTimeInterrupt() {
     if(runningThread == 0) {
-        setCursor(0);
-        print('c');
         schedule();
     }
     else {

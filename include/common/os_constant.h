@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-05-17 13:08:25
+ * LastEditTime : 2022-05-17 16:24:21
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
@@ -15,6 +15,6 @@
 #define IDT_START_ADDR 0x8880
 
 #define PCB_MAX_SIZE 4096
-#define MAX_PROCESS_COUNT 128
+#define MAX_PROCESS_COUNT 16
 
 #endif

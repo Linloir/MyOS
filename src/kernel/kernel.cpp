@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 15:35:17
+ * LastEditTime : 2022-05-17 16:48:27
  * Description  : 
  */
 #include "interrupt.h"
@@ -13,7 +13,21 @@
 void firstThread() {
     setCursor(0);
     print("hello, world");
-    while(true){}
+    while(true){
+        print("hello, world", 0, 0);
+    }
+}
+
+void secondThread() {
+    for(int i = 0; i < 200000; i++){
+        print("thread 2              ", 0, 0);
+    }
+}
+
+void thirdThread() {
+    for(int i = 0; i < 200000; i++){
+        print("thread 3              ", 0, 0);
+    }
 }
 
 extern "C" void kernel() {
@@ -24,7 +38,9 @@ extern "C" void kernel() {
     InterruptManager::setTimeInterruptHandler(asm_time_interrupt_handler);
     InterruptManager::enableTimeInterrupt();
     asm_enable_interrupt();
-    Scheduler::executeThread(firstThread, nullptr, 3);
+    Scheduler::executeThread(firstThread, nullptr, 1);
+    Scheduler::executeThread(secondThread, nullptr, 1);
+    Scheduler::executeThread(thirdThread, nullptr, 1);
     while(true) {
         //Halt
     }
