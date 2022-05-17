@@ -54,34 +54,37 @@ void setCursor(uint16 position) {
     asm_ports_write(0x03D5, (uint8)(position & 0xFF));
 }
 
-void print(char ch) {
+int print(char ch) {
     uint16 position = getCursor();
     uint8 color = 0x0F;
     uint16 data = 0;
     data |= (uint16)(ch & 0xFF);
     data |= ((uint16)color << 8) & 0xFF00;
     screen[position] = data;
+    return 1;
 }
 
-void print(char ch, uint8 color) {
+int print(char ch, uint8 color) {
     uint16 position = getCursor();
     uint16 data = 0;
     data |= (uint16)(ch & 0xFF);
     data |= ((uint16)color << 8) & 0xFF00;
     screen[position] = data;
+    return 1;
 }
 
-void print(uint8 row, uint8 col, char ch) {
+int print(char ch, uint8 row, uint8 col) {
     setCursor(row, col);
-    print(ch);
+    return print(ch);
 }
 
-void print(uint8 row, uint8 col, char ch, uint8 color) {
+int print(char ch, uint8 row, uint8 col, uint8 color) {
     setCursor(row, col);
-    print(ch, color);
+    return print(ch, color);
 }
 
-void print(const char* string) {
+int print(const char* string) {
+    int count = 0;
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
     uint8 color = 0x0F;
@@ -95,10 +98,13 @@ void print(const char* string) {
             screenScrollUp();
             position -= VGA_WIDTH;
         }
+        count++;
     }
+    return count;
 }
 
-void print(const char* string, uint8 color) {
+int print(const char* string, uint8 color) {
+    int count = 0;
     uint16 position = getCursor();
     uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
     for(int i = 0; string[i]; i++) {
@@ -111,17 +117,19 @@ void print(const char* string, uint8 color) {
             screenScrollUp();
             position -= VGA_WIDTH;
         }
+        count++;
     }
+    return count;
 }
 
-void print(const char* string, uint8 row, uint8 col) {
+int print(const char* string, uint8 row, uint8 col) {
     setCursor(row, col);
-    print(string);
+    return print(string);
 }
 
-void print(const char* string, uint8 row, uint8 col, uint8 color) {
+int print(const char* string, uint8 row, uint8 col, uint8 color) {
     setCursor(row, col);
-    print(string, color);
+    return print(string, color);
 }
 
 void screenScrollUp() {

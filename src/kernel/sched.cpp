@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 16:33:13
+ * LastEditTime : 2022-05-17 20:28:10
  * Description  : 
  */
 
@@ -14,7 +14,7 @@ char PCBBlock[PCB_MAX_SIZE * MAX_PROCESS_COUNT];
 bool PCBStatus[MAX_PROCESS_COUNT];
 
 PCB* nodeToPCB(ListNode* node) {
-    return (PCB*)((uint32)node - (uint32)&((PCB*)0)->readyTaskListNode);
+    return (PCB*)((uint32)node - (uint32)&((PCB*)0)->scheduleListNode);
 }
 
 PCB* allocPCB() {
@@ -56,6 +56,10 @@ void Scheduler::onTimeInterrupt() {
     }
 }
 
+PCB* Scheduler::currentRunningThread() {
+    return runningThread;
+}
+
 void Scheduler::schedule() {
     bool interruptStatus = InterruptManager::getInterruptStatus();
     asm_disable_interrupt();
@@ -64,20 +68,25 @@ void Scheduler::schedule() {
         return;
     }
 
-    PCB* currentThread = 0;
-    PCB* nextThread = 0;
-
-    if(runningThread != 0 && runningThread->status == JobStatus::RUNNING) {
-        currentThread = runningThread;
-        currentThread->tickRemaining = currentThread->priority * timeQuantum;
-        readyTaskList.pushBack(&currentThread->readyTaskListNode);
+    PCB* currentThread = runningThread;
+    PCB* nextThread = nodeToPCB(readyTaskList.popFront());
+    
+    if(runningThread != 0) {
+        if(runningThread->status == JobStatus::RUNNING) {
+            if(runningThread->tickRemaining > 0) {
+                readyTaskList.pushFront(&currentThread->scheduleListNode);
+            }
+            else {
+                currentThread->tickRemaining = currentThread->priority * timeQuantum;
+                currentThread->status = JobStatus::READY;
+                readyTaskList.pushBack(&currentThread->scheduleListNode);
+            }
+        }
+        else if(runningThread->status == JobStatus::DEAD) {
+            freePCB(currentThread);
+        }
     }
-    else if(runningThread != 0 && runningThread->status == JobStatus::DEAD) {
-        currentThread = runningThread;
-        freePCB(currentThread);
-    }
 
-    nextThread = nodeToPCB(readyTaskList.popFront());
     nextThread->status = JobStatus::RUNNING;
     runningThread = nextThread;
     asm_switch_thread((uint32)currentThread, (uint32)nextThread);
@@ -99,7 +108,7 @@ void Scheduler::executeThread(void (*function)(), void* parameters, uint32 prior
     newThread->priority = priority;
     newThread->status = JobStatus::READY;
     newThread->tickRemaining = newThread->priority * timeQuantum;
-    newThread->readyTaskListNode = ListNode();
+    newThread->scheduleListNode = ListNode();
 
     newThread->stack -= 7;
     newThread->stack[0] = 0;
@@ -110,9 +119,22 @@ void Scheduler::executeThread(void (*function)(), void* parameters, uint32 prior
     newThread->stack[5] = (uint32)threadExit;
     newThread->stack[6] = (uint32)parameters;
 
-    readyTaskList.pushBack(&newThread->readyTaskListNode);
+    readyTaskList.pushBack(&newThread->scheduleListNode);
 
     InterruptManager::setInterruptStatus(interruptStatus);
+}
+
+void Scheduler::awakeThreadMESA(PCB* thread) {
+    readyTaskList.pushBack(&thread->scheduleListNode);
+}
+
+void Scheduler::awakeThreadHasen(PCB* thread) {
+    readyTaskList.pushFront(&thread->scheduleListNode);
+}
+
+void Scheduler::awakeThreadHoare(PCB* thread) {
+    readyTaskList.pushFront(&thread->scheduleListNode);
+    schedule();
 }
 
 void Scheduler::threadExit() {

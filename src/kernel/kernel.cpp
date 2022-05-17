@@ -1,32 +1,35 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 16:48:27
+ * LastEditTime : 2022-05-17 20:50:14
  * Description  : 
  */
 #include "interrupt.h"
 #include "os_constant.h"
 #include "kernel.h"
 #include "sched.h"
-#include "display_utils.h"
+#include "std_utils.h"
 
 void firstThread() {
     setCursor(0);
     print("hello, world");
     while(true){
-        print("hello, world", 0, 0);
+        printf("hello, world");
+        for(int i = 0; i < 10000000; i++){}
     }
 }
 
 void secondThread() {
-    for(int i = 0; i < 200000; i++){
-        print("thread 2              ", 0, 0);
+    for(int i = 0; i < 50; i++){
+        printf("thread 2");
+        for(int i = 0; i < 10000000; i++){}
     }
 }
 
 void thirdThread() {
-    for(int i = 0; i < 200000; i++){
-        print("thread 3              ", 0, 0);
+    for(int i = 0; i < 50; i++){
+        printf("thread 3");
+        for(int i = 0; i < 10000000; i++){}
     }
 }
 

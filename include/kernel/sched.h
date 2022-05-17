@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-17 16:32:10
+ * LastEditTime : 2022-05-17 20:15:59
  * Description  : 
  */
 #ifndef _SCHED_H_
@@ -15,6 +15,7 @@ typedef enum JobStatus {
     NEW,
     READY,
     RUNNING,
+    BLOCKED,
     DEAD
 } JobStatus;
 
@@ -26,7 +27,7 @@ struct PCB {
     JobStatus   status;
     uint32      tickRemaining;
     /* Used for pcb lists, will delete after malloc is implemented */
-    ListNode    readyTaskListNode;
+    ListNode    scheduleListNode;
 };
 
 PCB* nodeToPCB(ListNode* node);
@@ -42,8 +43,12 @@ private:
 public:
     static void initialize();
     static void onTimeInterrupt();
+    static PCB* currentRunningThread();
     static void schedule();
     static void executeThread(void (*function)(), void* parameters, uint32 priority);
+    static void awakeThreadMESA(PCB* thread);
+    static void awakeThreadHasen(PCB* thread);
+    static void awakeThreadHoare(PCB* thread);
     static void threadExit();
 };
 
