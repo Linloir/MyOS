@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 14:52:53
+ * LastEditTime : 2022-05-17 15:00:05
  * Description  : 
  */
 
@@ -99,4 +99,9 @@ void Scheduler::executeThread(void (*function)(), void* parameters, uint32 prior
     readyTaskList.pushBack(&newThread->readyTaskListNode);
 
     InterruptManager::setInterruptStatus(interruptStatus);
+}
+
+void Scheduler::threadExit() {
+    runningThread->status = JobStatus::DEAD;
+    schedule();
 }
