@@ -19,7 +19,7 @@ void InterruptManager::set8259A() {
     asm_ports_write(0xA1, ICW4S);
 }
 
-InterruptManager::InterruptManager(uint32* tableAddr) {
+void InterruptManager::initialize(uint32* tableAddr) {
     descriptorTable = tableAddr;
 
     //Load default descriptor
