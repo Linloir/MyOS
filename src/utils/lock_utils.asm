@@ -15,6 +15,8 @@ asm_atomic_exchange:
     mov eax, [ebx]
     mov ebx, [ebp + 3 * 4]
     xchg eax, [ebx]
+    mov ebx, [ebp + 2 * 4]
+    mov [ebx], eax
 
     pop eax
     pop ebx

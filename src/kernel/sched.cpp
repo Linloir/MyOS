@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 20:28:10
+ * LastEditTime : 2022-05-17 22:11:41
  * Description  : 
  */
 
@@ -94,7 +94,7 @@ void Scheduler::schedule() {
     InterruptManager::setInterruptStatus(interruptStatus);
 }
 
-void Scheduler::executeThread(void (*function)(), void* parameters, uint32 priority) {
+void Scheduler::executeThread(void (*function)(void** args), void** parameters, uint32 priority) {
     bool interruptStatus = InterruptManager::getInterruptStatus();
     asm_disable_interrupt();
 

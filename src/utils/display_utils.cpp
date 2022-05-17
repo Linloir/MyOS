@@ -96,73 +96,18 @@ int print(char ch, uint8 row, uint8 col, uint8 color) {
 
 int print(const char* string) {
     int count = 0;
-    uint16 position = getCursor();
-    uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
-    uint8 color = 0x0F;
-    bool endWithEnter = false;
     for(int i = 0; string[i]; i++) {
-        endWithEnter = false;
-        if(string[i] == '\n') {
-            endWithEnter = true;
-            position = position / VGA_WIDTH * VGA_WIDTH + VGA_WIDTH;
-            if(position >= maxPosition) {
-                screenScrollUp();
-                position -= VGA_WIDTH;
-            }
-            continue;
-        }
-        uint16 data = 0;
-        data |= (uint16)(string[i] & 0xFF);
-        data |= ((uint16)color << 8) & 0xFF00;
-        screen[position] = data;
-        position += 1;
-        if(position >= maxPosition) {
-            screenScrollUp();
-            position -= VGA_WIDTH;
-        }
+        print(string[i]);
         count++;
-    }
-    if(!endWithEnter) {
-        setCursor(position + 1);
-    }
-    else {
-        setCursor(position);
     }
     return count;
 }
 
 int print(const char* string, uint8 color) {
     int count = 0;
-    uint16 position = getCursor();
-    uint16 maxPosition = VGA_HEIGHT * VGA_WIDTH;
-    bool endWithEnter = false;
     for(int i = 0; string[i]; i++) {
-        endWithEnter = false;
-        if(string[i] == '\n') {
-            endWithEnter = true;
-            position = position / VGA_WIDTH * VGA_WIDTH + VGA_WIDTH;
-            if(position >= maxPosition) {
-                screenScrollUp();
-                position -= VGA_WIDTH;
-            }
-            continue;
-        }
-        uint16 data = 0;
-        data |= (uint16)(string[i] & 0xFF);
-        data |= ((uint16)color << 8) & 0xFF00;
-        screen[position] = data;
-        position += 1;
-        if(position >= maxPosition) {
-            screenScrollUp();
-            position -= VGA_WIDTH;
-        }
+        print(string[i], color);
         count++;
-    }
-    if(!endWithEnter) {
-        setCursor(position + 1);
-    }
-    else {
-        setCursor(position);
     }
     return count;
 }

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-17 21:28:17
+ * LastEditTime : 2022-05-17 22:11:59
  * Description  : 
  */
 #ifndef _SCHED_H_
@@ -37,7 +37,7 @@ void freePCB(PCB* process);
 
 class Scheduler {
 private:
-    static const int timeQuantum = 1;
+    static const int timeQuantum = 10;
     static List readyTaskList;
     static PCB* runningThread;
 public:
@@ -45,7 +45,7 @@ public:
     static void onTimeInterrupt();
     static PCB* currentRunningThread();
     static void schedule();
-    static void executeThread(void (*function)(), void* parameters, uint32 priority);
+    static void executeThread(void (*function)(void** args), void** parameters, uint32 priority);
     static void awakeThreadMESA(PCB* thread);
     static void awakeThreadHasen(PCB* thread);
     static void awakeThreadHoare(PCB* thread);

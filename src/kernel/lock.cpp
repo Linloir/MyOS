@@ -1,20 +1,21 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-05-17 20:21:33
+ * LastEditTime : 2022-05-17 22:10:41
  * Description  : 
  */
 
 #include "lock.h"
 #include "lock_utils.h"
 #include "sched.h"
+#include "std_utils.h"
 
 SpinLock::SpinLock() {
     status = 0;
 }
 
 void SpinLock::lock() {
-    while(tryLock()){}
+    while(!tryLock()){}
 }
 
 bool SpinLock::tryLock() {
@@ -39,12 +40,13 @@ void SemLock::acquire() {
         PCB* currentThread = Scheduler::currentRunningThread();
         currentThread->status = JobStatus::BLOCKED;
         awaitList.pushBack(&currentThread->scheduleListNode);
+        permitLock.release();
         Scheduler::schedule();
     }
     else {
         availablePermits--;
+        permitLock.release();
     }
-    permitLock.release();
 }
 
 void SemLock::release() {
@@ -53,6 +55,10 @@ void SemLock::release() {
     if(!awaitList.isEmpty()) {
         PCB* thread = nodeToPCB(awaitList.popFront());
         thread->status = JobStatus::READY;
+        permitLock.release();
         Scheduler::awakeThreadHoare(thread);
+    }
+    else {
+        permitLock.release();
     }
 }
