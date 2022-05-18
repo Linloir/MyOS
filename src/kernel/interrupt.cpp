@@ -1,5 +1,5 @@
 #include "interrupt.h"
-#include "sched.h"
+#include "proc.h"
 
 uint32* InterruptManager::descriptorTable = nullptr;
 

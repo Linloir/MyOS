@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-17 22:11:41
+ * LastEditTime : 2022-05-18 14:51:58
  * Description  : 
  */
 
-#include "sched.h"
-#include "sched_utils.h"
+#include "proc.h"
+#include "proc_utils.h"
 #include "interrupt.h"
 
 /* Simple malloc here, will be delete afterwards */

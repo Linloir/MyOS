@@ -1,13 +1,13 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-05-18 13:53:23
+ * LastEditTime : 2022-05-18 14:51:45
  * Description  : 
  */
 
 #include "lock.h"
 #include "lock_utils.h"
-#include "sched.h"
+#include "proc.h"
 #include "std_utils.h"
 
 SpinLock::SpinLock() {

@@ -1,11 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 11:47:19
- * LastEditTime : 2022-05-18 10:53:09
+ * LastEditTime : 2022-05-18 14:25:05
  * Description  : 
  */
-#ifndef _SCHED_H_
-#define _SCHED_H_
+#ifndef _PROC_H_
+#define _PROC_H_
 
 #include "os_constant.h"
 #include "os_type.h"
