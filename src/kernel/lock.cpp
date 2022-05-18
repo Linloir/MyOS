@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-05-17 22:10:41
+ * LastEditTime : 2022-05-18 13:53:23
  * Description  : 
  */
 
@@ -42,11 +42,10 @@ void SemLock::acquire() {
         awaitList.pushBack(&currentThread->scheduleListNode);
         permitLock.release();
         Scheduler::schedule();
+        permitLock.lock();
     }
-    else {
-        availablePermits--;
-        permitLock.release();
-    }
+    availablePermits--;
+    permitLock.release();
 }
 
 void SemLock::release() {
