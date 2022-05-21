@@ -34,7 +34,7 @@ void _non_lock_mom(void** args) {
     printf("mom: There are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     (*cheeseBurger) += 10;
-    printf("mmom: ade 10 cheese burgers\n");
+    printf("mom: made 10 cheese burgers\n");
     printf("mom: now there are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     if((*cheeseBurger) == 0) {
@@ -63,7 +63,7 @@ void _spin_lock_mom(void** args) {
     printf("mom: There are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     (*cheeseBurger) += 10;
-    printf("mmom: ade 10 cheese burgers\n");
+    printf("mom: made 10 cheese burgers\n");
     printf("mom: now there are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     if((*cheeseBurger) == 0) {
@@ -96,7 +96,7 @@ void _sem_lock_mom(void** args) {
     printf("mom: There are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     (*cheeseBurger) += 10;
-    printf("mmom: ade 10 cheese burgers\n");
+    printf("mom: made 10 cheese burgers\n");
     printf("mom: now there are %d cheese burgers\n", (*cheeseBurger));
     for(int i = 0; i < 200000000; i++){}
     if((*cheeseBurger) == 0) {
