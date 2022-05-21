@@ -19,6 +19,22 @@ void _non_lock_phil_problem() {
     while(true){}
 }
 
+void _naive_lock_phil_problem() {
+    SemLock locks[5] = {SemLock(1), SemLock(1), SemLock(1), SemLock(1), SemLock(1)};
+    int id[5] = {0, 1, 2, 3, 4};
+    void* args0[2] = {&id[0], locks};
+    void* args1[2] = {&id[1], locks};
+    void* args2[2] = {&id[2], locks};
+    void* args3[2] = {&id[3], locks};
+    void* args4[2] = {&id[4], locks};
+    Scheduler::executeThread(_naive_lock_philosopher, args0, 10);
+    Scheduler::executeThread(_naive_lock_philosopher, args1, 10);
+    Scheduler::executeThread(_naive_lock_philosopher, args2, 10);
+    Scheduler::executeThread(_naive_lock_philosopher, args3, 10);
+    Scheduler::executeThread(_naive_lock_philosopher, args4, 10);
+    while(true){}
+}
+
 void _dead_lock_phil_problem() {
     SemLock locks[5] = {SemLock(1), SemLock(1), SemLock(1), SemLock(1), SemLock(1)};
     int id[5] = {0, 1, 2, 3, 4};
@@ -86,6 +102,27 @@ void _non_lock_philosopher(void** args) {
             printf("%d: Thinking\n", id);
             for(int i = 0; i < 200000000; i++){}
         }
+    }
+}
+
+void _naive_lock_philosopher(void** args) {
+    int id = *(int*)args[0];
+    SemLock* locks = (SemLock*)args[1];
+    
+    int left = id;
+    int right = id == 0 ? 4 : id - 1;
+
+    while(true) {
+        locks[left].acquire();
+        printf("%d: Picked Left\n", id);
+        locks[right].acquire();
+        printf("%d: Picked Right\n", id);
+        printf("%d: Eating\n", id);
+        for(int i = 0; i < 200000000; i++){}
+        printf("%d: Thinking\n", id);
+        locks[left].release();
+        locks[right].release();
+        for(int i = 0; i < 200000000; i++){}
     }
 }
 
