@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-05-18 14:51:45
+ * LastEditTime : 2022-05-22 16:18:08
  * Description  : 
  */
 
@@ -20,7 +20,8 @@ void SpinLock::lock() {
 
 bool SpinLock::tryLock() {
     uint32 newStatus = 1;
-    asm_atomic_exchange(&newStatus, &status);
+    // asm_atomic_exchange(&newStatus, &status);
+    newStatus = asm_atomic_test(&status);
     return newStatus == 0;
 }
 

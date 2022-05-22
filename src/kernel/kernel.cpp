@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-21 18:13:10
+ * LastEditTime : 2022-05-22 16:21:47
  * Description  : 
  */
 #include "interrupt.h"
@@ -23,9 +23,10 @@ void firstThread(void**) {
     // _sem_lock_cheeseBurger_problem();
 
     // _non_lock_cp_problem();
-    cp_problem();
+    // cp_problem();
 
     // _non_lock_phil_problem();
+    // _naive_lock_phil_problem();
     // _dead_lock_phil_problem();
     // _tri_lock_phil_problem();
     // _bi_lock_phil_problem();

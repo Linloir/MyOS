@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 19:33:09
- * LastEditTime : 2022-05-21 17:12:35
+ * LastEditTime : 2022-05-22 16:17:25
  * Description  : Lock utils
  */
 
@@ -12,5 +12,6 @@
 #include "os_type.h"
 
 extern "C" void asm_atomic_exchange(uint32* keyA, uint32* keyB);
+extern "C" uint32 asm_atomic_test(uint32* key);
 
 #endif

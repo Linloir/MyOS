@@ -11,11 +11,11 @@ void _non_lock_phil_problem() {
     void* args2[2] = {&id[2], states};
     void* args3[2] = {&id[3], states};
     void* args4[2] = {&id[4], states};
-    Scheduler::executeThread(_non_lock_philosopher, args0, 10);
-    Scheduler::executeThread(_non_lock_philosopher, args1, 10);
-    Scheduler::executeThread(_non_lock_philosopher, args2, 10);
-    Scheduler::executeThread(_non_lock_philosopher, args3, 10);
-    Scheduler::executeThread(_non_lock_philosopher, args4, 10);
+    Scheduler::executeThread(_non_lock_philosopher, args0, 1);
+    Scheduler::executeThread(_non_lock_philosopher, args1, 1);
+    Scheduler::executeThread(_non_lock_philosopher, args2, 1);
+    Scheduler::executeThread(_non_lock_philosopher, args3, 1);
+    Scheduler::executeThread(_non_lock_philosopher, args4, 1);
     while(true){}
 }
 
