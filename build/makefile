@@ -3,7 +3,8 @@ CPP_COMPILER := g++
 CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreestanding -fno-pic
 LINKER := ld
 
-INCLUDE_PATH := $(addprefix -I,$(wildcard ../include/*/))
+# INCLUDE_PATH := $(addprefix -I,$(wildcard ../include/*/))
+INCLUDE_PATH := $(addprefix -I, $(dir $(shell find '$(SRC_PATH)' -name '*.h')))
 SRC_PATH := ../src
 RUN_PATH := ../run
 
