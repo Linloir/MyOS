@@ -4,14 +4,18 @@ CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreesta
 LINKER := ld
 
 # INCLUDE_PATH := $(addprefix -I,$(wildcard ../include/*/))
-INCLUDE_PATH := $(addprefix -I, $(dir $(shell find '$(SRC_PATH)' -name '*.h')))
 SRC_PATH := ../src
 RUN_PATH := ../run
+INCLUDE_PATH := $(addprefix -I, $(dir $(shell find '$(SRC_PATH)' -name '*.h' -o -name '*.inc')))
 
 CPP_SRC := $(shell find '$(SRC_PATH)' -name '*.cpp' -not -path '$(SRC_PATH)/boot/*')
 ASM_SRC := $(shell find '$(SRC_PATH)' -name '*.asm' -not -path '$(SRC_PATH)/boot/*')
 CPP_OBJ := $(patsubst %.cpp,%.o,$(notdir $(CPP_SRC)))
 ASM_OBJ := $(patsubst %.asm,%.o,$(notdir $(ASM_SRC)))
+
+.PHONY:
+test:
+	@echo $(CPP_OBJ)
 
 .PHONY:
 build: mbr.bin bootloader.bin kernel.bin debug.o
