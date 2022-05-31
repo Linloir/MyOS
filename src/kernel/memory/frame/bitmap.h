@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:48:19
- * LastEditTime : 2022-05-31 13:48:41
+ * LastEditTime : 2022-05-31 17:11:07
  * Description  : Bit Map
  */
 
@@ -17,9 +17,9 @@
 
 class BitMap {
     private:
-        uint8* map;
-        int size;
-        int freeSize;
+        uint8* map = NULL;
+        int size = 0;
+        int freeSize = 0;
         /**
          * Find the first available block in the map
          * 
@@ -36,27 +36,37 @@ class BitMap {
          */
         int availableResources();
         /**
+         * Fetch the amount of resources unavailable
+         * 
+         * @return the amount of resources unavailable
+         */
+        int unavailableResources();
+        /**
+         * Get the total resources of the map
+         * 
+         * @return the size of resources
+         */
+        int totalResources();
+        /**
          * Set the status of specified index
          * 
          * @param index the specified resource
          * @param status the status to be set
-         * @return the status after setting
          */
-        bool set(int index, bool status);
+        void set(int index, bool status);
         /**
          * Allocate one resource from the bit map
          * 
          * @param size the amount of pages to be allocated
-         * @return the index of the allocated resource
+         * @return the index of the allocated resource, -1 if failed
          */
         int alloc();
         /**
          * Free the specific resource
          * 
          * @param index the index of the resource to be freed
-         * @return the actual amount of resources freed
          */
-        int free(int index);
+        void free(int index);
 };
 
 #endif

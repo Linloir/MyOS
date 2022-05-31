@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-05-31 15:00:44
+ * LastEditTime : 2022-05-31 17:45:25
  * Description  : Page management
  */
 
@@ -12,7 +12,7 @@
 
 #define PAGE_SIZE 4096
 
-typedef enum PagePermissonFlag {
+typedef enum PagePermissionFlag {
     READ = 0,
     READWRITE = 1,
 } PagePermissionFlag;
@@ -26,6 +26,10 @@ class PageManager {
     private:
         static uint32 ID_MAPPED_TABLE_ADDR;     //The identity-mapped level 1 table for temporary mapping
     public:
+        /**
+         * Initialize and Enable paging
+         */
+        static void initialize(uint32 scndLevTableAddr, uint32 mappedTableAddr);
         /**
          * Set the identity-mapped table address
          * 
@@ -42,7 +46,7 @@ class PageManager {
          * @param permission the permission flag of the page
          * @param priviledge the priviledge flag of the page
          */
-        static void mapPage(uint32 physicalAddr, uint32 virtualAddr, PagePermissonFlag permission, PagePriviledgeFlag priveledge);
+        static void mapPage(uint32 physicalAddr, uint32 virtualAddr, PagePermissionFlag permission, PagePriviledgeFlag priviledge);
         /**
          * Unmap a physical page from a virtual page, actually removes an entry from the page table
          * 
@@ -66,5 +70,7 @@ class PageManager {
          */
         static void freePageMap(uint32 virtualAddr);
 };
+
+extern "C" void asm_set_cr3(uint32 scndLevTableAddr);
 
 #endif
