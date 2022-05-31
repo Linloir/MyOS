@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-05-31 17:45:13
+ * LastEditTime : 2022-05-31 18:01:56
  * Description  : Paging
  */
 
@@ -14,7 +14,7 @@ void PageManager::initialize(uint32 scndLevTableAddr, uint32 mappedTableAddr) {
     asm_set_cr3(scndLevTableAddr);
 }
 
-inline void PageManager::setMappedTableAddr(uint32 addr) {
+void PageManager::setMappedTableAddr(uint32 addr) {
     ID_MAPPED_TABLE_ADDR = addr;
 }
 

@@ -16,6 +16,7 @@ ASM_OBJ := $(patsubst %.asm,%.o,$(notdir $(ASM_SRC)))
 .PHONY:
 test:
 	@echo $(CPP_OBJ)
+	@echo $(INCLUDE_PATH)
 
 .PHONY:
 build: mbr.bin bootloader.bin kernel.bin debug.o

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:48:29
- * LastEditTime : 2022-05-31 17:11:40
+ * LastEditTime : 2022-05-31 18:05:57
  * Description  : Bit Map
  */
 
@@ -44,24 +44,27 @@ BitMap::BitMap(int length) {
     freeSize = length;
 }
 
-inline int BitMap::availableResources() {
+int BitMap::availableResources() {
     return freeSize;
 }
 
-inline int BitMap::unavailableResources() {
+int BitMap::unavailableResources() {
     return size - freeSize;
 }
 
-inline int BitMap::totalResources() {
+int BitMap::totalResources() {
     return size;
 }
 
-inline void BitMap::set(int index, bool status) {
+void BitMap::set(int index, bool status) {
     map[index >> 3] &= (0 << (index & 3));
     map[index >> 3] &= ((status ? 1 : 0) << (index & 3));
+    if(status) {
+        freeSize--;
+    }
 }
 
-inline int BitMap::alloc() {
+int BitMap::alloc() {
     int index = firstAvailable(0);
     if(index == -1) {
         return -1;
@@ -71,7 +74,7 @@ inline int BitMap::alloc() {
     return index;
 }
 
-inline void BitMap::free(int index) {
+void BitMap::free(int index) {
     set(index, false);
     freeSize++;
 }

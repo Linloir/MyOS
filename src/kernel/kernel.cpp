@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-31 16:56:42
+ * LastEditTime : 2022-05-31 18:05:04
  * Description  : 
  */
 #include "interrupt.h"
@@ -13,14 +13,12 @@
 #include "frame.h"
 #include "paging.h"
 
-uint32 PageManager::ID_MAPPED_TABLE_ADDR = NULL;
-
 void firstThread(void** args);
 
 void firstThread(void**) {
     uint32 memorySize = *(uint32*)0x7c00;
     printf("Total memory: %x(", memorySize);
-    printf("%d KiB)", memorySize / 1024);
+    printf("%d KiB)\n", memorySize / 1024);
 
     //Set init page table
     uint32* secondLevelPageTableAddr = (uint32*)0x100000;
@@ -37,7 +35,8 @@ void firstThread(void**) {
     
     //Init page table manager
     FrameManager::initialize(memorySize);
-    printf("Total frames: %d", FrameManager::totalFrames());
+    printf("Total frames: %d\n", FrameManager::totalFrames());
+    printf("Free frames: %d\n", FrameManager::availableFrames());
     
     while(true){
     }

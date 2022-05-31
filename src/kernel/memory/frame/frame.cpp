@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:19
- * LastEditTime : 2022-05-31 16:56:17
+ * LastEditTime : 2022-05-31 18:02:09
  * Description  : 
  */
 
@@ -19,15 +19,15 @@ void FrameManager::initialize(int memorySize) {
     }
 }
 
-inline int FrameManager::availableFrames() {
+int FrameManager::availableFrames() {
     return framePool.availableResources();
 }
 
-inline int FrameManager::occupiedFrames() {
+int FrameManager::occupiedFrames() {
     return framePool.unavailableResources();
 }
 
-inline int FrameManager::totalFrames() {
+int FrameManager::totalFrames() {
     return framePool.totalResources();
 }
 

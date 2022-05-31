@@ -1,3 +1,5 @@
+[bits 32]
+
 global asm_set_cr3
 
 asm_set_cr3:
