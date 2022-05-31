@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-31 15:35:09
+ * LastEditTime : 2022-05-31 15:45:28
  * Description  : 
  */
 #include "interrupt.h"
@@ -30,7 +30,8 @@ void firstThread(void**) {
         physAddr += PAGE_SIZE;
     }
     secondLevelPageTableAddr[0] = (uint32)firstLevelPageTableAddr | pageFlags;
-    printf("%x", memorySize);
+    printf("%x(", memorySize);
+    printf("%d KiB)", memorySize / 1024);
     
     while(true){
     }
