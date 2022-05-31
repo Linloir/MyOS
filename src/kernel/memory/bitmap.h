@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:48:19
- * LastEditTime : 2022-05-31 11:38:21
+ * LastEditTime : 2022-05-31 13:48:41
  * Description  : Bit Map
  */
 
@@ -57,6 +57,6 @@ class BitMap {
          * @return the actual amount of resources freed
          */
         int free(int index);
-}
+};
 
 #endif

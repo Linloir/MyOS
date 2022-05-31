@@ -36,6 +36,12 @@ load_bootloader:
 
         loop .read_sector
 
+fetch_memory_size:
+    mov ax, 0xe801
+    int 15h
+    mov [0x7c00], ax
+    mov [0x7c00+2], bx
+
 ; Jump to boot loader
 jump_bootloader:
     jmp 0x0000:BL_START_ADDR

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-05-31 11:46:40
+ * LastEditTime : 2022-05-31 15:00:44
  * Description  : Page management
  */
 
@@ -10,35 +10,61 @@
 
 #include "os_type.h"
 
+#define PAGE_SIZE 4096
+
+typedef enum PagePermissonFlag {
+    READ = 0,
+    READWRITE = 1,
+} PagePermissionFlag;
+
+typedef enum PagePriviledgeFlag {
+    SUPERVISOR = 0,
+    USER = 1,
+} PagePriviledgeFlag;
+
 class PageManager {
     private:
-        uint32* ID_MAPPED_TABLE_ADDR = NULL;    //The identity-mapped level 1 table for temporary mapping
+        static uint32 ID_MAPPED_TABLE_ADDR;     //The identity-mapped level 1 table for temporary mapping
     public:
-        PageManager();
         /**
-         * Idendity-map a page
+         * Set the identity-mapped table address
          * 
-         * @param physicalAddr the physical address of a page to be mapped
+         * @param addr the address of the identity-mapped level 1 table
          */
-        void identityMapPage(uint32 physicalAddr);
+        static void setMappedTableAddr(uint32 addr);
         /**
-         * Map a virtual page to a physical page
+         * Map a virtual page to a physical page, actually adds an entry into the page table
          * 
          * The function will NOT use ID_MAPPED_TABLE_ADDR if it's not initialized
          *
          * @param physicalAddr the address of physical page that is mapped to
          * @param virtualAddr the address of virtual page that is mapped from
+         * @param permission the permission flag of the page
+         * @param priviledge the priviledge flag of the page
          */
-        void mapPage(uint32 physicalAddr, uint32 virtualAddr);
+        static void mapPage(uint32 physicalAddr, uint32 virtualAddr, PagePermissonFlag permission, PagePriviledgeFlag priveledge);
         /**
-         * Unmap a physical page from a virtual page
+         * Unmap a physical page from a virtual page, actually removes an entry from the page table
          * 
          * The function will NOT use ID_MAPPED_TABLE_ADDR if it's not initialized
          * 
          * @param physicalAddr the address of physical page that is to be unmapped
          * @param virtualAddr the address of virtual page that is to be mapped
          */
-        void unmapPage(uint32 physicalAddr, uint32 virtualAddr);
-}
+        static void unmapPage(uint32 physicalAddr, uint32 virtualAddr);
+        /**
+         * Temporarily map a physical page to a virtual address
+         * 
+         * @param physicalAddr the address of page to be mapped
+         * @return the virtual address mapped
+         */
+        static uint32 allocPageMap(uint32 physicalAddr);
+        /**
+         * Free a temporarily mapped page
+         * 
+         * @param virtualAddr the address of page to be freed
+         */
+        static void freePageMap(uint32 virtualAddr);
+};
 
 #endif
