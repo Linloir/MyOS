@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-31 18:05:04
+ * LastEditTime : 2022-05-31 20:41:43
  * Description  : 
  */
 #include "interrupt.h"
@@ -16,6 +16,14 @@
 void firstThread(void** args);
 
 void firstThread(void**) {
+    
+    while(true){
+    }
+}
+
+extern "C" void kernel() {
+    clearScreen();
+    
     uint32 memorySize = *(uint32*)0x7c00;
     printf("Total memory: %x(", memorySize);
     printf("%d KiB)\n", memorySize / 1024);
@@ -38,12 +46,6 @@ void firstThread(void**) {
     printf("Total frames: %d\n", FrameManager::totalFrames());
     printf("Free frames: %d\n", FrameManager::availableFrames());
     
-    while(true){
-    }
-}
-
-extern "C" void kernel() {
-    clearScreen();
     InterruptManager::initialize((uint32*)IDT_START_ADDR);
     Scheduler::initialize();
     InterruptManager::set8259A();
