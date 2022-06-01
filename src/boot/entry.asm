@@ -1,4 +1,4 @@
-global kernel_entry
-extern kernel
-kernel_entry:
-    jmp kernel
+global kernel_loader_entry
+extern kernelLoader
+kernel_loader_entry:
+    jmp kernelLoader

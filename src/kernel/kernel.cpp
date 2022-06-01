@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-31 20:41:43
+ * LastEditTime : 2022-06-01 09:27:28
  * Description  : 
  */
 #include "interrupt.h"
@@ -21,31 +21,31 @@ void firstThread(void**) {
     }
 }
 
-extern "C" void kernel() {
+extern void kernel() {
     clearScreen();
     
     uint32 memorySize = *(uint32*)0x7c00;
     printf("Total memory: %x(", memorySize);
     printf("%d KiB)\n", memorySize / 1024);
 
-    //Set init page table
-    uint32* secondLevelPageTableAddr = (uint32*)0x100000;
-    uint32* firstLevelPageTableAddr = (uint32*)0x101000;
-    //Map the first 1MiB of memory
-    uint32 physAddr = 0x0;
-    uint32 pageFlags = 0x3;
-    for(int i = 0; i < 256; i++) {
-        uint32 pageEntry = physAddr | pageFlags;
-        firstLevelPageTableAddr[i] = pageEntry;
-        physAddr += PAGE_SIZE;
-    }
-    secondLevelPageTableAddr[0] = (uint32)firstLevelPageTableAddr | pageFlags;
+    // //Set init page table
+    // uint32* secondLevelPageTableAddr = (uint32*)0x100000;
+    // uint32* firstLevelPageTableAddr = (uint32*)0x101000;
+    // //Map the first 1MiB of memory
+    // uint32 physAddr = 0x0;
+    // uint32 pageFlags = 0x3;
+    // for(int i = 0; i < 256; i++) {
+    //     uint32 pageEntry = physAddr | pageFlags;
+    //     firstLevelPageTableAddr[i] = pageEntry;
+    //     physAddr += PAGE_SIZE;
+    // }
+    // secondLevelPageTableAddr[0] = (uint32)firstLevelPageTableAddr | pageFlags;
     
     //Init page table manager
     FrameManager::initialize(memorySize);
     printf("Total frames: %d\n", FrameManager::totalFrames());
     printf("Free frames: %d\n", FrameManager::availableFrames());
-    
+
     InterruptManager::initialize((uint32*)IDT_START_ADDR);
     Scheduler::initialize();
     InterruptManager::set8259A();

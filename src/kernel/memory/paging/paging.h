@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-05-31 17:45:25
+ * LastEditTime : 2022-05-31 23:32:15
  * Description  : Page management
  */
 
@@ -9,8 +9,6 @@
 #define _PAGING_H_
 
 #include "os_type.h"
-
-#define PAGE_SIZE 4096
 
 typedef enum PagePermissionFlag {
     READ = 0,

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:19
- * LastEditTime : 2022-05-31 18:02:09
+ * LastEditTime : 2022-06-01 09:28:01
  * Description  : 
  */
 
@@ -14,7 +14,7 @@ void FrameManager::initialize(int memorySize) {
     int totalFrames = memorySize >> 12;
     //Init frame pool
     framePool = BitMap(totalFrames);
-    for(int i = 0; i < 256; i++) {
+    for(int i = 0; i < 512; i++) {
         framePool.set(i, true);
     }
 }

@@ -57,22 +57,22 @@ protect_mode:
     mov eax, VIDEO_SELECTOR
     mov gs, eax
 
-    ; Load kernel
+    ; Load kernel loader
     xor eax, eax
-    mov eax, KERNEL_SECTOR_START
-    mov ebx, KERNEL_START_ADDR
-    mov ecx, KERNEL_SECTOR_COUNT
-    .load_kernel:
+    mov eax, KERNEL_LOADER_SECTOR_START
+    mov ebx, KERNEL_LOADER_START_ADDR
+    mov ecx, KERNEL_LOADER_SECTOR_COUNT
+    .load_kernel_loader:
         push ebx
         push eax
         call asm_read_sector_pm
         add esp, 8
         inc eax
         add ebx, 512
-        loop .load_kernel
+        loop .load_kernel_loader
 
 ; Jump to kernel
-jmp CODE_SELECTOR:KERNEL_START_ADDR
+jmp CODE_SELECTOR:KERNEL_LOADER_START_ADDR
 
 ; Halt
 jmp $
