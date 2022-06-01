@@ -8,6 +8,11 @@ SRC_PATH := ../src
 RUN_PATH := ../run
 INCLUDE_PATH := $(addprefix -I, $(dir $(shell find '$(SRC_PATH)' -name '*.h' -o -name '*.inc')))
 
+BOOT_CPP_SRC := $(shell find '$(SRC_PATH)/boot/kernelloader' -name '*.cpp')
+BOOT_ASM_SRC := $(shell find '$(SRC_PATH)/boot/kernelloader' -name '*.asm')
+BOOT_CPP_OBJ := $(patsubst %.cpp,%.o,$(notdir $(BOOT_CPP_SRC)))
+BOOT_ASM_OBJ := $(patsubst %.asm,%.o,$(notdir $(BOOT_ASM_SRC)))
+
 CPP_SRC := $(shell find '$(SRC_PATH)' -name '*.cpp' -not -path '$(SRC_PATH)/boot/*')
 ASM_SRC := $(shell find '$(SRC_PATH)' -name '*.asm' -not -path '$(SRC_PATH)/boot/*')
 CPP_OBJ := $(patsubst %.cpp,%.o,$(notdir $(CPP_SRC)))
@@ -19,32 +24,38 @@ test:
 	@echo $(INCLUDE_PATH)
 
 .PHONY:
-build: mbr.bin bootloader.bin kernel.bin debug.o
+build: mbr.bin bootloader.bin kernelloader.bin kernel.bin debug.o kernelloaderdebug.o
 	qemu-img create $(RUN_PATH)/hd.img 10m
 	dd if=mbr.bin of=$(RUN_PATH)/hd.img bs=512 count=1 seek=0 conv=notrunc
 	dd if=bootloader.bin of=$(RUN_PATH)/hd.img bs=512 count=5 seek=1 conv=notrunc
 	dd if=kernelloader.bin of=$(RUN_PATH)/hd.img bs=512 count=2 seek=6 conv=notrunc
 	dd if=kernel.bin of=$(RUN_PATH)/hd.img bs=512 count=200 seek=8 conv=notrunc
 
-kernelloader.bin: entry.obj kernelloader.o kernelloader_utils.o
-	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_entry -Ttext 0x00010000 --oformat binary
+kernelloader.bin: $(BOOT_CPP_OBJ) $(BOOT_ASM_OBJ)
+	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_loader_entry -Ttext 0x00010000 --oformat binary
 
-kernel.bin: $(filter-out kernelloader*, $(CPP_OBJ)) $(filter-out kernelloader*, $(ASM_OBJ))
-	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_entry -Ttext 0xB0000000 --oformat binary
+kernelloaderdebug.o: $(BOOT_CPP_OBJ) $(BOOT_ASM_OBJ)
+	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_loader_entry -Ttext 0x00010000
 
-debug.o: $(filter-out kernelloader*, $(CPP_OBJ)) $(filter-out kernelloader*, $(ASM_OBJ))
-	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_entry -Ttext 0xB0000000
+kernel.bin: $(CPP_OBJ) $(ASM_OBJ)
+	$(LINKER) -o $@ -melf_i386 -N $^ -e kernelEntry -Ttext 0xB0000000 --oformat binary
+
+debug.o: $(CPP_OBJ) $(ASM_OBJ)
+	$(LINKER) -o $@ -melf_i386 -N $^ -e kernelEntry -Ttext 0xB0000000
 
 %.bin: $(SRC_PATH)/boot/%.asm
 	$(ASM_COMPILER) -o $@ -f bin $(INCLUDE_PATH) $^
-
-entry.obj: $(SRC_PATH)/boot/entry.asm
-	$(ASM_COMPILER) -o $@ -g -f elf32 $^
 
 $(CPP_OBJ): $(CPP_SRC)
 	$(CPP_COMPILER) $(CXX_COMPILER_FLAGS) $(INCLUDE_PATH) -c $(CPP_SRC)
 
 $(ASM_OBJ): $(ASM_SRC)
+	$(ASM_COMPILER) -o $@ -g -f elf32 $(filter %/$*.asm,$^)
+
+$(BOOT_CPP_OBJ): $(BOOT_CPP_SRC)
+	$(CPP_COMPILER) $(CXX_COMPILER_FLAGS) $(INCLUDE_PATH) -c $(BOOT_CPP_SRC)
+
+$(BOOT_ASM_OBJ): $(BOOT_ASM_SRC)
 	$(ASM_COMPILER) -o $@ -g -f elf32 $(filter %/$*.asm,$^)
 
 .PHONY:

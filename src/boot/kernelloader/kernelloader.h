@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:25:04
- * LastEditTime : 2022-06-01 09:38:53
+ * LastEditTime : 2022-06-01 10:00:42
  * Description  : 
  */
 
@@ -14,9 +14,9 @@
 #define KERNEL_START_SECTOR 8
 #define KERNEL_SECTOR_COUNT 200
 
-#define FRST_LEVEL_TABLE_ADDR_BOOT 0x101000     //1MiB + 4KiB
-#define FRST_LEVEL_TABLE_ADDR_KERNEL 0x102000   //1MiB + 8KiB
-#define SCND_LEVEL_TABLE_ADDR 0x100000          //1MiB
+#define FRST_LEVEL_TABLE_ADDR_BOOT 0x201000     //2MiB + 4KiB
+#define FRST_LEVEL_TABLE_ADDR_KERNEL 0x202000   //2MiB + 8KiB
+#define SCND_LEVEL_TABLE_ADDR 0x200000          //2MiB
 
 extern "C" void kernelLoader();
 extern "C" void readSector(int sector, uint32 addr);

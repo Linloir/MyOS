@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-01 09:27:28
+ * LastEditTime : 2022-06-01 10:11:50
  * Description  : 
  */
 #include "interrupt.h"
@@ -21,9 +21,9 @@ void firstThread(void**) {
     }
 }
 
-extern void kernel() {
+extern "C" void kernel() {
     clearScreen();
-    
+    while(true){}
     uint32 memorySize = *(uint32*)0x7c00;
     printf("Total memory: %x(", memorySize);
     printf("%d KiB)\n", memorySize / 1024);
@@ -40,6 +40,8 @@ extern void kernel() {
     //     physAddr += PAGE_SIZE;
     // }
     // secondLevelPageTableAddr[0] = (uint32)firstLevelPageTableAddr | pageFlags;
+
+    while(true){}
     
     //Init page table manager
     FrameManager::initialize(memorySize);

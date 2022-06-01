@@ -1,3 +1,4 @@
 target remote:1234
 file ../build/debug.o
+file ../build/kernelloaderdebug.o
 set disassembly-flavor intel

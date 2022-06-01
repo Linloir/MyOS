@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-01 09:40:00
+ * LastEditTime : 2022-06-01 10:03:01
  * Description  : Kernel loader
  */
 
@@ -24,7 +24,7 @@ extern "C" void kernelLoader() {
 
 void loadKernel() {
     int sectorIndex = KERNEL_START_SECTOR;
-    uint32 loadAddr = KERNEL_START_ADDR;
+    uint32 loadAddr = 0x100000;     //1MiB
     for(int i = 0; i < KERNEL_SECTOR_COUNT; i++) {
         readSector(sectorIndex, loadAddr);
         sectorIndex++;
@@ -58,9 +58,9 @@ void initializePaging() {
     }
     
     //Set the according entry of the virtual address 0MiB ~ 1MiB
-    scndLevelTable[0] = FRST_LEVEL_TABLE_ADDR_BOOT;
+    scndLevelTable[0] = FRST_LEVEL_TABLE_ADDR_BOOT | flag;
     //Set the according entry of the virtual address 3GiB ~ 3GiB + 1MiB
-    scndLevelTable[virtAddr >> 22] = FRST_LEVEL_TABLE_ADDR_KERNEL;
+    scndLevelTable[virtAddr >> 22] = FRST_LEVEL_TABLE_ADDR_KERNEL | flag;
 
     enablePaging(SCND_LEVEL_TABLE_ADDR);
 }
