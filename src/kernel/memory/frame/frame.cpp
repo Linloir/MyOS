@@ -14,9 +14,14 @@ void FrameManager::initialize(int memorySize) {
     int totalFrames = memorySize >> 12;
     //Init frame pool
     framePool = BitMap(totalFrames);
-    for(int i = 0; i < 512; i++) {
+    //Init 1MiB ~ 2MiB memory
+    for(int i = 256; i < 512; i++) {
         framePool.set(i, true);
     }
+    //Init 2MiB ~ 2MiB + 4KiB memory (L2 table)
+    framePool.set(512, true);
+    //Init 2MiB + 8KiB memory ~ 2MiB + 12KiB memory (L1 table kernel)
+    framePool.set(514, true);
 }
 
 int FrameManager::availableFrames() {

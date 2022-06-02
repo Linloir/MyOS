@@ -38,10 +38,10 @@ kernelloaderdebug.o: $(BOOT_CPP_OBJ) $(BOOT_ASM_OBJ)
 	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_loader_entry -Ttext 0x00010000
 
 kernel.bin: $(CPP_OBJ) $(ASM_OBJ)
-	$(LINKER) -o $@ -melf_i386 -N $^ -Tlinker.ld --oformat binary
+	$(LINKER) -o $@ -melf_i386 -N kernelentry.o $(filter-out kernelentry.o, $^) -Tlinker.ld --oformat binary
 
 debug.o: $(CPP_OBJ) $(ASM_OBJ)
-	$(LINKER) -o $@ -melf_i386 -N $^ -Tlinker.ld
+	$(LINKER) -o $@ -melf_i386 -N kernelentry.o $(filter-out kernelentry.o, $^) -Tlinker.ld
 
 %.bin: $(SRC_PATH)/boot/%.asm
 	$(ASM_COMPILER) -o $@ -f bin $(INCLUDE_PATH) $^

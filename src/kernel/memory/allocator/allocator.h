@@ -11,10 +11,7 @@
 #include "os_type.h"
 #include "bitmap.h"
 
-// void* malloc(int size, int amount);
-// void free(void* addr);
-
-#define HEAP_START_ADDR 0x0FF000
+#define HEAP_START_ADDR 0xB000FF00
 
 struct mem_control_block {
   int is_available;

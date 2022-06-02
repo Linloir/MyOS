@@ -1,4 +1,4 @@
-ENTRY(kernel)
+ENTRY(kernelEntry)
 
 KERNEL_BEGIN = 0xB0000000;
 
@@ -6,14 +6,14 @@ SECTIONS {
 
   . = KERNEL_BEGIN;
 
-  .rodata ALIGN(4K):
-  {
-    *(.rodata .rodata.*)
-  }
-
   .text ALIGN(4K):
   {
     *(.text .text.*)
+  }
+
+  .rodata ALIGN(4K):
+  {
+    *(.rodata .rodata.*)
   }
 
   .data ALIGN(4K):
