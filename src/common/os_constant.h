@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-05-31 23:32:05
+ * LastEditTime : 2022-06-03 14:51:09
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
@@ -18,5 +18,7 @@
 #define MAX_PROCESS_COUNT 16
 
 #define PAGE_SIZE 4096
+
+#define MEMORY_INFO_ADDR 0x0
 
 #endif

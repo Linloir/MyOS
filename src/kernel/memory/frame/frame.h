@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:11
- * LastEditTime : 2022-05-31 16:55:13
+ * LastEditTime : 2022-06-03 14:46:38
  * Description  : Frame manager, including allocate physical frames and deallocate physical frames
  */
 
@@ -10,11 +10,13 @@
 
 #include "bitmap.h"
 
+#define MEMORY_INFO_ADDR 0x0
+
 class FrameManager {
     private:
         static BitMap framePool;
     public:
-        static void initialize(int memorySize);
+        static void initialize();
         /**
          * Allocate one frame from memory
          * 

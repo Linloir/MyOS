@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 13:24:34
- * LastEditTime : 2022-05-31 16:41:54
+ * LastEditTime : 2022-06-03 15:24:01
  * Description  : 
  */
 
@@ -12,8 +12,8 @@ int has_initialized = 0;
 void *managed_memory_start;
 void *last_valid_address;
 
-void malloc_init() {
-    last_valid_address = (void*)HEAP_START_ADDR;
+void malloc_init(void* addr) {
+    last_valid_address = addr;
     managed_memory_start = last_valid_address;
     has_initialized = 1;
 }
@@ -31,7 +31,7 @@ void *malloc(long numbytes) {
     void *memory_location;
 
     if (!has_initialized) {
-        malloc_init();
+        return 0;
     }
 
     numbytes = numbytes + sizeof(struct mem_control_block);

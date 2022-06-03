@@ -1,27 +1,31 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:19
- * LastEditTime : 2022-06-01 09:28:01
+ * LastEditTime : 2022-06-03 15:08:33
  * Description  : 
  */
 
 #include "frame.h"
+#include "mmu.h"
 
 BitMap FrameManager::framePool = BitMap(0);
 
-void FrameManager::initialize(int memorySize) {
+void FrameManager::initialize() {
     //Get total managable frame number
-    int totalFrames = memorySize >> 12;
+    int* info = (int*)physicToVirtual(MEMORY_INFO_ADDR);
+    int totalFrames = info[1];
     //Init frame pool
     framePool = BitMap(totalFrames);
-    //Init 1MiB ~ 2MiB memory
-    for(int i = 256; i < 512; i++) {
+    //Init frame pool
+    uint32 startFrame = 256;
+    uint32 kernelFrame = 256;
+    uint32 pageInitFrame = 2;
+    uint32 pageMappingFrame = info[2];
+    uint32 heapFrame = 1;
+    uint32 endFrame = startFrame + kernelFrame + pageInitFrame + pageMappingFrame + heapFrame;
+    for(int i = startFrame; i < endFrame; i++) {
         framePool.set(i, true);
     }
-    //Init 2MiB ~ 2MiB + 4KiB memory (L2 table)
-    framePool.set(512, true);
-    //Init 2MiB + 8KiB memory ~ 2MiB + 12KiB memory (L1 table kernel)
-    framePool.set(514, true);
 }
 
 int FrameManager::availableFrames() {

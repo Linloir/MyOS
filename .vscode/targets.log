@@ -1,4 +1,250 @@
-make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
-'make.exe' �����ڲ����ⲿ���Ҳ���ǿ����еĳ���
-���������ļ���
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
 
+# GNU Make 4.2.1
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2016 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Fri Jun  3 12:13:07 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+PAPERSIZE = letter
+# default
+.SHELLFLAGS := -c
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AGENT_FOLDER = /home/linloir/.vscode-server
+# environment
+XDG_SESSION_TYPE = tty
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# default
+MAKE_VERSION := 4.2.1
+# makefile
+CURDIR := /home/linloir/OS_2022/MyOS
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"42e84e0914b17800d483f69e299e1b00.zh-cn","_translationsConfigFile":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/tcf.json","_cacheRoot":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn","_resolvedLanguagePackCoreLocation":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5","_corruptedFile":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/corrupted.info","_languagePackSupport":true}
+# environment
+_ = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/node
+# makefile
+MAKEFILE_LIST := 
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+MAKELEVEL := 0
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+P9K_SSH = 1
+# environment
+LC_NAME = en_US.UTF-8
+# environment
+VSCODE_CWD = /home/linloir
+# environment
+SSH_CONNECTION = 172.19.37.78 63972 192.168.87.128 22
+# environment
+PATH = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+# environment
+LSCOLORS = Gxfxcxdxbxegedabagacad
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+VSCODE_LOG_STACK = false
+# environment
+LC_NUMERIC = en_US.UTF-8
+# environment
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-687c1299-ff5b-4779-bc00-e1e1d09dc4b4.sock
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
+# environment
+LS_COLORS = 
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /home/linloir/OS_2022/MyOS
+# default
+.LOADED := 
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/linloir
+# environment
+LOGNAME = linloir
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
++F = $(notdir $+)
+# environment
+ZSH = /home/linloir/.oh-my-zsh
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+LC_TIME = en_US.UTF-8
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 0
+# environment
+XDG_SESSION_ID = 5
+# environment
+USER = linloir
+# environment
+LC_MONETARY = en_US.UTF-8
+# makefile
+.DEFAULT_GOAL := 
+# environment
+LESS = -R
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+LC_TELEPHONE = en_US.UTF-8
+# default
+MAKE_COMMAND := make
+# environment
+OLDPWD = /home/linloir
+# default
+.VARIABLES := 
+# automatic
+*F = $(notdir $*)
+# makefile
+MAKEFLAGS = pqrR
+# environment
+MFLAGS = -pqrR
+# environment
+SSH_CLIENT = 172.19.37.78 63972 22
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+BROWSER = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/helpers/browser.sh
+# environment
+VSCODE_HANDLES_SIGPIPE = true
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# automatic
+^F = $(notdir $^)
+# environment
+LC_MEASUREMENT = en_US.UTF-8
+# environment
+PAGER = less
+# environment
+LC_ALL = C
+# environment
+LC_PAPER = en_US.UTF-8
+# default
+SUFFIXES := 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# environment
+LC_IDENTIFICATION = en_US.UTF-8
+# default
+.RECIPEPREFIX := 
+# environment
+LC_ADDRESS = en_US.UTF-8
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# environment
+LANG = C
+# environment
+VSCODE_EXTHOST_WILL_SEND_SOCKET = true
+# environment
+MOTD_SHOWN = pam
+# variable set hash-table stats:
+# Load=83/1024=8%, Rehash=0, Collisions=13/105=12%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 2051, inode 1053165): 9 files, no impossibilities.
+
+# 9 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# files hash-table stats:
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 17 / storage = 138 B / avg = 8 B
+# current buf: size = 8162 B / used = 138 B / count = 17 / avg = 8 B
+
+# strcache performance: lookups = 20 / hit rate = 15%
+# hash-table stats:
+# Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
+# Finished Make data base on Fri Jun  3 12:13:07 2022
+
+ 

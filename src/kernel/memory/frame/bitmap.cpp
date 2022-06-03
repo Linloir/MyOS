@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:48:29
- * LastEditTime : 2022-05-31 18:05:57
+ * LastEditTime : 2022-06-03 15:40:32
  * Description  : Bit Map
  */
 
@@ -36,8 +36,9 @@ int BitMap::firstAvailable(int start) {
 }
 
 BitMap::BitMap(int length) {
-    map = (uint8*)malloc(sizeof(uint8) * length);
-    for(int i = 0; i < length; i++) {
+    int charLength = (length + 7) / 8;
+    map = (uint8*)malloc(sizeof(uint8) * charLength);
+    for(int i = 0; i < charLength; i++) {
         map[i] = 0;
     }
     size = length;

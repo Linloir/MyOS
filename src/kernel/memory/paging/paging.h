@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-05-31 23:32:15
+ * LastEditTime : 2022-06-03 13:32:03
  * Description  : Page management
  */
 
@@ -24,10 +24,6 @@ class PageManager {
     private:
         static uint32 ID_MAPPED_TABLE_ADDR;     //The identity-mapped level 1 table for temporary mapping
     public:
-        /**
-         * Initialize and Enable paging
-         */
-        static void initialize(uint32 scndLevTableAddr, uint32 mappedTableAddr);
         /**
          * Set the identity-mapped table address
          * 
@@ -68,7 +64,5 @@ class PageManager {
          */
         static void freePageMap(uint32 virtualAddr);
 };
-
-extern "C" void asm_set_cr3(uint32 scndLevTableAddr);
 
 #endif
