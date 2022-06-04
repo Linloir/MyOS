@@ -56,7 +56,7 @@ $(BOOT_CPP_OBJ): $(BOOT_CPP_SRC)
 	$(CPP_COMPILER) $(CXX_COMPILER_FLAGS) $(INCLUDE_PATH) -c $(BOOT_CPP_SRC)
 
 $(BOOT_ASM_OBJ): $(BOOT_ASM_SRC)
-	$(ASM_COMPILER) -o $@ -g -f elf32 $(filter %/$*.asm,$^)
+	$(ASM_COMPILER) -o $@ -g -f elf32 $(INCLUDE_PATH) $(filter %/$*.asm,$^)
 
 .PHONY:
 clean:

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-04 15:25:48
+ * LastEditTime : 2022-06-04 22:44:30
  * Description  : 
  */
 #include "interrupt.h"
@@ -15,6 +15,7 @@
 #include "paging.h"
 #include "mmu.h"
 #include "allocator.h"
+#include "gdt.h"
 
 void firstThread(void** args);
 
@@ -54,8 +55,10 @@ extern "C" void kernel() {
         printf("Heap initialized!\n");
     else
         printf("Heap initializing err: 0x%x -> %d\n", test, *test);
+    
     initFrames(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
     initPaging();
+    initGlobalDescriptorTable();
     initScheduler();
     initInterrupt();
 
@@ -79,6 +82,10 @@ void initPaging() {
     PageManager::initialize();
 }
 
+void initGlobalDescriptorTable() {
+    GDT.initialize();
+}
+
 void initScheduler() {
     Scheduler::initialize();
 }
@@ -89,6 +96,7 @@ void initInterrupt() {
     idt->initialize();
     idt->loadToIDTR();
     set8259A();
+    disableTimeInterrupt();
     enableTimeInterrupt();
     setInterruptStatus(true);
 }

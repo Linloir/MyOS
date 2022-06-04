@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:03:12
- * LastEditTime : 2022-06-04 13:33:34
+ * LastEditTime : 2022-06-04 18:35:05
  * Description  : 
  */
 #ifndef _INTERRUPT_UTILS_H_
@@ -18,6 +18,7 @@ extern "C" void asm_disable_interrupt();
 
 void set8259A();
 void enableTimeInterrupt();
+void disableTimeInterrupt();
 bool getInterruptStatus();
 void setInterruptStatus(bool status);
 

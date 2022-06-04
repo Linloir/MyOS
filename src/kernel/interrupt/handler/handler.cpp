@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-04 11:36:29
+ * LastEditTime : 2022-06-04 18:42:15
  * Description  : 
  */
 
@@ -21,7 +21,16 @@ extern "C" void emptyHandler() {
 }
 
 extern "C" void timeInterruptHandler() {
-    Scheduler::onTimeInterrupt();
+    // while(true){}
+    // Scheduler::onTimeInterrupt();
+    printf("test\n");
+}
+
+extern "C" void doubleFaultInterruptHandler() {
+    printf("Double fault\n");
+    while(true) {
+        
+    }
 }
 
 extern "C" void pageFaultInterruptHandler(uint32 virtualAddr) {

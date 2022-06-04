@@ -1,3 +1,4 @@
+%include 'boot.inc'
 [bits 32]
 
 global readSector
@@ -78,6 +79,11 @@ jumpKernel:
     push ebp
     mov ebp, esp
 
+    ; Set SS
+    mov dword [GDT_START_ADDR + 6 * 4], 0x00000000
+    mov dword [GDT_START_ADDR + 7 * 4], 0x00B09600
+
+    ; Move esp
     mov eax, dword [ebp + 2 * 4]
     mov esp, eax
     mov eax, dword [ebp + 3 * 4]
