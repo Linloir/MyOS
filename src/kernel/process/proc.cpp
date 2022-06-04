@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-05-31 13:38:53
+ * LastEditTime : 2022-06-04 14:50:21
  * Description  : 
  */
 
@@ -61,7 +61,7 @@ PCB* Scheduler::currentRunningThread() {
 }
 
 void Scheduler::schedule() {
-    bool interruptStatus = InterruptManager::getInterruptStatus();
+    bool interruptStatus = getInterruptStatus();
     asm_disable_interrupt();
 
     if(readyTaskList.isEmpty()) {
@@ -91,11 +91,11 @@ void Scheduler::schedule() {
     runningThread = nextThread;
     asm_switch_thread((uint32)currentThread, (uint32)nextThread);
 
-    InterruptManager::setInterruptStatus(interruptStatus);
+    setInterruptStatus(interruptStatus);
 }
 
 void Scheduler::executeThread(void (*function)(void** args), void** parameters, uint32 priority) {
-    bool interruptStatus = InterruptManager::getInterruptStatus();
+    bool interruptStatus = getInterruptStatus();
     asm_disable_interrupt();
 
     PCB* newThread = allocPCB();
@@ -121,7 +121,7 @@ void Scheduler::executeThread(void (*function)(void** args), void** parameters, 
 
     readyTaskList.pushBack(&newThread->scheduleListNode);
 
-    InterruptManager::setInterruptStatus(interruptStatus);
+    setInterruptStatus(interruptStatus);
 }
 
 void Scheduler::awakeThreadMESA(PCB* thread) {

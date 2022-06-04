@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-03 15:31:24
+ * LastEditTime : 2022-06-04 17:17:08
  * Description  : Kernel loader
  */
 
@@ -18,8 +18,7 @@
 extern "C" void kernelLoader() {
     loadKernel();
     initializePaging();
-    void (*kernel)() = (void(*)())KERNEL_START_ADDR;
-    kernel();
+    jumpKernel(0xFFFFFFFE, KERNEL_START_ADDR);
 }
 
 void loadKernel() {
@@ -62,6 +61,8 @@ void initializePaging() {
         physAddr += PAGE_SIZE;
     }
 
+    int tableCount = 3;
+
     //Map Memory 3GiB + 1MiB ~ 3GiB + 1MiB + SIZEOF(MEMORY) -> 0MiB ~ SIZEOF(MEMORY)
     uint32 memorySize = *(uint32*)0x7c00;
     uint32 frameCount = memorySize >> 12;
@@ -78,20 +79,50 @@ void initializePaging() {
             entryIndex = 0;
             table = (uint32*)((uint32)table + 0x1000);  //table = table + 4KiB
             scndLevelTable[virtAddr >> 22] = (uint32)table | flag;
+            tableCount++;
         }
     }
 
-    //Map one page for heap initialization
+    //Map pages for heap initialization
     uint32 heapAddr = virtAddr;
-    table[entryIndex] = physAddr | flag;
+    int initHeapFrameCount = 9;
+    
+    for(int i = 0; i < initHeapFrameCount; i++) {
+        if(entryIndex == 1024) {
+            entryIndex = 0;
+            table = (uint32*)((uint32)table + 0x1000);  //table = table + 4KiB
+            scndLevelTable[virtAddr >> 22] = (uint32)table | flag;
+            tableCount++;
+        }
+        table[entryIndex] = physAddr | flag;
+        physAddr += PAGE_SIZE;
+        virtAddr += PAGE_SIZE;
+        entryIndex++;
+    }
+
+    //Map stack frame
+    uint32 stackFrameAddr = 0xFFE00000;
+    int stackFrameCount = 1 << 9;
+    table = (uint32*)((uint32)table + 0x1000);
+    tableCount++;
+    entryIndex = (stackFrameAddr << 10) >> 22;
+    for(int i = 0; i < stackFrameCount; i++) {
+        table[entryIndex] = physAddr | flag;
+        physAddr += PAGE_SIZE;
+        entryIndex++;
+    }
+    scndLevelTable[stackFrameAddr >> 22] = (uint32)table | flag;
 
     //Map first heap page and store page information
-    uint* tempHeap = (uint*)0x0;
+    uint32* tempHeap = (uint32*)0x0;
     tempHeap[0] = memorySize;
     tempHeap[1] = frameCount;   //Total frame count
     tempHeap[2] = (frameCount + (1 << 10) - 1) >> 10;   //Frame used to map whole memory
     tempHeap[3] = SCND_LEVEL_TABLE_ADDR;
     tempHeap[4] = heapAddr;
+    tempHeap[5] = initHeapFrameCount;
+    tempHeap[6] = stackFrameCount;
+    tempHeap[7] = tableCount;
 
     enablePaging(SCND_LEVEL_TABLE_ADDR);
 }

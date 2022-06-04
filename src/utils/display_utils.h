@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-05-17 20:46:10
+ * LastEditTime : 2022-06-04 00:15:53
  * Description  : 
  */
 #ifndef _DISPLAY_UTILS_H_
@@ -9,11 +9,10 @@
 
 #include "os_type.h"
 #include "ports_utils.h"
+#include "mmu.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
-
-uint16* const screen = (uint16*)(0xB8000);
 
 void enableCursor();
 void disableCursor();

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 21:48:29
- * LastEditTime : 2022-06-03 15:40:32
+ * LastEditTime : 2022-06-03 23:49:11
  * Description  : Bit Map
  */
 
@@ -9,7 +9,7 @@
 #include "allocator.h"
 
 int BitMap::firstAvailable(int start) {
-    if(!freeSize) {
+    if(freeSize <= 0) {
         return -1;
     }
 
@@ -18,8 +18,8 @@ int BitMap::firstAvailable(int start) {
     int curBlock = map[index] >> offset;
 
     for(int i = start; i < size; i++) {
-        bool status = curBlock & 1;
-        if(status) {
+        bool status = (curBlock & 1) == 1;
+        if(!status) {
             return i;
         }
         if(offset == 7) {
@@ -58,8 +58,10 @@ int BitMap::totalResources() {
 }
 
 void BitMap::set(int index, bool status) {
-    map[index >> 3] &= (0 << (index & 3));
-    map[index >> 3] &= ((status ? 1 : 0) << (index & 3));
+    uint8 mask = 1 << (index & 3);
+    //erase bit
+    map[index >> 3] &= ~mask;
+    map[index >> 3] |= ((status ? 1 : 0) << (index & 3));
     if(status) {
         freeSize--;
     }

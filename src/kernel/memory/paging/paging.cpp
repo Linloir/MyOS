@@ -1,18 +1,50 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-03 13:34:29
+ * LastEditTime : 2022-06-03 22:48:56
  * Description  : Paging
  */
 
 #include "paging.h"
+#include "frame.h"
+#include "mmu.h"
 
-uint32 PageManager::ID_MAPPED_TABLE_ADDR = 0xB0101000;
-
-void PageManager::setMappedTableAddr(uint32 addr) {
-    ID_MAPPED_TABLE_ADDR = addr;
+void PageManager::initialize() {
+    //Free unused page
+    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    PageTable* bootTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(0).address());
+    scndLevelTable->removeAt(0);
+    bootTable->removeAt(0, 256);
 }
 
-void PageManager::mapPage(uint32 physicalAddr, uint32 virtualAddr, PagePermissionFlag permission, PagePriviledgeFlag priviledge) {
-    
+uint32 PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
+    //fetch l2 table
+    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    uint32 frstLevelTableIndex = virtualAddr >> 22;
+    //create l1 table if not exist
+    if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
+        uint32 newTableAddr = FrameManager::physicalFrames.allocateFrame();
+        PageTableEntry newEntry = PageTableEntry(newTableAddr, PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE);
+        scndLevelTable->insertAt(frstLevelTableIndex, newEntry);
+    }
+    //add entry to l1 table
+    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(frstLevelTableIndex).address());
+    uint32 entryIndex = (virtualAddr << 10) >> 22;
+    PageTableEntry newEntry = PageTableEntry(physicalAddr, flags);
+    frstLevelTable->insertAt(entryIndex, newEntry);
+}
+
+uint32 PageManager::unmapPage(uint32 virtualAddr) {
+    //fetch l2 table
+    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    uint32 frstLevelTableIndex = virtualAddr >> 22;
+    //check existence of l1 table
+    if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
+        return toPhysicalAddress(virtualAddr);
+    }
+    //remove entry from l1 table
+    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(frstLevelTableIndex).address());
+    uint32 entryIndex = (virtualAddr << 10) >> 22;
+    frstLevelTable->removeAt(entryIndex);
+    return toPhysicalAddress(virtualAddr);
 }

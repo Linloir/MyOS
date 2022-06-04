@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun  3 12:13:07 2022
+# Make data base, printed on Sat Jun  4 16:56:44 2022
 
 # Variables
 
@@ -61,7 +61,7 @@ LC_NAME = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/linloir
 # environment
-SSH_CONNECTION = 172.19.37.78 63972 192.168.87.128 22
+SSH_CONNECTION = 172.19.14.162 58936 192.168.87.128 22
 # environment
 PATH = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-687c1299-ff5b-4779-bc00-e1e1d09dc4b4.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-b25a3cdd-9c58-4d8d-bba6-7c11509dfdc0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -95,7 +95,7 @@ HOME = /home/linloir
 # environment
 LOGNAME = linloir
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 +F = $(notdir $+)
 # environment
@@ -113,7 +113,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-XDG_SESSION_ID = 5
+XDG_SESSION_ID = 72
 # environment
 USER = linloir
 # environment
@@ -139,7 +139,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 172.19.37.78 63972 22
+SSH_CLIENT = 172.19.14.162 58936 22
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
@@ -245,6 +245,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Fri Jun  3 12:13:07 2022
+# Finished Make data base on Sat Jun  4 16:56:44 2022
 
  

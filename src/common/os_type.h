@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-05-31 12:39:11
+ * LastEditTime : 2022-06-04 10:13:26
  * Description  : 
  */
 #ifndef _OS_TYPE_H_
@@ -20,5 +20,6 @@ typedef unsigned int uint32;
 typedef unsigned int uint;
 typedef unsigned int dword;
 
+typedef unsigned long long uint64;
 
 #endif

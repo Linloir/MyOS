@@ -28,14 +28,14 @@ build: mbr.bin bootloader.bin kernelloader.bin kernel.bin debug.o kernelloaderde
 	qemu-img create $(RUN_PATH)/hd.img 10m
 	dd if=mbr.bin of=$(RUN_PATH)/hd.img bs=512 count=1 seek=0 conv=notrunc
 	dd if=bootloader.bin of=$(RUN_PATH)/hd.img bs=512 count=5 seek=1 conv=notrunc
-	dd if=kernelloader.bin of=$(RUN_PATH)/hd.img bs=512 count=2 seek=6 conv=notrunc
-	dd if=kernel.bin of=$(RUN_PATH)/hd.img bs=512 count=200 seek=8 conv=notrunc
+	dd if=kernelloader.bin of=$(RUN_PATH)/hd.img bs=512 count=10 seek=6 conv=notrunc
+	dd if=kernel.bin of=$(RUN_PATH)/hd.img bs=512 count=200 seek=16 conv=notrunc
 
 kernelloader.bin: $(BOOT_CPP_OBJ) $(BOOT_ASM_OBJ)
-	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_loader_entry -Ttext 0x00010000 --oformat binary
+	$(LINKER) -o $@ -melf_i386 -N entry.o $(filter-out entry.o,$^) -Tkllinker.ld --oformat binary
 
 kernelloaderdebug.o: $(BOOT_CPP_OBJ) $(BOOT_ASM_OBJ)
-	$(LINKER) -o $@ -melf_i386 -N $^ -e kernel_loader_entry -Ttext 0x00010000
+	$(LINKER) -o $@ -melf_i386 -N entry.o $(filter-out entry.o,$^) -Tkllinker.ld
 
 kernel.bin: $(CPP_OBJ) $(ASM_OBJ)
 	$(LINKER) -o $@ -melf_i386 -N kernelentry.o $(filter-out kernelentry.o, $^) -Tlinker.ld --oformat binary

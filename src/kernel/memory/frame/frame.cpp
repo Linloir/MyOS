@@ -1,32 +1,28 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:19
- * LastEditTime : 2022-06-03 15:08:33
+ * LastEditTime : 2022-06-04 14:46:02
  * Description  : 
  */
 
 #include "frame.h"
 #include "mmu.h"
+#include "allocator.h"
 
-BitMap FrameManager::framePool = BitMap(0);
+FrameManager FrameManager::physicalFrames = FrameManager(0);
 
-void FrameManager::initialize() {
-    //Get total managable frame number
-    int* info = (int*)physicToVirtual(MEMORY_INFO_ADDR);
-    int totalFrames = info[1];
+void FrameManager::initialize(int totalFrames, int mappedFrames) {
     //Init frame pool
-    framePool = BitMap(totalFrames);
+    physicalFrames.framePool = BitMap(totalFrames);
     //Init frame pool
     uint32 startFrame = 256;
-    uint32 kernelFrame = 256;
-    uint32 pageInitFrame = 2;
-    uint32 pageMappingFrame = info[2];
-    uint32 heapFrame = 1;
-    uint32 endFrame = startFrame + kernelFrame + pageInitFrame + pageMappingFrame + heapFrame;
+    uint32 endFrame = startFrame + mappedFrames;
     for(int i = startFrame; i < endFrame; i++) {
-        framePool.set(i, true);
+        physicalFrames.framePool.set(i, true);
     }
 }
+
+FrameManager::FrameManager(int size): framePool(BitMap(size)) {}
 
 int FrameManager::availableFrames() {
     return framePool.availableResources();
@@ -41,10 +37,26 @@ int FrameManager::totalFrames() {
 }
 
 uint32 FrameManager::allocateFrame() {
-    int pageIndex = framePool.alloc();
-    if(pageIndex == -1) {
+    int frameIndex = framePool.alloc();
+    if(frameIndex == -1) {
         //Swap frame
         return 0;
     }
-    return pageIndex << 12;
+    return frameIndex << 12;
+}
+
+//@TODO To be finished
+uint32* FrameManager::allocateFrames(int count) {
+    uint32* framesAddr = (uint32*)malloc(sizeof(uint32) * count);
+    return framesAddr;
+}
+
+//@TODO To be finished
+uint32 FrameManager::allocateSequencialFrames(int count) {
+    return 0;
+}
+
+void FrameManager::freeFrame(uint32 physicalAddr) {
+    int frameIndex = physicalAddr >> 12;
+    framePool.free(frameIndex);
 }

@@ -2,6 +2,7 @@
 
 global readSector
 global enablePaging
+global jumpKernel
 
 readSector:
     ; push readToAddr
@@ -71,3 +72,15 @@ enablePaging:
     pop ebp
 
     ret
+
+jumpKernel:
+; 0xFFFFFFFB
+    push ebp
+    mov ebp, esp
+
+    mov eax, dword [ebp + 2 * 4]
+    mov esp, eax
+    mov eax, dword [ebp + 3 * 4]
+    jmp eax
+
+    jmp $

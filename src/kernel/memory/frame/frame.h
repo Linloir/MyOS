@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:11
- * LastEditTime : 2022-06-03 14:46:38
+ * LastEditTime : 2022-06-04 14:46:28
  * Description  : Frame manager, including allocate physical frames and deallocate physical frames
  */
 
@@ -14,33 +14,56 @@
 
 class FrameManager {
     private:
-        static BitMap framePool;
+        BitMap framePool;
     public:
-        static void initialize();
+        static FrameManager physicalFrames;
+        static void initialize(int totalFrames, int mappedFrames);
+
+        FrameManager(int size);
         /**
          * Allocate one frame from memory
          * 
          * @return the physic address of the allocated memory
          */
-        static uint32 allocateFrame();
+        uint32 allocateFrame();
+        /**
+         * Allocate more than one frames from memory
+         * 
+         * @param count the count of frames to be allocated
+         * @return an array of physical addresses of the allocated frames
+         */
+        uint32* allocateFrames(int count);
+        /**
+         * Allocate sequencial frames from memory
+         * 
+         * @param count the count of frames to be allocated
+         * @return the start physical address of the allocated sequence
+         */
+        uint32 allocateSequencialFrames(int count);
+        /**
+         * Free the specified frame
+         * 
+         * @param physicalAddr the physical address of the frame
+         */
+        void freeFrame(uint32 physicalAddr);
         /**
          * Get the amount of available frames
          * 
          * @return the amount of available frames
          */
-        static int availableFrames();
+        int availableFrames();
         /**
          * Get the amount of occupiedFrames
          * 
          * @return the amount of occupied frames
          */
-        static int occupiedFrames();
+        int occupiedFrames();
         /**
          * Get the size of frame pool
          * 
          * @return the size of frame pool
          */
-        static int totalFrames();
+        int totalFrames();
 };
 
 #endif

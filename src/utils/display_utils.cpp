@@ -56,6 +56,7 @@ void setCursor(uint16 position) {
 }
 
 int print(char ch) {
+    uint16* screen = (uint16*)toVirtualAddress(0xB8000);
     uint16 position = getCursor();
     if(ch == '\n') {
         setCursor(position / VGA_WIDTH + 1, 0);
@@ -71,6 +72,7 @@ int print(char ch) {
 }
 
 int print(char ch, uint8 color) {
+    uint16* screen = (uint16*)toVirtualAddress(0xB8000);
     uint16 position = getCursor();
     if(ch == '\n') {
         setCursor(position / VGA_WIDTH + 1, 0);
@@ -123,6 +125,7 @@ int print(const char* string, uint8 row, uint8 col, uint8 color) {
 }
 
 void screenScrollUp() {
+    uint16* screen = (uint16*)toVirtualAddress(0xB8000);
     uint16 position = 0;
     for(int i = 0; i < VGA_HEIGHT - 1; i++) {
         for(int j = 0; j < VGA_WIDTH; j++) {
