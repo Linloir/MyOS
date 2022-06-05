@@ -47,6 +47,8 @@ asm_double_fault_interrupt_handler:
     iret
 
 asm_page_fault_interrupt_handler:
+    push ebp
+    mov ebp, esp
     pushad
 
     mov al, 0x20
@@ -55,8 +57,13 @@ asm_page_fault_interrupt_handler:
 
     mov eax, cr2
     push eax
+
+    mov eax, [ebp + 1 * 4]  ; err code
+    push eax
     call pageFaultInterruptHandler
-    pop eax
+    add esp, 8
 
     popad
+    pop ebp
+    add esp, 4
     iret

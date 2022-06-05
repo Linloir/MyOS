@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 12:40:15
- * LastEditTime : 2022-05-17 13:45:31
+ * LastEditTime : 2022-06-05 10:54:49
  * Description  : Data structures
  */
 
@@ -41,7 +41,9 @@ ListNode* List::popFront() {
         return nullptr;
     }
     head.next = front->next;
-    front->next->prev = &head;
+    if(front->next != nullptr) {
+        front->next->prev = &head;
+    }
     front->prev = nullptr;
     front->next = nullptr;
     length--;

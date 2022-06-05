@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-04 14:50:21
+ * LastEditTime : 2022-06-05 10:36:01
  * Description  : 
  */
 
@@ -103,7 +103,7 @@ void Scheduler::executeThread(void (*function)(void** args), void** parameters, 
         return;
     }
 
-    newThread->stack = (uint32*)((int)newThread + PCB_MAX_SIZE);
+    newThread->stack = (uint32*)((uint32)newThread + PCB_MAX_SIZE);
     newThread->pID = 0;
     newThread->priority = priority;
     newThread->status = JobStatus::READY;

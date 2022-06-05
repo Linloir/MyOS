@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-04 22:44:30
+ * LastEditTime : 2022-06-04 23:14:04
  * Description  : 
  */
 #include "interrupt.h"
@@ -22,6 +22,7 @@ void firstThread(void** args);
 void firstThread(void**) {
 
     int* test = (int*)0xBF000000;
+    *test = 1;
     printf("%d\n", *test);
     
     while(true){
@@ -62,9 +63,7 @@ extern "C" void kernel() {
     initScheduler();
     initInterrupt();
 
-    while(true){}
-
-    Scheduler::executeThread(firstThread, nullptr, 1);
+    Scheduler::executeThread(firstThread, 0, 1);
     while(true) {
         //Halt
     }

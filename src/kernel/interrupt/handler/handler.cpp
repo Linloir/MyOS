@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-04 18:42:15
+ * LastEditTime : 2022-06-05 11:22:12
  * Description  : 
  */
 
@@ -21,9 +21,7 @@ extern "C" void emptyHandler() {
 }
 
 extern "C" void timeInterruptHandler() {
-    // while(true){}
-    // Scheduler::onTimeInterrupt();
-    printf("test\n");
+    Scheduler::onTimeInterrupt();
 }
 
 extern "C" void doubleFaultInterruptHandler() {
@@ -33,8 +31,8 @@ extern "C" void doubleFaultInterruptHandler() {
     }
 }
 
-extern "C" void pageFaultInterruptHandler(uint32 virtualAddr) {
-    printf("Page fault when visiting 0x%x\n", virtualAddr);
+extern "C" void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr) {
+    printf("Page fault with err code 0x%x when visiting 0x%x\n", errCode, virtualAddr);
     uint32 physAddr = FrameManager::physicalFrames.allocateFrame();
     PageManager::mapPage(virtualAddr, physAddr, PageFlag::PRESENT | PageFlag::WRITABLE);
 }
