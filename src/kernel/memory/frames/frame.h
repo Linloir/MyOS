@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-06 15:52:00
+ * LastEditTime : 2022-06-06 16:06:43
  * Description  : 
  */
 
@@ -14,8 +14,7 @@
 enum class FrameFlag {
     FREE        = 1,
     LOCKED      = 1 << 1,
-    REFERENCED  = 1 << 2,
-    IS_FILE     = 1 << 3,
+    IS_FILE     = 1 << 2,
 };
 
 class Frame {
@@ -23,8 +22,11 @@ class Frame {
         uint32 addr;
         PageTableEntry* pgEntry;
         FrameFlag flags;
+        uint8 accessBits;
     public:
         void reclaim();
+        void updateAccessHistory();
+        uint8 accessHistory();
 };
 
 #endif
