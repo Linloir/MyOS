@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-04 23:14:04
+ * LastEditTime : 2022-06-05 17:32:08
  * Description  : 
  */
 #include "interrupt.h"
@@ -11,7 +11,7 @@
 #include "proc.h"
 #include "lock.h"
 #include "idt.h"
-#include "frame.h"
+#include "framing.h"
 #include "paging.h"
 #include "mmu.h"
 #include "allocator.h"

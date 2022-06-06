@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 20:17:11
- * LastEditTime : 2022-06-04 14:46:28
+ * LastEditTime : 2022-06-05 17:32:48
  * Description  : Frame manager, including allocate physical frames and deallocate physical frames
  */
 
-#ifndef _FRAME_H_
-#define _FRAME_H_
+#ifndef _FRAMING_H_
+#define _FRAMING_H_
 
 #include "bitmap.h"
 

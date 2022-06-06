@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-03 22:48:56
+ * LastEditTime : 2022-06-05 17:31:35
  * Description  : Paging
  */
 
 #include "paging.h"
-#include "frame.h"
+#include "framing.h"
 #include "mmu.h"
 
 void PageManager::initialize() {

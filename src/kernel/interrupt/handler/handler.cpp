@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-05 11:22:12
+ * LastEditTime : 2022-06-05 17:32:12
  * Description  : 
  */
 
@@ -9,7 +9,7 @@
 #include "interrupt.h"
 #include "proc.h"
 #include "std_utils.h"
-#include "frame.h"
+#include "framing.h"
 #include "paging.h"
 
 extern "C" void emptyHandler() {
