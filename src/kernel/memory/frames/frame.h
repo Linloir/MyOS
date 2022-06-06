@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-06 16:06:43
+ * LastEditTime : 2022-06-06 22:03:50
  * Description  : 
  */
 
@@ -12,9 +12,8 @@
 #include "page.h"
 
 enum class FrameFlag {
-    FREE        = 1,
-    LOCKED      = 1 << 1,
-    IS_FILE     = 1 << 2,
+    LOCKED      = 1,
+    DIRTY       = 1 << 1,
 };
 
 class Frame {
