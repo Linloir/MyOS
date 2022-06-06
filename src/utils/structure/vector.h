@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-06 20:42:53
+ * LastEditTime : 2022-06-06 20:57:30
  * Description  : 
  */
 
@@ -31,6 +31,8 @@ class Vec {
         void erase(unsigned int pos);
         T& operator[](int index);
         T& at(int index);
+        T& front();
+        T& back();
         unsigned int size();
         unsigned int capacity();
         void clear();

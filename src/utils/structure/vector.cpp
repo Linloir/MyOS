@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:14
- * LastEditTime : 2022-06-06 20:53:22
+ * LastEditTime : 2022-06-06 20:57:50
  * Description  : 
  */
 
@@ -112,6 +112,22 @@ T& Vec<T>::at(int index) {
         //@TODO do something
     }
     return _items[index];
+}
+
+template<typename T>
+T& Vec<T>::front() {
+    if(_size <= 0) {
+        //@TODO do something
+    }
+    return _items[0];
+}
+
+template<typename T>
+T& Vec<T>::back() {
+    if(_size <= 0) {
+        //@TODO do something
+    }
+    return _items[_size - 1];
 }
 
 template<typename T>

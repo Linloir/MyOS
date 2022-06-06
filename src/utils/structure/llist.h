@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:15:43
- * LastEditTime : 2022-06-06 16:55:48
+ * LastEditTime : 2022-06-06 20:56:15
  * Description  : 
  */
 
@@ -29,16 +29,16 @@ class LinkedList {
     public:
         LinkedList(): head(nullptr) {}
         ~LinkedList();
-        void pushFront(T val);
+        void pushFront(const T& val);
         void popFront();
-        void pushBack(T val);
+        void pushBack(const T& val);
         void popBack();
-        void insertAt(T val);
+        void insertAt(const T& val);
         void removeAt(int index);
-        LinkedListNode<T>* operator[](int index);
-        LinkedListNode<T>* at(int index);
-        LinkedListNode<T>* front();
-        LinkedListNode<T>* back();
+        T& operator[](int index);
+        T& at(int index);
+        T& front();
+        T& back();
         int length();
 };
 
