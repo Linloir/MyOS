@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-05 17:32:12
+ * LastEditTime : 2022-06-07 18:00:42
  * Description  : 
  */
 
@@ -32,7 +32,10 @@ extern "C" void doubleFaultInterruptHandler() {
 }
 
 extern "C" void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr) {
-    printf("Page fault with err code 0x%x when visiting 0x%x\n", errCode, virtualAddr);
+    printf("Error 0xE: {\n");
+    printf("    Page fault with err code 0x%x when visiting 0x%x\n", errCode, virtualAddr);
     uint32 physAddr = FrameManager::physicalFrames.allocateFrame();
     PageManager::mapPage(virtualAddr, physAddr, PageFlag::PRESENT | PageFlag::WRITABLE);
+    printf("    Mapped [physical] 0x%x <- [virtual] 0x%x\n", physAddr, virtualAddr);
+    printf("}\n");
 }

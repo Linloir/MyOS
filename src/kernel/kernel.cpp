@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-05 17:32:08
+ * LastEditTime : 2022-06-07 18:09:21
  * Description  : 
  */
 #include "interrupt.h"
@@ -21,9 +21,14 @@ void firstThread(void** args);
 
 void firstThread(void**) {
 
+    printf("Try writing value 1 to addr 0xBF000000\n");
     int* test = (int*)0xBF000000;
     *test = 1;
     printf("%d\n", *test);
+    int* mallocTest = (int*)malloc(sizeof(int) * 5);
+    mallocTest[0] = 1;
+    mallocTest[1] = 2;
+    printf("%d %d\n", mallocTest[0], mallocTest[1]);
     
     while(true){
     }
