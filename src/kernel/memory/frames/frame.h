@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-06 22:03:50
+ * LastEditTime : 2022-06-07 17:52:25
  * Description  : 
  */
 
@@ -13,19 +13,36 @@
 
 enum class FrameFlag {
     LOCKED      = 1,
-    DIRTY       = 1 << 1,
 };
+
+FrameFlag operator|(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator&(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator-(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator!(FrameFlag flag);
+bool contains(FrameFlag flagSet, FrameFlag flag);
 
 class Frame {
     private:
-        uint32 addr;
-        PageTableEntry* pgEntry;
-        FrameFlag flags;
-        uint8 accessBits;
+        uint32 _val;
+        PageTableEntry* _pageEntry;
+        uint8 _access = 0;
     public:
+        Frame(uint32 physicalAddr, FrameFlag flags, PageTableEntry* entry);
+        
+        uint32 physicalAddr();
+
+        FrameFlag flags();
+        void setFlags(FrameFlag flags);
+        
+        PageTableEntry* pageEntry();
+        void setPageEntry(PageTableEntry* entry);
+
+        uint8 access();
+        void updateAccess();
+
         void reclaim();
-        void updateAccessHistory();
-        uint8 accessHistory();
 };
+
+bool cmp(Frame& a, Frame& b);
 
 #endif

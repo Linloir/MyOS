@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:14
- * LastEditTime : 2022-06-06 20:57:50
+ * LastEditTime : 2022-06-07 14:41:39
  * Description  : 
  */
 
@@ -96,6 +96,15 @@ void Vec<T>::erase(unsigned int pos) {
         _items[i] = _items[i + 1];
     }
     _size--;
+}
+
+template<typename T>
+Vec<T>& Vec<T>::operator+=(const Vec<T>& other) {
+    _ensureCapacity(_size + other._size);
+    for(int i = 0; i < other._size; i++) {
+        _items[_size + i] = other._items[i];
+    }
+    return *this;
 }
 
 template<typename T>

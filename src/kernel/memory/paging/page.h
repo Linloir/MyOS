@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-04 15:23:28
+ * LastEditTime : 2022-06-07 17:25:53
  * Description  : 
  */
 
@@ -9,6 +9,7 @@
 #define _PAGE_H_
 
 #include "os_type.h"
+#include "swap.h"
 
 enum class PageFlag{
     PRESENT         = 1,
@@ -45,8 +46,10 @@ class PageTableEntry {
         void setValue(uint32 address, PageFlag flags);
         void setAddress(uint32 address);
         void setFlags(PageFlag flags);
+        void clearFlags(PageFlag flags);
         bool isPresent();
         void erase();
+        SwapRecord* toSwapRecord(uint32 startSector);
 };
 
 class PageTable {

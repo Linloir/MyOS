@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-05 17:31:35
+ * LastEditTime : 2022-06-07 15:43:01
  * Description  : Paging
  */
 
 #include "paging.h"
-#include "framing.h"
+#include "framemanager.h"
 #include "mmu.h"
 
 void PageManager::initialize() {
@@ -17,13 +17,13 @@ void PageManager::initialize() {
     bootTable->removeAt(0, 256);
 }
 
-uint32 PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
+PageTableEntry* PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
     //fetch l2 table
     PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
     uint32 frstLevelTableIndex = virtualAddr >> 22;
     //create l1 table if not exist
     if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
-        uint32 newTableAddr = FrameManager::physicalFrames.allocateFrame();
+        uint32 newTableAddr = physicalFrames.allocateFrame().physicalAddr();
         PageTableEntry newEntry = PageTableEntry(newTableAddr, PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE);
         scndLevelTable->insertAt(frstLevelTableIndex, newEntry);
     }
@@ -32,6 +32,7 @@ uint32 PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag fl
     uint32 entryIndex = (virtualAddr << 10) >> 22;
     PageTableEntry newEntry = PageTableEntry(physicalAddr, flags);
     frstLevelTable->insertAt(entryIndex, newEntry);
+    return &(frstLevelTable->entryAt(entryIndex));
 }
 
 uint32 PageManager::unmapPage(uint32 virtualAddr) {

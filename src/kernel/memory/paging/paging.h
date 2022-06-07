@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-06-03 22:47:33
+ * LastEditTime : 2022-06-07 15:42:48
  * Description  : Page management
  */
 
@@ -26,7 +26,7 @@ class PageManager {
          * @param virtualAddr the address of virtual page that is mapped from
          * @param flags the flags of the mapping page
          */
-        static uint32 mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags);
+        static PageTableEntry* mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags);
         /**
          * Unmap a physical page from a virtual page, actually removes an entry from the page table
          * 

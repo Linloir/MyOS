@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-04 15:21:50
+ * LastEditTime : 2022-06-07 11:34:02
  * Description  : 
  */
 
@@ -73,6 +73,12 @@ void PageTableEntry::setFlags(PageFlag flags) {
     temp &= 0xFFFFF000;
     temp |= static_cast<uint32>(flags);
     val = temp;
+}
+
+void PageTableEntry::clearFlags(PageFlag flags) {
+    PageFlag curFlag = this->flags();
+    curFlag = curFlag - flags;
+    this->setFlags(curFlag);
 }
 
 bool PageTableEntry::isPresent() {

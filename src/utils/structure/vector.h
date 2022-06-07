@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-06 20:57:30
+ * LastEditTime : 2022-06-07 14:41:07
  * Description  : 
  */
 
@@ -29,6 +29,7 @@ class Vec {
         void popBack();
         void insert(unsigned int pos, const T& item);
         void erase(unsigned int pos);
+        Vec<T>& operator+=(const Vec<T>& other);
         T& operator[](int index);
         T& at(int index);
         T& front();

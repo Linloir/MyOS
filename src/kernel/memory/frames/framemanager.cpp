@@ -1,32 +1,39 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-06 22:23:14
+ * LastEditTime : 2022-06-07 17:54:32
  * Description  : 
  */
 
-#ifndef _FRAME_MANAGER_H_
-#define _FRAME_MANAGER_H_
+#include "framemanager.h"
+#include "paging.h"
+#include "linkedlist.h"
+#include "algorithm.h"
+#include "mmu.h"
 
-#include "os_type.h"
-#include "vector.h"
-#include "frame.h"
+FrameManager physicalFrames;
 
-class FrameManager {
-    private:
-        Vec<Frame*> _availableFrames;
-        Vec<Frame*> _shadowFrames;
-        Vec<Frame*> _allocatedFrames;
-        Vec<Vec<uint32>> _swappedFrames;
-        void reclaimFrames(uint32 count);
-        void swapOut(Frame* frame);
-        void swapIn(uint32 attemptingAddr);
-    public:
-        bool tryShadow(uint32 attemptingAddr, uint32 pid);
-        bool trySwap(uint32 );
-        Vec<Frame*> allocateFrames(uint32 count);
-        void freeFrames(Frame* frame);
-        void ageFrames();
-};
+void FrameManager::reclaimFrames(uint32 count) {
+    _lock.acquire();
+    if(count <= 0)  return;
 
-#endif
+    qsort(_allocatedFrames, cmp);
+    Vec<Frame> skippedFrames;
+    int reclaimedCount = 0;
+    while(reclaimedCount < count && _allocatedFrames.size() > 0) {
+        Frame f = _allocatedFrames.back();
+        _allocatedFrames.popBack();
+        if(contains(f.flags(), FrameFlag::LOCKED)) {
+            skippedFrames.pushBack(f);
+            continue;
+        }
+        SwapManager::swapOut(f);
+        f.reclaim();
+        _availableFrames.pushBack(f);
+        reclaimedCount++;
+    }
+    
+    _allocatedFrames += skippedFrames;
+
+    _lock.release();
+}
