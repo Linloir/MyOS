@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-07 11:34:02
+ * LastEditTime : 2022-06-07 22:49:28
  * Description  : 
  */
 
@@ -87,6 +87,13 @@ bool PageTableEntry::isPresent() {
 
 void PageTableEntry::erase() {
     val = 0;
+}
+
+SwapRecord* PageTableEntry::toSwapRecord(uint32 startSector) {
+    startSector <<= 12;
+    val &= 0x00000FFF;
+    val |= startSector;
+    return (SwapRecord*)this;
 }
 
 PageTable* PageTable::fromPhysicalAddr(uint32 addr) {

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:06:18
- * LastEditTime : 2022-06-07 17:37:14
+ * LastEditTime : 2022-06-07 22:50:51
  * Description  : 
  */
 
@@ -12,6 +12,7 @@
 #include "vector.h"
 #include "frame.h"
 #include "page.h"
+#include "lock.h"
 
 struct SwapRecord {
     private:
@@ -25,11 +26,12 @@ struct SwapRecord {
 
 class SwapManager {
     private:
+        static SemLock _lock;
         static Vec<uint32> _freeSectors;
     public:
         static void initialize(uint32 totalSectors);
         static void swapOut(Frame frame);
-        static void swapIn(SwapRecord* record); 
+        static void swapIn(SwapRecord* record, Frame newFrame); 
 };
 
 extern "C" void readSector(uint32 sector, uint32 addr);

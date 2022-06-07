@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:53
- * LastEditTime : 2022-06-07 17:54:04
+ * LastEditTime : 2022-06-07 23:26:55
  * Description  : 
  */
 
@@ -15,28 +15,25 @@
 
 class FrameManager {
     private:
-        const uint32 _minAvailableFrames = 50;
+        static const uint32 _defaultRefreshInterval = 500;
 
-        SemLock _lock;
-        uint32 _tickTillRefresh;
+        static SemLock _lock;
+        static uint32 _tickTillRefresh;
 
-        uint32 _totalFrames;
-        uint32 _freeFrames;
+        static uint32 _totalFrames;
+        static uint32 _freeFrames;
 
-        Vec<Frame> _availableFrames;
-        Vec<Frame> _allocatedFrames;
+        static Vec<Frame> _availableFrames;
+        static Vec<Frame> _allocatedFrames;
 
-        void reclaimFrames(uint32 count);
+        static void reclaimFrames(uint32 count);
     public:
-        FrameManager();
-        FrameManager(uint32 totalFrames);
-        Frame allocateFrame();
-        Vec<Frame> allocateFrames(uint32 count);
-        void freeFrame(Frame frame);
-        void ageFrames();
+        static void initialize();
+        static Frame allocateFrame();
+        static Vec<Frame> allocateFrames(uint32 count);
+        static void freeFrame(uint32 physicalAddr);
+        static void ageFrames();
 };
-
-extern FrameManager physicalFrames;
 
 extern "C" void readSector(int sector, uint32 virtualAddr);
 extern "C" void writeSector(int sector, uint32 virtualAddr);
