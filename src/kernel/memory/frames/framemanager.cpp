@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-08 09:08:26
+ * LastEditTime : 2022-06-08 11:08:50
  * Description  : 
  */
 
@@ -12,7 +12,7 @@
 #include "algorithm.h"
 #include "mmu.h"
 
-SemLock FrameManager::_lock = SemLock(1);
+SemLock FrameManager::_lock;
 uint32 FrameManager::_tickTillRefresh = FrameManager::_defaultRefreshInterval;
 uint32 FrameManager::_totalFrames = 0;
 uint32 FrameManager::_freeFrames = 0;
@@ -23,7 +23,7 @@ void FrameManager::reclaimFrames(uint32 count) {
     _lock.acquire();
     if(count <= 0)  return;
 
-    qsort(_allocatedFrames, cmp);
+    qsort(_allocatedFrames, 0, _allocatedFrames.size() - 1, cmp);
     Vec<Frame> skippedFrames;
     int reclaimedCount = 0;
     while(reclaimedCount < count && _allocatedFrames.size() > 0) {
@@ -68,6 +68,10 @@ void FrameManager::initialize(int totalFrames, int mappedFrames) {
             _freeFrames++;
         }
     }
+
+    _lock = SemLock(1);
+
+    printf("_lock at 0x%x with permit %d\n", &_lock, _lock.permits());
 }
 
 Frame FrameManager::allocateFrame() {

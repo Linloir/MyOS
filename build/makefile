@@ -1,6 +1,6 @@
 ASM_COMPILER := nasm
 CPP_COMPILER := g++
-CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreestanding -fno-pic
+CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreestanding -fno-pic -fno-exceptions -fno-unwind-tables -fno-threadsafe-statics
 LINKER := ld
 
 # INCLUDE_PATH := $(addprefix -I,$(wildcard ../include/*/))
@@ -19,9 +19,7 @@ CPP_OBJ := $(patsubst %.cpp,%.o,$(notdir $(CPP_SRC)))
 ASM_OBJ := $(patsubst %.asm,%.o,$(notdir $(ASM_SRC)))
 
 .PHONY:
-test:
-	@echo $(CPP_OBJ)
-	@echo $(INCLUDE_PATH)
+test: cppAll.o
 
 .PHONY:
 build: mbr.bin bootloader.bin kernelloader.bin kernel.bin debug.o kernelloaderdebug.o
@@ -48,6 +46,9 @@ debug.o: $(CPP_OBJ) $(ASM_OBJ)
 
 $(CPP_OBJ): $(CPP_SRC)
 	$(CPP_COMPILER) $(CXX_COMPILER_FLAGS) $(INCLUDE_PATH) -c $(CPP_SRC)
+
+cppAll.o: $(CPP_SRC)
+	$(CPP_COMPILER) -o $@ $(CXX_COMPILER_FLAGS) $(INCLUDE_PATH) $(CPP_SRC)
 
 $(ASM_OBJ): $(ASM_SRC)
 	$(ASM_COMPILER) -o $@ -g -f elf32 $(filter %/$*.asm,$^)

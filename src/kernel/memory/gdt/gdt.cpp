@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:58
- * LastEditTime : 2022-06-04 22:45:58
+ * LastEditTime : 2022-06-08 10:04:31
  * Description  : 
  */
 
@@ -32,11 +32,11 @@ bool contains(GlobalDescriptorFlag flagSet, GlobalDescriptorFlag flag) {
 }
 
 GlobalDescriptor::GlobalDescriptor(uint32 base, uint32 limit, int ring, GlobalDescriptorFlag flags) {
-    uint64 base_hi = (base & 0xFF000000) << 32;
-    uint64 base_mid = (base & 0x00FF0000) << (32 - 16);
-    uint64 base_lo = (base & 0x0000FFFF) << 16;
-    uint64 limit_hi = (limit & 0x000F0000) << 32;
-    uint64 limit_lo = (limit & 0x0000FFFF);
+    uint64 base_hi = (uint64)(base & 0xFF000000) << 32;
+    uint64 base_mid = (uint64)(base & 0x00FF0000) << (32 - 16);
+    uint64 base_lo = (uint64)(base & 0x0000FFFF) << 16;
+    uint64 limit_hi = (uint64)(limit & 0x000F0000) << 32;
+    uint64 limit_lo = (uint64)(limit & 0x0000FFFF);
     uint64 r = (uint64)(ring & 0x3) << 45;
     if(contains(flags, GlobalDescriptorFlag::USE_64_BIT | GlobalDescriptorFlag::USE_32_BIT)) {
         flags = flags - GlobalDescriptorFlag::USE_32_BIT;

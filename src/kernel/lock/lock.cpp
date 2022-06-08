@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-05-22 16:18:08
+ * LastEditTime : 2022-06-08 11:11:05
  * Description  : 
  */
 
@@ -27,6 +27,12 @@ bool SpinLock::tryLock() {
 
 void SpinLock::release() {
     status = 0;
+}
+
+SemLock::SemLock() {
+    availablePermits = 1;
+    permitLock = SpinLock();
+    awaitList = List();
 }
 
 SemLock::SemLock(int permits) {

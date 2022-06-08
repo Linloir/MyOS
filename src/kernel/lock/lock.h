@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:20
- * LastEditTime : 2022-05-18 13:43:34
+ * LastEditTime : 2022-06-08 11:10:57
  * Description  : Spin lock and 
  */
 
@@ -27,6 +27,7 @@ private:
     SpinLock permitLock;
     List awaitList;
 public:
+    SemLock();
     SemLock(int permits);
     int permits() {return availablePermits;}
     void acquire();     //Try acquire permission, blocking

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-08 09:05:24
+ * LastEditTime : 2022-06-08 10:35:08
  * Description  : Kernel loader
  */
 
@@ -85,7 +85,7 @@ void initializePaging() {
 
     //Map pages for heap initialization
     uint32 heapAddr = virtAddr;
-    int initHeapFrameCount = 9;
+    int initHeapFrameCount = 1024;
     
     for(int i = 0; i < initHeapFrameCount; i++) {
         if(entryIndex == 1024) {
