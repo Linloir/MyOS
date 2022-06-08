@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-08 10:55:09
+ * LastEditTime : 2022-06-08 11:43:25
  * Description  : 
  */
 #include "interrupt.h"
@@ -83,6 +83,7 @@ void initPaging() {
 
 void initGlobalDescriptorTable() {
     GDT.initialize();
+    GDT.loadToGDTR();
 }
 
 void initScheduler() {

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-08 11:08:50
+ * LastEditTime : 2022-06-08 19:56:35
  * Description  : 
  */
 
@@ -48,6 +48,8 @@ void FrameManager::reclaimFrames(uint32 count) {
 void FrameManager::initialize(int totalFrames, int mappedFrames) {
     _totalFrames = totalFrames;
     _freeFrames = 0;
+    _availableFrames = Vec<Frame>(_totalFrames);
+    _allocatedFrames = Vec<Frame>();
     uint32 addr = 0x0;
     uint32 mappedStart = toVirtualAddress(0x200000);
     uint32 mappedEnd = toVirtualAddress(0x200000 + mappedFrames * PAGE_SIZE);

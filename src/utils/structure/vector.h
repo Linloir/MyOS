@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-08 10:42:30
+ * LastEditTime : 2022-06-08 20:05:38
  * Description  : 
  */
 
@@ -33,6 +33,7 @@ class Vec {
         void insert(unsigned int pos, const T& item);
         void erase(unsigned int pos);
         Vec<T>& operator+=(const Vec<T>& other);
+        Vec<T>& operator=(const Vec<T>& other);
         T& operator[](int index);
         T& at(int index);
         T& front();
@@ -143,6 +144,20 @@ Vec<T>& Vec<T>::operator+=(const Vec<T>& other) {
         _items[_size + i] = other._items[i];
     }
     return *this;
+}
+
+template<typename T>
+Vec<T>& Vec<T>::operator=(const Vec<T>& other) {
+    T* newItems = (T*)malloc(sizeof(T) * other._capacity);
+    if(_items != nullptr) {
+        free(_items);
+    }
+    _items = newItems;
+    _size = other._size;
+    _capacity = other._capacity;
+    for(int i = 0; i < _size; i++) {
+        _items[i] = other._items[i];
+    }
 }
 
 template<typename T>

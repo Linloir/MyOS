@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:58
- * LastEditTime : 2022-06-08 10:04:31
+ * LastEditTime : 2022-06-08 13:18:01
  * Description  : 
  */
 
@@ -52,7 +52,7 @@ GlobalDescriptorFlag GlobalDescriptor::flags() {
 
 void GlobalDescriptor::setFlags(GlobalDescriptorFlag flags) {
     GlobalDescriptorFlag all = GlobalDescriptorFlag::ACCESSED | GlobalDescriptorFlag::RW_AVAILABLE | GlobalDescriptorFlag::GROWS_DOWN |
-                                GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::SYSTEM | GlobalDescriptorFlag::PRESENT | 
+                                GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::NOT_SYSTEM | GlobalDescriptorFlag::PRESENT | 
                                 GlobalDescriptorFlag::USE_64_BIT | GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK;
     uint64 f = (uint64)static_cast<uint32>(flags) << 32;
     val &= ~((uint64)static_cast<uint32>(all) << 32);
@@ -93,15 +93,6 @@ void GlobalDescriptorTable::initialize() {
         GlobalDescriptorFlag::_EMPTY
     );
     descriptors[0] = emptySegmentDescriptor;
-    //Code Segment
-    GlobalDescriptor codeSegmentDescriptor = GlobalDescriptor(
-        0x0,
-        0xFFFFF,
-        0,
-        GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::PRESENT | 
-        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK  
-    );
-    descriptors[1] = codeSegmentDescriptor;
 
     //Data Segment
     GlobalDescriptor dataSegmentDescriptor = GlobalDescriptor(
@@ -109,9 +100,21 @@ void GlobalDescriptorTable::initialize() {
         0xFFFFF,
         0,
         GlobalDescriptorFlag::RW_AVAILABLE | GlobalDescriptorFlag::PRESENT | 
-        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
     );
-    descriptors[2] = dataSegmentDescriptor;
+    descriptors[1] = dataSegmentDescriptor;
+
+    //Code Segment
+    GlobalDescriptor codeSegmentDescriptor = GlobalDescriptor(
+        0x0,
+        0xFFFFF,
+        0,
+        GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::PRESENT | 
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
+    );
+    descriptors[2] = codeSegmentDescriptor;
 
     //Stack Segment
     GlobalDescriptor stackSegmentDescriptor = GlobalDescriptor(
@@ -120,7 +123,7 @@ void GlobalDescriptorTable::initialize() {
         0,
         GlobalDescriptorFlag::GROWS_DOWN | GlobalDescriptorFlag::RW_AVAILABLE | 
         GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::USE_32_BIT | 
-        GlobalDescriptorFlag::USE_4KB_BLOCK
+        GlobalDescriptorFlag::USE_4KB_BLOCK | GlobalDescriptorFlag::NOT_SYSTEM
     );
     descriptors[3] = stackSegmentDescriptor;
 }

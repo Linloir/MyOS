@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:53
- * LastEditTime : 2022-06-08 00:02:22
+ * LastEditTime : 2022-06-08 13:17:42
  * Description  : 
  */
 
@@ -18,11 +18,11 @@ enum class GlobalDescriptorFlag {
     RW_AVAILABLE    = 1 << 9,
     GROWS_DOWN      = 1 << 10,
     EXECUTABLE      = 1 << 11,
-    SYSTEM          = 1 << 12,
+    NOT_SYSTEM      = 1 << 12,
     PRESENT         = 1 << 15,
-    USE_64_BIT      = 1 << 21,
-    USE_32_BIT      = 1 << 22,
-    USE_4KB_BLOCK   = 1 << 23,
+    USE_64_BIT      = 1 << 20,
+    USE_32_BIT      = 1 << 21,
+    USE_4KB_BLOCK   = 1 << 22,
 };
 
 GlobalDescriptorFlag operator|(GlobalDescriptorFlag lhs, GlobalDescriptorFlag rhs);

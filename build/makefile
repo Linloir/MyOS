@@ -1,6 +1,6 @@
 ASM_COMPILER := nasm
 CPP_COMPILER := g++
-CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreestanding -fno-pic -fno-exceptions -fno-unwind-tables -fno-threadsafe-statics
+CXX_COMPILER_FLAGS := -g -Wall -march=i386 -m32 -nostdlib -fno-builtin -ffreestanding -fno-pic -fno-exceptions -fno-unwind-tables
 LINKER := ld
 
 # INCLUDE_PATH := $(addprefix -I,$(wildcard ../include/*/))
