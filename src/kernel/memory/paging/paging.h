@@ -1,15 +1,15 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-06-07 15:42:48
+ * LastEditTime : 2022-06-07 23:53:44
  * Description  : Page management
  */
 
-#ifndef _PAGING_H_
-#define _PAGING_H_
-
 #include "os_type.h"
 #include "page.h"
+
+#ifndef _PAGING_H_
+#define _PAGING_H_
 
 extern "C" uint32 getCR3();
 extern "C" void setCR3(uint32 table);

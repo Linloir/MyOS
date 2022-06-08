@@ -1,18 +1,20 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:06:18
- * LastEditTime : 2022-06-07 22:50:51
+ * LastEditTime : 2022-06-07 23:57:09
  * Description  : 
  */
+
+#include "os_type.h"
+#include "vector.h"
+#include "lock.h"
 
 #ifndef _SWAP_H_
 #define _SWAP_H_
 
-#include "os_type.h"
-#include "vector.h"
-#include "frame.h"
-#include "page.h"
-#include "lock.h"
+enum class PageFlag;
+class PageTableEntry;
+class Frame;
 
 struct SwapRecord {
     private:

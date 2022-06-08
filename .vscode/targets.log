@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun  7 22:35:13 2022
+# Make data base, printed on Wed Jun  8 08:52:54 2022
 
 # Variables
 
@@ -61,7 +61,7 @@ LC_NAME = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/linloir
 # environment
-SSH_CONNECTION = 172.19.19.244 60742 192.168.87.128 22
+SSH_CONNECTION = 172.19.49.196 52953 192.168.87.128 22
 # environment
 PATH = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-003dc8e5-fc89-429f-88eb-f44859cc9cc6.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-cd14ce38-491c-4089-8535-1e70e05144d0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -113,7 +113,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-XDG_SESSION_ID = 2
+XDG_SESSION_ID = 47
 # environment
 USER = linloir
 # environment
@@ -139,7 +139,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 172.19.19.244 60742 22
+SSH_CLIENT = 172.19.49.196 52953 22
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
@@ -245,6 +245,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Tue Jun  7 22:35:13 2022
+# Finished Make data base on Wed Jun  8 08:52:54 2022
 
  

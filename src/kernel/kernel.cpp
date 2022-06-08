@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-05 17:32:08
+ * LastEditTime : 2022-06-07 23:51:01
  * Description  : 
  */
 #include "interrupt.h"
@@ -11,7 +11,7 @@
 #include "proc.h"
 #include "lock.h"
 #include "idt.h"
-#include "framing.h"
+#include "framemanager.h"
 #include "paging.h"
 #include "mmu.h"
 #include "allocator.h"
@@ -90,7 +90,7 @@ void initScheduler() {
 }
 
 void initInterrupt() {
-    uint32 idtAddr = FrameManager::physicalFrames.allocateFrame();
+    uint32 idtAddr = FrameManager::allocateFrame().physicalAddr();
     InterruptDescriptorTable* idt = InterruptDescriptorTable::fromPhysicalAddr(idtAddr);
     idt->initialize();
     idt->loadToIDTR();

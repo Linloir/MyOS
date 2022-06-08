@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-07 15:43:01
+ * LastEditTime : 2022-06-07 23:44:20
  * Description  : Paging
  */
 
@@ -23,7 +23,7 @@ PageTableEntry* PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, Pa
     uint32 frstLevelTableIndex = virtualAddr >> 22;
     //create l1 table if not exist
     if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
-        uint32 newTableAddr = physicalFrames.allocateFrame().physicalAddr();
+        uint32 newTableAddr = FrameManager::allocateFrame().physicalAddr();
         PageTableEntry newEntry = PageTableEntry(newTableAddr, PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE);
         scndLevelTable->insertAt(frstLevelTableIndex, newEntry);
     }

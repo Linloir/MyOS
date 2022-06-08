@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-07 14:01:59
- * LastEditTime : 2022-06-07 14:22:39
+ * LastEditTime : 2022-06-07 23:41:29
  * Description  : 
  */
 
@@ -15,7 +15,7 @@ void swap(T& a, T& b) {
 }
 
 template<typename T>
-void _partition(Vec<T> arr, int start, int end, bool (*cmp)(T& a, T& b)) {
+int _partition(Vec<T> arr, int start, int end, bool (*cmp)(T& a, T& b)) {
     int pivot = arr[start];
 
     int count = 0;

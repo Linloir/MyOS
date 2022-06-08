@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 21:54:46
- * LastEditTime : 2022-06-06 21:56:21
+ * LastEditTime : 2022-06-07 23:39:46
  * Description  : 
  */
 
@@ -18,10 +18,10 @@ struct DualLinkedListNode {
 template<typename T>
 class DualLinkedList {
     private:
-        DualLinkedListNode<T>* head;
-        int length;
+        DualLinkedListNode<T>* _head;
+        int _length;
     public:
-        DualLinkedList(): head(nullptr) {}
+        DualLinkedList(): _head(nullptr) {}
         ~DualLinkedList();
         void pushFront(T val);
         void popFront();
@@ -32,7 +32,7 @@ class DualLinkedList {
         DualLinkedListNode<T>* operator[](int index);
         DualLinkedListNode<T>* at(int index);
         DualLinkedListNode<T>* front();
-        LinkedListNode<T>* back();
+        DualLinkedListNode<T>* back();
         int length();
 };
 

@@ -1,17 +1,18 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-07 17:52:25
+ * LastEditTime : 2022-06-08 08:58:07
  * Description  : 
  */
-
-#ifndef _FRAME_H_
-#define _FRAME_H_
 
 #include "os_type.h"
 #include "page.h"
 
+#ifndef _FRAME_H_
+#define _FRAME_H_
+
 enum class FrameFlag {
+    EMPTY      = 0,
     LOCKED      = 1,
 };
 

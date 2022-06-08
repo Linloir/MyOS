@@ -1,14 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:53
- * LastEditTime : 2022-06-04 22:47:35
+ * LastEditTime : 2022-06-08 00:02:22
  * Description  : 
  */
 
+#include "os_type.h"
+
 #ifndef _GDT_H_
 #define _GDT_H_
-
-#include "os_type.h"
 
 #define GDT_MAX_SIZE 4
 

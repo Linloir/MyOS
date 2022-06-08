@@ -32,23 +32,23 @@ writeSector:
     mov dx, 0x1F7
     out dx, al
 
-    .wait:
+    .write_sector_wait:
         mov dx, 0x1F7
         in  al, dx
         and al, 0x88
         cmp al, 0x08
-        jnz .wait
+        jnz .write_sector_wait
     
-    .write:
+    .write_sector_write:
         mov ebx, dword [ebp + 3 * 4]
         mov ecx, 256
         mov esi, 0
         mov dx, 0x1F0
-        .loop:
+        .write_sector_loop:
             mov ax, word [ebx + esi]
-            out ax, dx
+            out dx, ax
             add esi, 2
-            loop .loop
+            loop .write_sector_loop
 
 readSector:
     ; push addr
@@ -79,23 +79,23 @@ readSector:
     mov dx, 0x1F7
     out dx, al
 
-    .wait:
+    .read_sector_wait:
         mov dx, 0x1F7
         in  al, dx
         and al, 0x88
         cmp al, 0x08
-        jnz .wait
+        jnz .read_sector_wait
     
-    .write:
+    .read_sector_read:
         mov ebx, dword [ebp + 3 * 4]; addr
         mov ecx, 256
         mov esi, 0
         mov dx, 0x1F0
-        .loop:
+        .read_sector_loop:
             in  ax, dx
             mov word [ebx + esi], ax
             add esi, 2
-            loop .loop
+            loop .read_sector_loop
     
     popad
     pop ebp

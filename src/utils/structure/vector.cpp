@@ -1,11 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:14
- * LastEditTime : 2022-06-07 14:41:39
+ * LastEditTime : 2022-06-07 23:40:52
  * Description  : 
  */
 
 #include "vector.h"
+#include "allocator.h"
 
 template<typename T>
 bool Vec<T>::_setCapacity(unsigned int newCapacity) {

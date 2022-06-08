@@ -1,11 +1,13 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:06:15
- * LastEditTime : 2022-06-07 22:58:35
+ * LastEditTime : 2022-06-08 00:02:01
  * Description  : 
  */
 
 #include "swap.h"
+#include "page.h"
+#include "frame.h"
 #include "mmu.h"
 
 SwapRecord::SwapRecord(uint32 sector, PageFlag oldFlags) {

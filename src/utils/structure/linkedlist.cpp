@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:15:47
- * LastEditTime : 2022-06-06 21:55:15
+ * LastEditTime : 2022-06-07 23:40:33
  * Description  : 
  */
 
@@ -132,7 +132,7 @@ void LinkedList<T>::removeAt(int index) {
 
     //find node before remove point
     LinkedListNode<T>* iter = _head;
-    for(int i = 0; i < index, i++) {
+    for(int i = 0; i < index; i++) {
         iter = iter->_next;
     }
     

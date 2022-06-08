@@ -1,14 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 14:03:21
- * LastEditTime : 2022-06-03 21:27:21
+ * LastEditTime : 2022-06-07 23:54:37
  * Description  : Transform address
  */
 
+#include "os_type.h"
+
 #ifndef _MMU_H_
 #define _MMU_H_
-
-#include "os_type.h"
 
 #define OFFSET 0xB0100000
 

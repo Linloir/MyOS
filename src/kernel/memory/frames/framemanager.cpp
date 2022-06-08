@@ -1,11 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-07 23:31:04
+ * LastEditTime : 2022-06-08 09:08:26
  * Description  : 
  */
 
 #include "framemanager.h"
+#include "os_constant.h"
 #include "paging.h"
 #include "linkedlist.h"
 #include "algorithm.h"
@@ -44,15 +45,37 @@ void FrameManager::reclaimFrames(uint32 count) {
     _lock.release();
 }
 
-void FrameManager::initialize() {
-
+void FrameManager::initialize(int totalFrames, int mappedFrames) {
+    _totalFrames = totalFrames;
+    _freeFrames = 0;
+    uint32 addr = 0x0;
+    uint32 mappedStart = toVirtualAddress(0x200000);
+    uint32 mappedEnd = toVirtualAddress(0x200000 + mappedFrames * PAGE_SIZE);
+    for(int i = 0; i < totalFrames; i++) {
+        if(addr >= mappedStart && addr <= mappedEnd) {
+            _allocatedFrames.pushBack(Frame(
+                addr,
+                FrameFlag::LOCKED,
+                nullptr
+            ));
+        }
+        else {
+            _availableFrames.pushBack(Frame(
+                addr,
+                FrameFlag::EMPTY,
+                nullptr
+            ));
+            _freeFrames++;
+        }
+    }
 }
 
 Frame FrameManager::allocateFrame() {
     _lock.acquire();
     if(_freeFrames == 0) {
         _lock.release();
-        return;
+        reclaimFrames(1);
+        _lock.acquire();
     }
     Frame alloc = _availableFrames.back();
     _availableFrames.popBack();
@@ -70,7 +93,7 @@ Vec<Frame> FrameManager::allocateFrames(uint32 count) {
         _lock.acquire();
         if(count < _freeFrames) {
             _lock.release();
-            return;
+            return Vec<Frame>();
         }
     }
     Vec<Frame> alloc;

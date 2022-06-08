@@ -1,15 +1,15 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-07 17:25:53
+ * LastEditTime : 2022-06-07 23:54:04
  * Description  : 
  */
 
-#ifndef _PAGE_H_
-#define _PAGE_H_
-
 #include "os_type.h"
 #include "swap.h"
+
+#ifndef _PAGE_H_
+#define _PAGE_H_
 
 enum class PageFlag{
     PRESENT         = 1,
