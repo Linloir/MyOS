@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-06-07 23:53:44
+ * LastEditTime : 2022-06-08 22:37:00
  * Description  : Page management
  */
 
@@ -35,6 +35,8 @@ class PageManager {
          * @param virtualAddr the address of virtual page that is to be unmapped
          */
         static uint32 unmapPage(uint32 virtualAddr);
+        static bool isMapped(PageTable* pageTable, Page page);
+        static PageTableEntry* mapPage(PageTable* pageTable, Page page, Frame frame, PageFlag flags);
 };
 
 #endif
