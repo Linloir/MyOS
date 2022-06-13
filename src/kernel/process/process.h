@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-08 23:14:36
+ * LastEditTime : 2022-06-12 20:01:58
  * Description  : Process Control Block
  */
 
@@ -11,7 +11,7 @@
 #include "os_type.h"
 #include "page.h"
 
-#define START_ADDR_MASK(MAXSIZE) !((MAXSIZE) - 1)
+#define START_ADDR_MASK(MAXSIZE) (!((MAXSIZE) - 1))
 
 enum class ProcessStatus {
     NEW,

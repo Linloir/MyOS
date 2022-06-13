@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:25:04
- * LastEditTime : 2022-06-08 09:06:05
+ * LastEditTime : 2022-06-13 10:13:11
  * Description  : 
  */
 
@@ -10,7 +10,7 @@
 
 #include "os_type.h"
 
-#define KERNEL_START_ADDR 0xB0000000    //3GiB
+#define KERNEL_START_ADDR 0xC0000000    //3GiB
 #define KERNEL_START_SECTOR 16
 #define KERNEL_SECTOR_COUNT 200
 

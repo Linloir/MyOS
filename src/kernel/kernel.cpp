@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-08 11:43:25
+ * LastEditTime : 2022-06-13 10:21:33
  * Description  : 
  */
 #include "interrupt.h"
@@ -45,7 +45,7 @@ extern "C" void kernel() {
     printf("Kernel: {\n");
     printf("    'void kernel()' address: 0x%x\n", &kernel);
     printf("    Mapped pages: %d\n", mappedPages);
-    printf("    Mapped address space: \n        [virtual] 0x%x ~ 0x%x -> [physical] 0x%x ~ 0x%x\n", 0xB0100000, 0xB0100000 + memorySize, 0x0, memorySize);
+    printf("    Mapped address space: \n        [virtual] 0x%x ~ 0x%x -> [physical] 0x%x ~ 0x%x\n", 0xC0100000, 0xC0100000 + memorySize, 0x0, memorySize);
     printf("    Total memory: %d KiB (%d MiB)\n", totalFrames << 2, totalFrames >> 8);
     printf("}\n");
     
@@ -62,7 +62,7 @@ extern "C" void kernel() {
     initGlobalDescriptorTable();
     initScheduler();
     initInterrupt();
-
+    int a = 0 / 0;
     Scheduler::executeThread(firstThread, 0, 1);
     while(true) {
         //Halt

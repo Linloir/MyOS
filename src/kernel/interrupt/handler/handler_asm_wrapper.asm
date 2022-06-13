@@ -10,17 +10,17 @@ extern timeInterruptHandler
 extern doubleFaultInterruptHandler
 extern pageFaultInterruptHandler
 
-asm_empty_interrupt_handler:
-    pushad
+; asm_empty_interrupt_handler:
+;     pushad
 
-    mov al, 0x20
-    out 0x20, al
-    out 0xA0, al
+;     mov al, 0x20
+;     out 0x20, al
+;     out 0xA0, al
 
-    call emptyHandler
+;     call emptyHandler
 
-    popad
-    iret
+;     popad
+;     iret
 
 asm_time_interrupt_handler:
     pushad
@@ -46,24 +46,24 @@ asm_double_fault_interrupt_handler:
     popad
     iret
 
-asm_page_fault_interrupt_handler:
-    push ebp
-    mov ebp, esp
-    pushad
+; asm_page_fault_interrupt_handler:
+;     push ebp
+;     mov ebp, esp
+;     pushad
 
-    mov al, 0x20
-    out 0x20, al
-    out 0xA0, al
+;     mov al, 0x20
+;     out 0x20, al
+;     out 0xA0, al
 
-    mov eax, cr2
-    push eax
+;     mov eax, cr2
+;     push eax
 
-    mov eax, [ebp + 1 * 4]  ; err code
-    push eax
-    call pageFaultInterruptHandler
-    add esp, 8
+;     mov eax, [ebp + 1 * 4]  ; err code
+;     push eax
+;     call pageFaultInterruptHandler
+;     add esp, 8
 
-    popad
-    pop ebp
-    add esp, 4
-    iret
+;     popad
+;     pop ebp
+;     add esp, 4
+;     iret

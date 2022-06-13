@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 09:42:01
- * LastEditTime : 2022-06-04 22:40:55
+ * LastEditTime : 2022-06-12 20:04:29
  * Description  : Interrupt Descriptor structures
  */
 
@@ -85,7 +85,7 @@ InterruptDescriptorTable* InterruptDescriptorTable::fromVirtualAddr(uint32 addr)
 void InterruptDescriptorTable::initialize() {
     //Set default descriptor
     InterruptDescriptor defaultDescriptor = InterruptDescriptor(
-        (uint32)asm_empty_interrupt_handler, 
+        (uint32)emptyHandler, 
         CODE_SELECTOR, 
         0x0, 
         InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
@@ -111,13 +111,13 @@ void InterruptDescriptorTable::initialize() {
     );
     setAt(0x20, timeInterruptHandler);
 
-    InterruptDescriptor pageFaultInterruptHandler = InterruptDescriptor(
-        (uint32)asm_page_fault_interrupt_handler,
-        CODE_SELECTOR,
-        0x0,
-        InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
-    );
-    setAt(0xE, pageFaultInterruptHandler);
+    // InterruptDescriptor pageFaultInterruptHandler = InterruptDescriptor(
+    //     (uint32)asm_page_fault_interrupt_handler,
+    //     CODE_SELECTOR,
+    //     0x0,
+    //     InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
+    // );
+    // setAt(0xE, pageFaultInterruptHandler);
 }
 
 uint32 InterruptDescriptorTable::physicalAddr() {

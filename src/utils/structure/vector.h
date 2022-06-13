@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-08 20:05:38
+ * LastEditTime : 2022-06-12 20:01:01
  * Description  : 
  */
 
@@ -158,6 +158,7 @@ Vec<T>& Vec<T>::operator=(const Vec<T>& other) {
     for(int i = 0; i < _size; i++) {
         _items[i] = other._items[i];
     }
+    return *this;
 }
 
 template<typename T>

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-08 19:56:35
+ * LastEditTime : 2022-06-13 10:14:51
  * Description  : 
  */
 
@@ -72,8 +72,6 @@ void FrameManager::initialize(int totalFrames, int mappedFrames) {
     }
 
     _lock = SemLock(1);
-
-    printf("_lock at 0x%x with permit %d\n", &_lock, _lock.permits());
 }
 
 Frame FrameManager::allocateFrame() {

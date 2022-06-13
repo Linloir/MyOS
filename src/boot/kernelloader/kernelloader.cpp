@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-08 10:35:08
+ * LastEditTime : 2022-06-13 10:13:35
  * Description  : Kernel loader
  */
 
@@ -18,7 +18,7 @@
 extern "C" void kernelLoader() {
     loadKernel();
     initializePaging();
-    jumpKernel(0xFFFFFFFE, KERNEL_START_ADDR);
+    jumpKernel(0xFFFFFFFC, KERNEL_START_ADDR);
 }
 
 void loadKernel() {
@@ -36,7 +36,7 @@ void initializePaging() {
     uint32* frstLevelTableBoot = (uint32*)FRST_LEVEL_TABLE_ADDR_BOOT;
     uint32* frstLevelTableKernel = (uint32*)FRST_LEVEL_TABLE_ADDR_KERNEL;
     uint32 physAddr = 0x0;          //0KiB
-    uint32 virtAddr = 0xB0000000;   //3GiB
+    uint32 virtAddr = KERNEL_START_ADDR;   //3GiB
     uint32 flag = 0x3;              //P, RWX, PRIVILEDGE
 
     //Init second level page table (set all entries to be 0(not present))
@@ -69,7 +69,7 @@ void initializePaging() {
     uint32* table = (uint32*)FRST_LEVEL_TABLE_ADDR_KERNEL;
     int entryIndex = 256;
     physAddr = 0x0;
-    virtAddr = 0xB0100000;
+    virtAddr = KERNEL_START_ADDR + 0x100000;
     for(int i = 0; i < frameCount; i++) {
         table[entryIndex] = physAddr | flag;
         physAddr += PAGE_SIZE;

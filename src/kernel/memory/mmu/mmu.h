@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 14:03:21
- * LastEditTime : 2022-06-07 23:54:37
+ * LastEditTime : 2022-06-13 10:20:59
  * Description  : Transform address
  */
 
@@ -10,7 +10,7 @@
 #ifndef _MMU_H_
 #define _MMU_H_
 
-#define OFFSET 0xB0100000
+#define OFFSET 0xC0100000
 
 uint32 toVirtualAddress(uint32 addr);
 uint32 toPhysicalAddress(uint32 addr);
