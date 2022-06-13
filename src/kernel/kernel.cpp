@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-13 10:21:33
+ * LastEditTime : 2022-06-13 10:27:30
  * Description  : 
  */
 #include "interrupt.h"
@@ -62,9 +62,10 @@ extern "C" void kernel() {
     initGlobalDescriptorTable();
     initScheduler();
     initInterrupt();
-    int a = 0 / 0;
-    Scheduler::executeThread(firstThread, 0, 1);
+    // Scheduler::executeThread(firstThread, 0, 1);
     while(true) {
+        for(int i = 0; i < 0x3FFFFFF; i++){}
+        printf("1\n");
         //Halt
     }
 }

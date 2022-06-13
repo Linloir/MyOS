@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-13 10:22:20
+ * LastEditTime : 2022-06-13 10:42:05
  * Description  : 
  */
 
@@ -22,7 +22,6 @@
 // }
 
 __attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
-    register uint32 out asm("%al");
     printf("0x%x\n", frame);
     printf("Empty handler\n");
     while(true) {
@@ -32,10 +31,11 @@ __attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
 
 __attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame) {
     printf("Time handler\n");
+    eoi();
     // Scheduler::onTimeInterrupt();
 }
 
-__attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame) {
+__attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode) {
 
     printf("Double fault\n");
     while(true) {
@@ -72,3 +72,12 @@ __attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* fra
 
 //     printf("Visiting wrong address\n");
 // }
+
+void eoi() {
+    asm(
+        ".intel_syntax noprefix\n\t"
+        "mov al, 0x20\n\t"
+        "out 0x20, al\n\t"
+        "out 0xA0, al\n\t"
+    );
+}
