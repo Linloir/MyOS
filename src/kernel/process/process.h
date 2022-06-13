@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-13 15:59:40
+ * LastEditTime : 2022-06-13 22:44:10
  * Description  : Process Control Block
  */
 
@@ -10,8 +10,7 @@
 
 #include "os_type.h"
 #include "page.h"
-
-#define START_ADDR_MASK(MAXSIZE) (!((MAXSIZE) - 1))
+#include "vector.h"
 
 enum class ProcessStatus {
     NEW,
@@ -26,26 +25,40 @@ enum class ProcessPriviledge {
     USER = 3,
 };
 
-class ProcessData {
-    friend class Process;
-
+class ProcessSegment {
     private:
-        uint32 _dataStartAddr;
-        uint32 _dataMaxSize;
-        uint32 _stackStartAddr;
-        uint32 _stackMaxSize;
+        uint32 _startAddr = 0x0;
+        uint32 _endAddr = 0x0;
     public:
-        ProcessData(uint32 dataStart, uint32 dataMaxSize, uint32 stackStart, uint32 stackMaxSize);
+        static ProcessSegment defaultKernelDataSegment();
+        static ProcessSegment defaultKernelStackSegment();
+        static ProcessSegment defaultUserDataSegment();
+        static ProcessSegment defaultUserStackSegment();
+        static ProcessSegment defaultESP0Segment();
+        ProcessSegment() {}
+        ProcessSegment(uint32 start, uint32 end);
+        bool includeAddr(uint32 addr);
+        uint32 sizeOfPages();
+        uint32 sizeOfBytes();
+        uint32 endAddr();
+        uint32 startAddr();
+        Vec<Page> toPages();
+        Vec<Page> toPages(int offset);
 };
 
 class Process {
+    friend class ProcessManager;
+
     private:
         uint32 _pid;
         ProcessPriviledge _priviledge;
         PageTable* _table;
-        //Stores the previous esp before process switch
-        uint32 _stack;
-        ProcessData _data;
+        uint32 _esp;
+
+        ProcessSegment _dataSegment;
+        ProcessSegment _stackSegment;
+        //For user mode process only
+        ProcessSegment _esp0Segment;
 
         Process* _parent;
         Vec<Process*> _children;
@@ -54,16 +67,35 @@ class Process {
         uint32 _remainingTicks;
         ProcessStatus _status;
     public:
-        Process(uint32 pid, ProcessPriviledge priviledge, PageTable* table, uint32 stack, ProcessData data, Process* parent, uint32 ticks);
+        Process() {}
+        Process(
+            //Process info
+            uint32 pid, 
+            ProcessPriviledge priviledge, 
+
+            ProcessSegment dataSegment,
+            ProcessSegment stackSegment,
+            
+            Process* parent,
+
+            uint32 ticks,
+
+            //Execute info
+            uint32 entryPoint
+        );
+        uint32 pid();
         PageTable* pageTable();
         ProcessPriviledge priviledge();
+        ProcessStatus status();
+        uint32 esp();
         uint32 remainingTicks();
-        bool isData(uint32 addr);
-        bool isStack(uint32 addr);
+        bool stackIncludeAddr(uint32 addr);
+        bool dataIncludeAddr(uint32 addr);
+        bool esp0IncludeAddr(uint32 addr);
         void tickOnce();
         void resetTick();
         void addChild(Process* child);
-        ProcessStatus status();
+        void setEsp(uint32 esp);
         void setStatus(ProcessStatus status);
 };
 

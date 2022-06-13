@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:06:18
- * LastEditTime : 2022-06-07 23:57:09
+ * LastEditTime : 2022-06-13 19:34:45
  * Description  : 
  */
 
@@ -32,8 +32,8 @@ class SwapManager {
         static Vec<uint32> _freeSectors;
     public:
         static void initialize(uint32 totalSectors);
-        static void swapOut(Frame frame);
-        static void swapIn(SwapRecord* record, Frame newFrame); 
+        static void swapOut(Frame* frame);
+        static void swapIn(SwapRecord* record, Frame* newFrame); 
 };
 
 extern "C" void readSector(uint32 sector, uint32 addr);

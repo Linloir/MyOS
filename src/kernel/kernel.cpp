@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-13 15:11:17
+ * LastEditTime : 2022-06-13 22:59:12
  * Description  : 
  */
 #include "interrupt.h"
@@ -12,6 +12,7 @@
 #include "lock.h"
 #include "idt.h"
 #include "framemanager.h"
+#include "processmanager.h"
 #include "paging.h"
 #include "mmu.h"
 #include "allocator.h"
@@ -57,14 +58,23 @@ extern "C" void kernel() {
     else
         printf("Heap initializing err: 0x%x -> %d\n", test, *test);
     
-    initFrames(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
-    initPaging();
+    FrameManager::initialize(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
+    PageManager::initialize();
     GlobalDescriptorTable::initialize();
+    ProcessManager::initialize();
     initScheduler();
     initInterrupt();
     // Scheduler::executeThread(firstThread, 0, 1);
     while(true) {
-        for(int i = 0; i < 0x3FFFFFF; i++){}
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
         printf("1\n");
         //Halt
     }
@@ -74,20 +84,12 @@ void initHeap(uint32 heapStartAddress) {
     malloc_init((void*)(heapStartAddress));
 }
 
-void initFrames(int totalFrames, int mappedFrames) {
-    FrameManager::initialize(totalFrames, mappedFrames);
-}
-
-void initPaging() {
-    PageManager::initialize();
-}
-
 void initScheduler() {
     Scheduler::initialize();
 }
 
 void initInterrupt() {
-    uint32 idtAddr = FrameManager::allocateFrame().physicalAddr();
+    uint32 idtAddr = FrameManager::allocateFrame()->physicalAddr();
     InterruptDescriptorTable* idt = InterruptDescriptorTable::fromPhysicalAddr(idtAddr);
     idt->initialize();
     idt->loadToIDTR();

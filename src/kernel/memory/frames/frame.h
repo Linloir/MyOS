@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-08 08:58:07
+ * LastEditTime : 2022-06-13 19:41:42
  * Description  : 
  */
 
@@ -31,6 +31,7 @@ class Frame {
         Frame(uint32 physicalAddr, FrameFlag flags, PageTableEntry* entry);
         
         uint32 physicalAddr();
+        uint32 virtualAddr();
 
         FrameFlag flags();
         void setFlags(FrameFlag flags);
@@ -44,6 +45,6 @@ class Frame {
         void reclaim();
 };
 
-bool cmp(Frame& a, Frame& b);
+bool cmp(Frame* &a, Frame* &b);
 
 #endif

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-12 15:31:00
+ * LastEditTime : 2022-06-13 22:02:13
  * Description  : 
  */
 
@@ -13,18 +13,23 @@
 #include "vector.h"
 #include "process.h"
 
-// class ProcessManager {
-//     private:
-//         static BitMap _pids;
-//         static Vec<Process*> _readyProcesses;
-//         static Process* _curProcess;
-//         static void _processExit();
-//         static void _forceSchedule();
-//     public:
-//         static void initialize();
-//         static void schedule();
-//         static Process* curProcess();
-//         static void executeProcess(uint32 loadAddr, uint32 dataSize, uint32 priority);
-// };
+class ProcessManager {
+    private:
+        static BitMap _pids;
+        static Vec<Process*> _allProcesses;
+        static Vec<Process*> _readyProcesses;
+        static Process* _curProcess;
+        static void _schedule();
+        static void _switchProcess(Process* cur, Process* next);
+    public:
+        static __attribute__((interrupt)) void _processStart(void*);
+        static void _processExit();
+        static void initialize();
+        static void onTimeTick();
+        static Process* curProcess();
+        static Process* processOfPID(uint32 pid);
+        static uint32 allocPID();
+        static void executeProcess(Process* process);
+};
 
 #endif

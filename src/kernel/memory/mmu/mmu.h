@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 14:03:21
- * LastEditTime : 2022-06-13 10:20:59
+ * LastEditTime : 2022-06-13 20:25:50
  * Description  : Transform address
  */
 
@@ -14,6 +14,8 @@
 
 uint32 toVirtualAddress(uint32 addr);
 uint32 toPhysicalAddress(uint32 addr);
+uint32 pageAlignUpper(uint32 addr);
+uint32 pageAlignLower(uint32 addr);
 
 // class Address {
 //     protected:

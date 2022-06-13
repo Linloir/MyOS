@@ -1,10 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-07 22:49:28
+ * LastEditTime : 2022-06-13 22:19:55
  * Description  : 
  */
 
+#include "os_constant.h"
 #include "page.h"
 #include "mmu.h"
 
@@ -36,6 +37,24 @@ PageFlag operator!(PageFlag flag) {
 
 bool contains(PageFlag flagSet, PageFlag flag) {
     return (static_cast<uint32>(flagSet) & static_cast<uint32>(flag)) != 0;
+}
+
+Page::Page(uint32 addr): _addr(addr) {}
+
+uint32 Page::virtualAddr() {
+    return _addr;
+}
+
+uint32 Page::physicalAddr() {
+    return toPhysicalAddress(_addr);
+}
+
+Page Page::higher() {
+    return Page(_addr + PAGE_SIZE);
+}
+
+Page Page::lower() {
+    return Page(_addr - PAGE_SIZE);
 }
 
 PageTableEntry::PageTableEntry(uint32 address, PageFlag flags) {

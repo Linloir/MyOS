@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-13 10:14:51
+ * LastEditTime : 2022-06-13 22:56:47
  * Description  : 
  */
 
@@ -16,25 +16,25 @@ SemLock FrameManager::_lock;
 uint32 FrameManager::_tickTillRefresh = FrameManager::_defaultRefreshInterval;
 uint32 FrameManager::_totalFrames = 0;
 uint32 FrameManager::_freeFrames = 0;
-Vec<Frame> FrameManager::_availableFrames;
-Vec<Frame> FrameManager::_allocatedFrames;
+Vec<Frame*> FrameManager::_availableFrames;
+Vec<Frame*> FrameManager::_allocatedFrames;
 
 void FrameManager::reclaimFrames(uint32 count) {
     _lock.acquire();
     if(count <= 0)  return;
 
     qsort(_allocatedFrames, 0, _allocatedFrames.size() - 1, cmp);
-    Vec<Frame> skippedFrames;
+    Vec<Frame*> skippedFrames;
     int reclaimedCount = 0;
     while(reclaimedCount < count && _allocatedFrames.size() > 0) {
-        Frame f = _allocatedFrames.back();
+        Frame* f = _allocatedFrames.back();
         _allocatedFrames.popBack();
-        if(contains(f.flags(), FrameFlag::LOCKED)) {
+        if(contains(f->flags(), FrameFlag::LOCKED)) {
             skippedFrames.pushBack(f);
             continue;
         }
         SwapManager::swapOut(f);
-        f.reclaim();
+        f->reclaim();
         _availableFrames.pushBack(f);
         reclaimedCount++;
         _freeFrames++;
@@ -48,40 +48,49 @@ void FrameManager::reclaimFrames(uint32 count) {
 void FrameManager::initialize(int totalFrames, int mappedFrames) {
     _totalFrames = totalFrames;
     _freeFrames = 0;
-    _availableFrames = Vec<Frame>(_totalFrames);
-    _allocatedFrames = Vec<Frame>();
+    _availableFrames = Vec<Frame*>(_totalFrames);
+    _allocatedFrames = Vec<Frame*>();
     uint32 addr = 0x0;
     uint32 mappedStart = toVirtualAddress(0x200000);
     uint32 mappedEnd = toVirtualAddress(0x200000 + mappedFrames * PAGE_SIZE);
+    Frame* newFrameArr = (Frame*)malloc(sizeof(Frame) * totalFrames);
+    if(newFrameArr == nullptr) {
+        return;
+    }
     for(int i = 0; i < totalFrames; i++) {
+        Frame* newFrame = &newFrameArr[i];
         if(addr >= mappedStart && addr <= mappedEnd) {
-            _allocatedFrames.pushBack(Frame(
+            *newFrame = Frame(
                 addr,
                 FrameFlag::LOCKED,
                 nullptr
-            ));
+            );
+            _allocatedFrames.pushBack(newFrame);
         }
         else {
-            _availableFrames.pushBack(Frame(
+            *newFrame = Frame(
                 addr,
                 FrameFlag::EMPTY,
                 nullptr
-            ));
+            );
+            _availableFrames.pushBack(newFrame);
             _freeFrames++;
         }
     }
 
     _lock = SemLock(1);
+    
+    printf("Frame Manager Initialized!\n");
 }
 
-Frame FrameManager::allocateFrame() {
+Frame* FrameManager::allocateFrame() {
     _lock.acquire();
     if(_freeFrames == 0) {
         _lock.release();
         reclaimFrames(1);
         _lock.acquire();
     }
-    Frame alloc = _availableFrames.back();
+    Frame* alloc = _availableFrames.back();
     _availableFrames.popBack();
     _allocatedFrames.pushBack(alloc);
     _freeFrames--;
@@ -89,7 +98,7 @@ Frame FrameManager::allocateFrame() {
     return alloc;
 }
 
-Vec<Frame> FrameManager::allocateFrames(uint32 count) {
+Vec<Frame*> FrameManager::allocateFrames(uint32 count) {
     _lock.acquire();
     if(count < _freeFrames) {
         _lock.release();
@@ -97,12 +106,12 @@ Vec<Frame> FrameManager::allocateFrames(uint32 count) {
         _lock.acquire();
         if(count < _freeFrames) {
             _lock.release();
-            return Vec<Frame>();
+            return Vec<Frame*>();
         }
     }
-    Vec<Frame> alloc;
+    Vec<Frame*> alloc;
     for(int i = 0; i < count; i++) {
-        Frame newFrame = _availableFrames.back();
+        Frame* newFrame = _availableFrames.back();
         _availableFrames.popBack();
         _allocatedFrames.pushBack(newFrame);
         alloc.pushBack(newFrame);
@@ -115,21 +124,22 @@ Vec<Frame> FrameManager::allocateFrames(uint32 count) {
 void FrameManager::freeFrame(uint32 physicalAddr) {
     _lock.acquire();
     for(int i = 0; i < _allocatedFrames.size(); i++) {
-        if(_allocatedFrames[i].physicalAddr() != physicalAddr)  continue;
+        if(_allocatedFrames[i]->physicalAddr() != physicalAddr)  continue;
         
-        _allocatedFrames[i].reclaim();
+        _allocatedFrames[i]->reclaim();
         _availableFrames.pushBack(_allocatedFrames[i]);
         _allocatedFrames.erase(i);
-        break;
+        _freeFrames++;
+        _lock.release();
+        return;
     }
-    _freeFrames++;
     _lock.release();
 }
 
 void FrameManager::ageFrames() {
     _lock.acquire();
     for(int i = 0; i < _allocatedFrames.size(); i++) {
-        _allocatedFrames[i].updateAccess();
+        _allocatedFrames[i]->updateAccess();
     }
     _lock.release();
 }

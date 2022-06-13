@@ -1,11 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:38
- * LastEditTime : 2022-06-07 17:53:11
+ * LastEditTime : 2022-06-13 19:42:02
  * Description  : 
  */
 
 #include "frame.h"
+#include "mmu.h"
 
 FrameFlag operator|(FrameFlag lhs, FrameFlag rhs) {
     return static_cast<FrameFlag>(static_cast<uint32>(lhs) | static_cast<uint32>(rhs));
@@ -37,6 +38,10 @@ Frame::Frame(uint32 physicalAddr, FrameFlag flags, PageTableEntry* entry) {
 
 uint32 Frame::physicalAddr() {
     return _val & 0xFFFFF000;
+}
+
+uint32 Frame::virtualAddr() {
+    return toVirtualAddress(physicalAddr());
 }
 
 FrameFlag Frame::flags() {
@@ -75,6 +80,6 @@ void Frame::reclaim() {
     _access = 0;
 }
 
-bool cmp(Frame& a, Frame& b) {
-    return a.access() >= b.access();
+bool cmp(Frame* &a, Frame* &b) {
+    return a->access() >= b->access();
 }

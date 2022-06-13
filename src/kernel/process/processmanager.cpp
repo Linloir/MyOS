@@ -1,55 +1,149 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-12 15:30:55
+ * LastEditTime : 2022-06-13 22:51:25
  * Description  : 
  */
 
-// #include "processmanager.h"
+#include "os_constant.h"
+#include "processmanager.h"
+#include "paging.h"
+#include "interrupt.h"
 
-// BitMap ProcessManager::_pids;
-// Vec<Process*> ProcessManager::_readyProcesses;
-// Process* ProcessManager::_curProcess;
+BitMap ProcessManager::_pids;
+Vec<Process*> ProcessManager::_readyProcesses;
+Vec<Process*> ProcessManager::_allProcesses;
+Process* ProcessManager::_curProcess;
 
-// void ProcessManager::_processExit() {
-//     _curProcess->setStatus(ProcessStatus::DEAD);
-//     _forceSchedule();
-// }
+__attribute__((interrupt)) void ProcessManager::_processStart(void* _) {
+    asm("sti");
+}
 
-// void ProcessManager::_forceSchedule() {
+void ProcessManager::_processExit() {
+    _curProcess->setStatus(ProcessStatus::DEAD);
+    _schedule();
+}
 
-// }
-
-// void ProcessManager::initialize() {
-//     _pids = BitMap(256);
-//     _readyProcesses = Vec<Process*>(256);
-//     _curProcess = nullptr;
-
-//     _pids.set(0, true);
+void ProcessManager::_schedule() {
+    bool interrupt = getInterruptStatus();
+    setInterruptStatus(false);
     
-//     Process* kernelProcess = (Process*)malloc(sizeof(Process));
-//     *kernelProcess = Process(
-//         0,
-//         ProcessPriviledge::KERNEL,
-        
-//     )
-// }
+    if(_readyProcesses.isEmpty()) {
+        return;
+    }
 
-// void ProcessManager::schedule() {
-//     if(_curProcess->remainingTicks() > 0) {
-//         _curProcess->tickOnce();
-//         return;
-//     }
-//     else {
-//         _curProcess->resetTick();
-//         _forceSchedule();
-//     }
-// }
+    Process* cur = _curProcess;
+    Process* next = _readyProcesses.front();
 
-// Process* ProcessManager::curProcess() {
-//     return _curProcess;
-// }
+    _readyProcesses.erase(0);
+    cur->setStatus(ProcessStatus::READY);
+    next->setStatus(ProcessStatus::RUNNING);
+    _curProcess = next;
+    _readyProcesses.pushBack(cur);
 
-// void ProcessManager::executeProcess(uint32 loadAddr, uint32 dataSize, uint32 priority) {
+    _switchProcess(cur, next);
 
-// }
+    setInterruptStatus(interrupt);
+}
+
+void ProcessManager::_switchProcess(Process* cur, Process* next) {
+    //Preserve old process
+    uint32 oldEsp;
+    asm volatile(
+        "push %%ds\n\t"
+        "push %%es\n\t"
+        "push %%fs\n\t"
+        "push %%gs\n\t"
+        "push %%esi\n\t"
+        "push %%edi\n\t"
+        "push %%ebp\n\t"
+        "push %%edx\n\t"
+        "push %%ecx\n\t"
+        "push %%ebx\n\t"
+        "push %%eax\n\t"
+        "movl %%esp, %0"
+        : "=r"(oldEsp)
+    );
+    _curProcess->setEsp(oldEsp);
+    //Move to new esp
+    uint32 newEsp = next->esp();
+    asm volatile(
+        "movl %[esp], %%esp\n\t"
+        "pop %%eax\n\t"
+        "pop %%ebx\n\t"
+        "pop %%ecx\n\t"
+        "pop %%edx\n\t"
+        "pop %%ebp\n\t"
+        "pop %%edi\n\t"
+        "pop %%edi\n\t"
+        "pop %%esi\n\t"
+        "pop %%gs\n\t"
+        "pop %%fs\n\t"
+        "pop %%es\n\t"
+        "pop %%ds"
+        : 
+        : [esp]"r"(newEsp)
+    );
+}
+
+void ProcessManager::initialize() {
+    _pids = BitMap(25536);
+    _allProcesses = Vec<Process*>();
+    _readyProcesses = Vec<Process*>();
+    _curProcess = nullptr;
+
+    _pids.set(0, true);
+    
+    Process* kernelProcess = (Process*)malloc(sizeof(Process));
+    *kernelProcess = Process();
+
+    kernelProcess->_priviledge = ProcessPriviledge::KERNEL;
+    kernelProcess->_table = PageTable::fromPhysicalAddr(getCR3());
+    kernelProcess->_dataSegment = ProcessSegment::defaultKernelDataSegment();
+    kernelProcess->_stackSegment = ProcessSegment::defaultKernelStackSegment();
+    kernelProcess->_esp0Segment = ProcessSegment();
+    kernelProcess->_parent = nullptr;
+    kernelProcess->_children = Vec<Process*>();
+    kernelProcess->_ticks = 30;
+    kernelProcess->_remainingTicks = 30;
+    kernelProcess->_status = ProcessStatus::RUNNING;
+
+    _curProcess = kernelProcess;
+
+    printf("Process Manager Initialized!\n");
+}
+
+void ProcessManager::onTimeTick() {
+    if(_curProcess->remainingTicks() > 0) {
+        _curProcess->tickOnce();
+        return;
+    }
+    else {
+        _curProcess->resetTick();
+        _schedule();
+    }
+}
+
+Process* ProcessManager::curProcess() {
+    return _curProcess;
+}
+
+Process* ProcessManager::processOfPID(uint32 pid) {
+    for(int i = 0; i < _allProcesses.size(); i++) {
+        if(_allProcesses[i]->pid()) {
+            continue;
+        }
+        return _allProcesses[i];
+    }
+    return nullptr;
+}
+
+uint32 ProcessManager::allocPID() {
+    return _pids.alloc();
+}
+
+void ProcessManager::executeProcess(Process* process) {
+    process->setStatus(ProcessStatus::READY);
+    _allProcesses.pushBack(process);
+    _readyProcesses.pushBack(process);
+}

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-07 23:44:20
+ * LastEditTime : 2022-06-13 22:53:49
  * Description  : Paging
  */
 
@@ -15,15 +15,17 @@ void PageManager::initialize() {
     PageTable* bootTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(0).address());
     scndLevelTable->removeAt(0);
     bootTable->removeAt(0, 256);
+
+    printf("Page Manager Initialized!\n");
 }
 
-PageTableEntry* PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
+PageTableEntry* PageManager::_mapPage(PageTable* pageTable, uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
     //fetch l2 table
-    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    PageTable* scndLevelTable = pageTable;
     uint32 frstLevelTableIndex = virtualAddr >> 22;
     //create l1 table if not exist
     if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
-        uint32 newTableAddr = FrameManager::allocateFrame().physicalAddr();
+        uint32 newTableAddr = FrameManager::allocateFrame()->physicalAddr();
         PageTableEntry newEntry = PageTableEntry(newTableAddr, PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE);
         scndLevelTable->insertAt(frstLevelTableIndex, newEntry);
     }
@@ -33,6 +35,27 @@ PageTableEntry* PageManager::mapPage(uint32 virtualAddr, uint32 physicalAddr, Pa
     PageTableEntry newEntry = PageTableEntry(physicalAddr, flags);
     frstLevelTable->insertAt(entryIndex, newEntry);
     return &(frstLevelTable->entryAt(entryIndex));
+}
+
+PageTableEntry* PageManager::_mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags) {
+    PageTable* pageTable = PageTable::fromPhysicalAddr(getCR3());
+    return _mapPage(pageTable, virtualAddr, physicalAddr, flags);
+}
+
+PageTableEntry* PageManager::mapPage(Page page, Frame* frame, PageFlag flags) {
+    uint32 virtualAddr = page.virtualAddr();
+    uint32 physicalAddr = frame->virtualAddr();
+    PageTableEntry* entry = _mapPage(virtualAddr, physicalAddr, flags);
+    frame->setPageEntry(entry);
+    return entry;
+}
+
+PageTableEntry* PageManager::mapPage(PageTable* pageTable, Page page, Frame* frame, PageFlag flags) {
+    uint32 virtualAddr = page.virtualAddr();
+    uint32 physicalAddr = frame->virtualAddr();
+    PageTableEntry* entry = _mapPage(pageTable, virtualAddr, physicalAddr, flags);
+    frame->setPageEntry(entry);
+    return entry;
 }
 
 uint32 PageManager::unmapPage(uint32 virtualAddr) {
@@ -48,4 +71,20 @@ uint32 PageManager::unmapPage(uint32 virtualAddr) {
     uint32 entryIndex = (virtualAddr << 10) >> 22;
     frstLevelTable->removeAt(entryIndex);
     return toPhysicalAddress(virtualAddr);
+}
+
+uint32 PageManager::unmapPage(Page page) {
+    return unmapPage(page.virtualAddr());
+}
+
+bool PageManager::isPageMapped(Page page) {
+    uint32 virtualAddr = page.virtualAddr();
+    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    uint32 frstLevelTableIndex = virtualAddr >> 22;
+    if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
+        return false;
+    }
+    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(frstLevelTableIndex).address());
+    uint32 entryIndex = (virtualAddr << 10) >> 22;
+    return frstLevelTable->entryAt(entryIndex).isPresent();
 }

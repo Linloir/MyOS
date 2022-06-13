@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:58
- * LastEditTime : 2022-06-13 15:56:55
+ * LastEditTime : 2022-06-13 22:52:21
  * Description  : 
  */
 
@@ -9,6 +9,7 @@
 #include "tss.h"
 #include "mmu.h"
 #include "allocator.h"
+#include "std_utils.h"
 
 GlobalDescriptorTable GDT;
 
@@ -172,6 +173,8 @@ void GlobalDescriptorTable::initialize() {
     GDT.descriptors[7] = tssDescriptor;
 
     GDT.loadToGDTR();
+
+    printf("Global Descriptor Table Initialized!\n");
 }
 
 uint32 GlobalDescriptorTable::physicalAddr() {
