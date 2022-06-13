@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 13 14:13:14 2022
+# Make data base, printed on Mon Jun 13 15:53:22 2022
 
 # Variables
 
@@ -71,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-b2a1199d-9d74-4fe0-abd5-9463b03bdaaf.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-8643f746-5aeb-4a68-918a-fc6305706cba.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -93,7 +95,7 @@ HOME = /home/linloir
 # environment
 LOGNAME = linloir
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 +F = $(notdir $+)
 # environment
@@ -144,6 +146,7 @@ SSH_CLIENT = 192.168.8.215 56063 22
 BROWSER = /home/linloir/.vscode-server/bin/4af164ea3a06f701fe3e89a2bcbb421d2026b68f/bin/helpers/browser.sh
 # environment
 VSCODE_HANDLES_SIGPIPE = true
+ 
 # default
 MAKEFILES := 
 # automatic
@@ -243,8 +246,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Mon Jun 13 14:13:14 2022
+# Finished Make data base on Mon Jun 13 15:53:22 2022
 
  
-make: *** No rule to make target 'all'.  Stop.
-

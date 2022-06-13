@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-13 10:27:30
+ * LastEditTime : 2022-06-13 15:11:17
  * Description  : 
  */
 #include "interrupt.h"
@@ -59,7 +59,7 @@ extern "C" void kernel() {
     
     initFrames(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
     initPaging();
-    initGlobalDescriptorTable();
+    GlobalDescriptorTable::initialize();
     initScheduler();
     initInterrupt();
     // Scheduler::executeThread(firstThread, 0, 1);
@@ -80,11 +80,6 @@ void initFrames(int totalFrames, int mappedFrames) {
 
 void initPaging() {
     PageManager::initialize();
-}
-
-void initGlobalDescriptorTable() {
-    GDT.initialize();
-    GDT.loadToGDTR();
 }
 
 void initScheduler() {

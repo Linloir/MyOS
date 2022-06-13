@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:53
- * LastEditTime : 2022-06-08 13:17:42
+ * LastEditTime : 2022-06-13 15:49:09
  * Description  : 
  */
 
@@ -10,14 +10,21 @@
 #ifndef _GDT_H_
 #define _GDT_H_
 
-#define GDT_MAX_SIZE 4
+#define GDT_MAX_SIZE 10
 
 enum class GlobalDescriptorFlag {
     _EMPTY          = 0,
+    //ACCESS BYTE--------------
+    //NOT SYSTEM
     ACCESSED        = 1 << 8,
     RW_AVAILABLE    = 1 << 9,
     GROWS_DOWN      = 1 << 10,
     EXECUTABLE      = 1 << 11,
+    //SYSTEM
+    IS_TSS          = 1 << 8,
+    IS_BUSY         = 1 << 9,
+    IS_32_BIT       = 1 << 11,
+    //END OF ACCESS BYTE-------
     NOT_SYSTEM      = 1 << 12,
     PRESENT         = 1 << 15,
     USE_64_BIT      = 1 << 20,
@@ -50,14 +57,15 @@ class GlobalDescriptorTable {
     public:
         static GlobalDescriptorTable* fromPhysicalAddr(uint32 addr);
         static GlobalDescriptorTable* fromVirtualAddr(uint32 addr);
+        static void initialize();
         GlobalDescriptorTable(){}
-        void initialize();
         uint32 physicalAddr();
         uint32 virtualAddr();
         GlobalDescriptor& operator[](int index);
         GlobalDescriptor& getAt(int index);
         void setAt(int index, GlobalDescriptor descriptor);
         void removeAt(int index);
+        int append(GlobalDescriptor descriptor);
         void loadToGDTR();
 };
 

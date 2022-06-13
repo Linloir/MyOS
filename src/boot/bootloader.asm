@@ -8,13 +8,13 @@ org 0x7E00
 mov dword [GDT_START_ADDR + 0 * 4], 0x00000000
 mov dword [GDT_START_ADDR + 1 * 4], 0x00000000
 
-; Descriptor #1: Data descriptor
+; Descriptor #1: Code descriptor
 mov dword [GDT_START_ADDR + 2 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9200
+mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9A00
 
-; Descriptor #2: Code descriptor
+; Descriptor #2: Data descriptor
 mov dword [GDT_START_ADDR + 4 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9A00
+mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9200
 
 ; Descriptor #3: Stack descriptor
 mov dword [GDT_START_ADDR + 6 * 4], 0x00000000

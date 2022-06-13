@@ -13,8 +13,8 @@ BL_START_ADDR       equ 0x7E00
 ; CONSTANTS FOR GDT---------------------
 GDT_START_ADDR      equ 0x8800
 EMPTY_SELECTOR      equ 0x00
-DATA_SELECTOR       equ 0x08
-CODE_SELECTOR       equ 0x10
+CODE_SELECTOR       equ 0x08
+DATA_SELECTOR       equ 0x10
 STACK_SELECTOR      equ 0x18
 VIDEO_SELECTOR      equ 0x20
 ; CONSTANTS FOR KERNEL LOADER----------
