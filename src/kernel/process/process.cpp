@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-08 23:15:19
+ * LastEditTime : 2022-06-13 14:02:54
  * Description  : 
  */
 
@@ -47,11 +47,11 @@ uint32 Process::remainingTicks() {
 }
 
 bool Process::isData(uint32 addr) {
-    return addr & START_ADDR_MASK(_data._dataMaxSize) == _data._dataStartAddr;
+    return (addr & START_ADDR_MASK(_data._dataMaxSize)) == _data._dataStartAddr;
 }
 
 bool Process::isStack(uint32 addr) {
-    return addr & START_ADDR_MASK(_data._stackMaxSize) == _data._stackStartAddr;
+    return (addr & START_ADDR_MASK(_data._stackMaxSize)) == _data._stackStartAddr;
 }
 
 void Process::tickOnce() {
