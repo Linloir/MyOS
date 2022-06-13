@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 14:51:41
- * LastEditTime : 2022-06-13 15:55:59
+ * LastEditTime : 2022-06-13 16:07:34
  * Description  : 
  */
 
@@ -13,6 +13,7 @@ TaskStateSegment TSS;
 
 void TaskStateSegment::initialize() {
     //init TSS
+    TSS = TaskStateSegment();
     TSS._esp0 = ESP_0_ADDR;
     TSS._ss0 = STACK_SELECTOR;
     //load tr
@@ -20,7 +21,7 @@ void TaskStateSegment::initialize() {
 }
 
 void TaskStateSegment::loadTR() {
-    int index = -1;
+    short index = -1;
     for(int i = 0; i < GDT_MAX_SIZE; i++) {
         if(GDT[i].base() != (uint32)this) {
             continue;
@@ -30,9 +31,10 @@ void TaskStateSegment::loadTR() {
     if(index == -1) {
         return;
     }
-    asm (
-        "ltr %1;"
+    index <<= 3;
+    __asm__ (
+        "ltr %[tr]\n\t"
         :
-        : "r"(index)
+        : [tr]"r"(index)
     );
 }

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-12 20:01:58
+ * LastEditTime : 2022-06-13 15:59:40
  * Description  : Process Control Block
  */
 
@@ -43,6 +43,7 @@ class Process {
         uint32 _pid;
         ProcessPriviledge _priviledge;
         PageTable* _table;
+        //Stores the previous esp before process switch
         uint32 _stack;
         ProcessData _data;
 

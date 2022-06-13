@@ -10,7 +10,7 @@ mov dword [GDT_START_ADDR + 1 * 4], 0x00000000
 
 ; Descriptor #1: Code descriptor
 mov dword [GDT_START_ADDR + 2 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9A00
+mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9800
 
 ; Descriptor #2: Data descriptor
 mov dword [GDT_START_ADDR + 4 * 4], 0x0000FFFF
@@ -24,11 +24,8 @@ mov dword [GDT_START_ADDR + 7 * 4], 0x00409600
 mov dword [GDT_START_ADDR + 8 * 4], 0x80007FFF
 mov dword [GDT_START_ADDR + 9 * 4], 0x0040920B
 
-mov dword [GDT_START_ADDR + 4 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9800
-
 ; Init GDTR
-mov word [pgdt], 2063
+mov word [pgdt], 39
 lgdt [pgdt]
 
 ; Open A20 gate
