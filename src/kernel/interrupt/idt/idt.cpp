@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 09:42:01
- * LastEditTime : 2022-06-12 20:04:29
+ * LastEditTime : 2022-06-13 10:23:26
  * Description  : Interrupt Descriptor structures
  */
 
@@ -95,21 +95,21 @@ void InterruptDescriptorTable::initialize() {
     }
 
     //Set overriden handlers
-    InterruptDescriptor doubleFaultInterruptHandler = InterruptDescriptor(
-        (uint32)asm_double_fault_interrupt_handler,
+    InterruptDescriptor doubleFaultDescriptor = InterruptDescriptor(
+        (uint32)doubleFaultInterruptHandler,
         CODE_SELECTOR,
         0x0,
         InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
     );
-    setAt(0xD, doubleFaultInterruptHandler);
+    setAt(0xD, doubleFaultDescriptor);
 
-    InterruptDescriptor timeInterruptHandler = InterruptDescriptor(
-        (uint32)asm_time_interrupt_handler,
+    InterruptDescriptor timeInterruptDescriptor = InterruptDescriptor(
+        (uint32)timeInterruptHandler,
         CODE_SELECTOR,
         0x0,
         InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
     );
-    setAt(0x20, timeInterruptHandler);
+    setAt(0x20, timeInterruptDescriptor);
 
     // InterruptDescriptor pageFaultInterruptHandler = InterruptDescriptor(
     //     (uint32)asm_page_fault_interrupt_handler,

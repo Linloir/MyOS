@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-13 10:15:10
+ * LastEditTime : 2022-06-13 10:22:20
  * Description  : 
  */
 
@@ -30,12 +30,12 @@ __attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
     }
 }
 
-extern "C" void timeInterruptHandler() {
+__attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame) {
     printf("Time handler\n");
     // Scheduler::onTimeInterrupt();
 }
 
-extern "C" void doubleFaultInterruptHandler() {
+__attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame) {
 
     printf("Double fault\n");
     while(true) {
