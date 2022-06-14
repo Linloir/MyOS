@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-14 11:33:59
+ * LastEditTime : 2022-06-14 12:38:40
  * Description  : 
  */
 
@@ -101,8 +101,8 @@ void ProcessManager::initialize() {
     kernelProcess->_pid = 0;
     kernelProcess->_priviledge = ProcessPriviledge::KERNEL;
     kernelProcess->_table = PageTable::fromPhysicalAddr(getCR3());
-    kernelProcess->_dataSegment = ProcessSegment::defaultKernelDataSegment();
-    kernelProcess->_stackSegment = ProcessSegment::defaultKernelStackSegment();
+    kernelProcess->_dataSegment = ProcessSegment(0xC0000000, 0xC0100000);
+    kernelProcess->_stackSegment = ProcessSegment(0xFFE00000, 0xFFFFFFFC);
     kernelProcess->_esp0Segment = ProcessSegment();
     kernelProcess->_parent = nullptr;
     kernelProcess->_children = Vec<Process*>();
