@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-14 16:06:19
+ * LastEditTime : 2022-06-14 16:18:48
  * Description  : 
  */
 
@@ -184,7 +184,7 @@ Process::Process(
     }
 
     // - Prepare init stack
-    StackHandler stack = StackHandler(initStackFrame->virtualAddr());
+    StackHandler stack = StackHandler(initStackFrame->virtualAddr() + PAGE_SIZE);
     stack.push((uint32)(priviledge == ProcessPriviledge::KERNEL ? STACK_SELECTOR : USER_STACK_SELECTOR));
     stack.push((uint32)_stackSegment.endAddr());
 
