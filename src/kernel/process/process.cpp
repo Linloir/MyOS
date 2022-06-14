@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-14 10:18:31
+ * LastEditTime : 2022-06-14 11:58:06
  * Description  : 
  */
 
@@ -21,7 +21,7 @@ ProcessSegment ProcessSegment::defaultKernelDataSegment() {
 }
 
 ProcessSegment ProcessSegment::defaultKernelStackSegment() {
-    return ProcessSegment(KERNEL_STACK_START, KERNEL_STACK_END);
+    return ProcessSegment(KERNEL_DATA_START - 0x100000, KERNEL_DATA_START);
 }
 
 ProcessSegment ProcessSegment::defaultUserDataSegment() {

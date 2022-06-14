@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-13 22:02:13
+ * LastEditTime : 2022-06-14 11:20:35
  * Description  : 
  */
 
@@ -12,6 +12,7 @@
 #include "bitmap.h"
 #include "vector.h"
 #include "process.h"
+#include "interruptframe.h"
 
 class ProcessManager {
     private:
@@ -22,7 +23,7 @@ class ProcessManager {
         static void _schedule();
         static void _switchProcess(Process* cur, Process* next);
     public:
-        static __attribute__((interrupt)) void _processStart(void*);
+        __attribute__ ((interrupt)) static void _processStart(InterruptFrame* f);
         static void _processExit();
         static void initialize();
         static void onTimeTick();

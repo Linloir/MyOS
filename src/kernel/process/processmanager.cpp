@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-14 10:25:53
+ * LastEditTime : 2022-06-14 11:33:59
  * Description  : 
  */
 
@@ -16,7 +16,7 @@ Vec<Process*> ProcessManager::_readyProcesses;
 Vec<Process*> ProcessManager::_allProcesses;
 Process* ProcessManager::_curProcess;
 
-__attribute__((interrupt)) void ProcessManager::_processStart(void* _) {
+void ProcessManager::_processStart(InterruptFrame* f) {
     asm("sti");
 }
 

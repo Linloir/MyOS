@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-14 10:25:16
+ * LastEditTime : 2022-06-14 11:28:37
  * Description  : 
  */
 
@@ -53,7 +53,7 @@ bool Vec<T>::_setCapacity(unsigned int newCapacity) {
     _capacity = newCapacity;
     
     _size = _MIN_(_size, newCapacity);
-    for(int i = 0; i < _size; i++) {
+    for(unsigned int i = 0; i < _size; i++) {
         newItems[i] = _items[i];
     }
     free(_items);
@@ -105,8 +105,9 @@ Vec<T>::~Vec() {
 
 template<typename T>
 void Vec<T>::pushBack(const T& val) {
+    T newItem = val;
     if(!_ensureCapacity(_size + 1))  return;
-    _items[_size++] = val;
+    _items[_size++] = newItem;
 }
 
 template<typename T>
@@ -117,11 +118,12 @@ void Vec<T>::popBack() {
 
 template<typename T>
 void Vec<T>::insert(unsigned int pos, const T& item) {
+    T newItem = item;
     if(!_ensureCapacity(_size + 1))  return;
-    for(int i = _size; i > pos; i--) {
+    for(unsigned int i = _size; i > pos; i--) {
         _items[i] = _items[i - 1];
     }
-    _items[pos] = item;
+    _items[pos] = newItem;
     _size++;
 }
 
@@ -129,7 +131,7 @@ template<typename T>
 void Vec<T>::erase(unsigned int pos) {
     if(pos < 0 || pos >= _size)  return;
     if(_size <= 0)  return;
-    for(int i = pos; i < _size; i++) {
+    for(unsigned int i = pos; i < _size; i++) {
         _items[i] = _items[i + 1];
     }
     _size--;
@@ -138,7 +140,7 @@ void Vec<T>::erase(unsigned int pos) {
 template<typename T>
 Vec<T>& Vec<T>::operator+=(const Vec<T>& other) {
     _ensureCapacity(_size + other._size);
-    for(int i = 0; i < other._size; i++) {
+    for(unsigned int i = 0; i < other._size; i++) {
         _items[_size + i] = other._items[i];
     }
     return *this;
@@ -153,7 +155,7 @@ Vec<T>& Vec<T>::operator=(const Vec<T>& other) {
     _items = newItems;
     _size = other._size;
     _capacity = other._capacity;
-    for(int i = 0; i < _size; i++) {
+    for(unsigned int i = 0; i < _size; i++) {
         _items[i] = other._items[i];
     }
     return *this;
