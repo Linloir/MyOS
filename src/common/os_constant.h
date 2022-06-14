@@ -1,18 +1,29 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-03 14:51:09
+ * LastEditTime : 2022-06-14 20:05:16
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
 #define _OS_CONSTANT_H_
 
-#define DATA_SELECTOR 0x08
-#define CODE_SELECTOR 0x10
+#define CODE_SELECTOR 0x08
+#define DATA_SELECTOR 0x10
 #define STACK_SELECTOR 0x18
-#define VEDIO_SELECTOR 0x20
 
-#define IDT_START_ADDR 0x8880
+#define USER_CODE_SELECTOR 0x23
+#define USER_DATA_SELECTOR 0x2B
+#define USER_STACK_SELECTOR 0x33
+
+#define TSS_SELECTOR 0x38
+
+#define KERNEL_DATA_START 0xC0000000
+#define KERNEL_DATA_END 0xC0100000
+#define KERNEL_STACK_START 0xFFE00000
+#define KERNEL_STACK_END 0xFFFFFFFC
+
+#define ESP_0_ADDR 0xC0000000
+#define USER_STACK_ADDR 0xBFF00000
 
 #define PCB_MAX_SIZE 4096
 #define MAX_PROCESS_COUNT 16

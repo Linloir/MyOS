@@ -1,19 +1,21 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 14:03:21
- * LastEditTime : 2022-06-03 21:27:21
+ * LastEditTime : 2022-06-13 20:25:50
  * Description  : Transform address
  */
+
+#include "os_type.h"
 
 #ifndef _MMU_H_
 #define _MMU_H_
 
-#include "os_type.h"
-
-#define OFFSET 0xB0100000
+#define OFFSET 0xC0100000
 
 uint32 toVirtualAddress(uint32 addr);
 uint32 toPhysicalAddress(uint32 addr);
+uint32 pageAlignUpper(uint32 addr);
+uint32 pageAlignLower(uint32 addr);
 
 // class Address {
 //     protected:

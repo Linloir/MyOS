@@ -8,13 +8,13 @@ org 0x7E00
 mov dword [GDT_START_ADDR + 0 * 4], 0x00000000
 mov dword [GDT_START_ADDR + 1 * 4], 0x00000000
 
-; Descriptor #1: Data descriptor
+; Descriptor #1: Code descriptor
 mov dword [GDT_START_ADDR + 2 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9200
+mov dword [GDT_START_ADDR + 3 * 4], 0x00CF9800
 
-; Descriptor #2: Code descriptor
+; Descriptor #2: Data descriptor
 mov dword [GDT_START_ADDR + 4 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9A00
+mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9200
 
 ; Descriptor #3: Stack descriptor
 mov dword [GDT_START_ADDR + 6 * 4], 0x00000000
@@ -24,11 +24,8 @@ mov dword [GDT_START_ADDR + 7 * 4], 0x00409600
 mov dword [GDT_START_ADDR + 8 * 4], 0x80007FFF
 mov dword [GDT_START_ADDR + 9 * 4], 0x0040920B
 
-mov dword [GDT_START_ADDR + 4 * 4], 0x0000FFFF
-mov dword [GDT_START_ADDR + 5 * 4], 0x00CF9800
-
 ; Init GDTR
-mov word [pgdt], 2063
+mov word [pgdt], 39
 lgdt [pgdt]
 
 ; Open A20 gate
@@ -55,10 +52,9 @@ protect_mode:
     mov ds, eax
     mov es, eax
     mov fs, eax
+    mov gs, eax
     mov eax, STACK_SELECTOR
     mov ss, eax
-    mov eax, VIDEO_SELECTOR
-    mov gs, eax
 
     ; Load kernel loader
     xor eax, eax

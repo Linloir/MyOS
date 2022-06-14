@@ -1,8 +1,8 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-05-30 21:48:29
- * LastEditTime : 2022-06-03 23:49:11
- * Description  : Bit Map
+ * Date         : 2022-06-08 23:09:46
+ * LastEditTime : 2022-06-08 23:12:09
+ * Description  : 
  */
 
 #include "bitmap.h"
@@ -34,6 +34,8 @@ int BitMap::firstAvailable(int start) {
     
     return -1;
 }
+
+BitMap::BitMap() {}
 
 BitMap::BitMap(int length) {
     int charLength = (length + 7) / 8;

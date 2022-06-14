@@ -1,8 +1,8 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-05-30 21:48:19
- * LastEditTime : 2022-05-31 17:11:07
- * Description  : Bit Map
+ * Date         : 2022-06-08 23:09:40
+ * LastEditTime : 2022-06-08 23:11:49
+ * Description  : 
  */
 
 #ifndef _BIT_MAP_H_
@@ -28,6 +28,7 @@ class BitMap {
          */
         int firstAvailable(int start);
     public:
+        BitMap();
         BitMap(int length);
         /**
          * Fetch the amount of resources available

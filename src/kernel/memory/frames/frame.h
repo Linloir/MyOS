@@ -1,30 +1,50 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 17:34:34
- * LastEditTime : 2022-06-06 15:52:00
+ * LastEditTime : 2022-06-13 19:41:42
  * Description  : 
  */
-
-#ifndef _FRAME_H_
-#define _FRAME_H_
 
 #include "os_type.h"
 #include "page.h"
 
+#ifndef _FRAME_H_
+#define _FRAME_H_
+
 enum class FrameFlag {
-    FREE        = 1,
-    LOCKED      = 1 << 1,
-    REFERENCED  = 1 << 2,
-    IS_FILE     = 1 << 3,
+    EMPTY      = 0,
+    LOCKED      = 1,
 };
+
+FrameFlag operator|(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator&(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator-(FrameFlag lhs, FrameFlag rhs);
+FrameFlag operator!(FrameFlag flag);
+bool contains(FrameFlag flagSet, FrameFlag flag);
 
 class Frame {
     private:
-        uint32 addr;
-        PageTableEntry* pgEntry;
-        FrameFlag flags;
+        uint32 _val;
+        PageTableEntry* _pageEntry;
+        uint8 _access = 0;
     public:
+        Frame(uint32 physicalAddr, FrameFlag flags, PageTableEntry* entry);
+        
+        uint32 physicalAddr();
+        uint32 virtualAddr();
+
+        FrameFlag flags();
+        void setFlags(FrameFlag flags);
+        
+        PageTableEntry* pageEntry();
+        void setPageEntry(PageTableEntry* entry);
+
+        uint8 access();
+        void updateAccess();
+
         void reclaim();
 };
+
+bool cmp(Frame* &a, Frame* &b);
 
 #endif

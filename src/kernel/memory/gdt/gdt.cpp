@@ -1,13 +1,15 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:58
- * LastEditTime : 2022-06-04 22:45:58
+ * LastEditTime : 2022-06-14 20:42:20
  * Description  : 
  */
 
 #include "gdt.h"
+#include "tss.h"
 #include "mmu.h"
 #include "allocator.h"
+#include "std_utils.h"
 
 GlobalDescriptorTable GDT;
 
@@ -32,11 +34,11 @@ bool contains(GlobalDescriptorFlag flagSet, GlobalDescriptorFlag flag) {
 }
 
 GlobalDescriptor::GlobalDescriptor(uint32 base, uint32 limit, int ring, GlobalDescriptorFlag flags) {
-    uint64 base_hi = (base & 0xFF000000) << 32;
-    uint64 base_mid = (base & 0x00FF0000) << (32 - 16);
-    uint64 base_lo = (base & 0x0000FFFF) << 16;
-    uint64 limit_hi = (limit & 0x000F0000) << 32;
-    uint64 limit_lo = (limit & 0x0000FFFF);
+    uint64 base_hi = (uint64)(base & 0xFF000000) << 32;
+    uint64 base_mid = (uint64)(base & 0x00FF0000) << (32 - 16);
+    uint64 base_lo = (uint64)(base & 0x0000FFFF) << 16;
+    uint64 limit_hi = (uint64)(limit & 0x000F0000) << 32;
+    uint64 limit_lo = (uint64)(limit & 0x0000FFFF);
     uint64 r = (uint64)(ring & 0x3) << 45;
     if(contains(flags, GlobalDescriptorFlag::USE_64_BIT | GlobalDescriptorFlag::USE_32_BIT)) {
         flags = flags - GlobalDescriptorFlag::USE_32_BIT;
@@ -52,7 +54,7 @@ GlobalDescriptorFlag GlobalDescriptor::flags() {
 
 void GlobalDescriptor::setFlags(GlobalDescriptorFlag flags) {
     GlobalDescriptorFlag all = GlobalDescriptorFlag::ACCESSED | GlobalDescriptorFlag::RW_AVAILABLE | GlobalDescriptorFlag::GROWS_DOWN |
-                                GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::SYSTEM | GlobalDescriptorFlag::PRESENT | 
+                                GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::NOT_SYSTEM | GlobalDescriptorFlag::PRESENT | 
                                 GlobalDescriptorFlag::USE_64_BIT | GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK;
     uint64 f = (uint64)static_cast<uint32>(flags) << 32;
     val &= ~((uint64)static_cast<uint32>(all) << 32);
@@ -92,16 +94,18 @@ void GlobalDescriptorTable::initialize() {
         0,
         GlobalDescriptorFlag::_EMPTY
     );
-    descriptors[0] = emptySegmentDescriptor;
+    GDT.descriptors[0] = emptySegmentDescriptor;
+
     //Code Segment
     GlobalDescriptor codeSegmentDescriptor = GlobalDescriptor(
         0x0,
         0xFFFFF,
         0,
         GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::PRESENT | 
-        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK  
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
     );
-    descriptors[1] = codeSegmentDescriptor;
+    GDT.descriptors[1] = codeSegmentDescriptor;
 
     //Data Segment
     GlobalDescriptor dataSegmentDescriptor = GlobalDescriptor(
@@ -109,9 +113,10 @@ void GlobalDescriptorTable::initialize() {
         0xFFFFF,
         0,
         GlobalDescriptorFlag::RW_AVAILABLE | GlobalDescriptorFlag::PRESENT | 
-        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
     );
-    descriptors[2] = dataSegmentDescriptor;
+    GDT.descriptors[2] = dataSegmentDescriptor;
 
     //Stack Segment
     GlobalDescriptor stackSegmentDescriptor = GlobalDescriptor(
@@ -120,9 +125,56 @@ void GlobalDescriptorTable::initialize() {
         0,
         GlobalDescriptorFlag::GROWS_DOWN | GlobalDescriptorFlag::RW_AVAILABLE | 
         GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::USE_32_BIT | 
-        GlobalDescriptorFlag::USE_4KB_BLOCK
+        GlobalDescriptorFlag::USE_4KB_BLOCK | GlobalDescriptorFlag::NOT_SYSTEM
     );
-    descriptors[3] = stackSegmentDescriptor;
+    GDT.descriptors[3] = stackSegmentDescriptor;
+
+    //Code Segment
+    GlobalDescriptor userCodeSegmentDescriptor = GlobalDescriptor(
+        0x0,
+        0xFFFFF,
+        3,
+        GlobalDescriptorFlag::EXECUTABLE | GlobalDescriptorFlag::PRESENT | 
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
+    );
+    GDT.descriptors[4] = userCodeSegmentDescriptor;
+
+    //Data Segment
+    GlobalDescriptor userDataSegmentDescriptor = GlobalDescriptor(
+        0x0,
+        0xFFFFF,
+        3,
+        GlobalDescriptorFlag::RW_AVAILABLE | GlobalDescriptorFlag::PRESENT | 
+        GlobalDescriptorFlag::USE_32_BIT | GlobalDescriptorFlag::USE_4KB_BLOCK |
+        GlobalDescriptorFlag::NOT_SYSTEM
+    );
+    GDT.descriptors[5] = userDataSegmentDescriptor;
+
+    //Stack Segment
+    GlobalDescriptor userStackSegmentDescriptor = GlobalDescriptor(
+        0x0,
+        0x0000,
+        3,
+        GlobalDescriptorFlag::GROWS_DOWN | GlobalDescriptorFlag::RW_AVAILABLE | 
+        GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::USE_32_BIT | 
+        GlobalDescriptorFlag::USE_4KB_BLOCK | GlobalDescriptorFlag::NOT_SYSTEM
+    );
+    GDT.descriptors[6] = userStackSegmentDescriptor;
+
+    GlobalDescriptor tssDescriptor = GlobalDescriptor(
+        (uint32)&TSS,
+        sizeof(TSS) - 1,
+        0,
+        GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::IS_TSS | 
+        GlobalDescriptorFlag::IS_32_BIT | GlobalDescriptorFlag::USE_32_BIT
+    );
+    GDT.descriptors[7] = tssDescriptor;
+
+    GDT.loadToGDTR();
+    TaskStateSegment::initialize();
+
+    printf("Global Descriptor Table Initialized!\n");
 }
 
 uint32 GlobalDescriptorTable::physicalAddr() {
@@ -147,6 +199,17 @@ void GlobalDescriptorTable::setAt(int index, GlobalDescriptor descriptor) {
 
 void GlobalDescriptorTable::removeAt(int index) {
     descriptors[index].setFlags(descriptors[index].flags() - GlobalDescriptorFlag::PRESENT);
+}
+
+int GlobalDescriptorTable::append(GlobalDescriptor descriptor) {
+    for(int i = 0; i < GDT_MAX_SIZE; i++) {
+        if(contains(descriptors[i].flags(), GlobalDescriptorFlag::PRESENT)) {
+            continue;
+        }
+        descriptors[i] = descriptor;
+        return i;
+    }
+    return -1;
 }
 
 void GlobalDescriptorTable::loadToGDTR() {

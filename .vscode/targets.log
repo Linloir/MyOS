@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun  6 15:55:08 2022
+# Make data base, printed on Tue Jun 14 14:45:09 2022
 
 # Variables
 
@@ -41,9 +41,9 @@ CURDIR := /home/linloir/OS_2022/MyOS
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"42e84e0914b17800d483f69e299e1b00.zh-cn","_translationsConfigFile":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/tcf.json","_cacheRoot":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn","_resolvedLanguagePackCoreLocation":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5","_corruptedFile":"/home/linloir/.vscode-server/data/clp/42e84e0914b17800d483f69e299e1b00.zh-cn/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"4d12339779e8282869a6d44b7af3df1e.zh-cn","_translationsConfigFile":"/home/linloir/.vscode-server/data/clp/4d12339779e8282869a6d44b7af3df1e.zh-cn/tcf.json","_cacheRoot":"/home/linloir/.vscode-server/data/clp/4d12339779e8282869a6d44b7af3df1e.zh-cn","_resolvedLanguagePackCoreLocation":"/home/linloir/.vscode-server/data/clp/4d12339779e8282869a6d44b7af3df1e.zh-cn/4af164ea3a06f701fe3e89a2bcbb421d2026b68f","_corruptedFile":"/home/linloir/.vscode-server/data/clp/4d12339779e8282869a6d44b7af3df1e.zh-cn/corrupted.info","_languagePackSupport":true}
 # environment
-_ = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/node
+_ = /home/linloir/.vscode-server/bin/4af164ea3a06f701fe3e89a2bcbb421d2026b68f/node
 # makefile
 MAKEFILE_LIST := 
 # 'override' directive
@@ -61,9 +61,9 @@ LC_NAME = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/linloir
 # environment
-SSH_CONNECTION = 172.19.8.29 62543 192.168.87.128 22
+SSH_CONNECTION = 192.168.8.215 51813 192.168.87.128 22
 # environment
-PATH = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PATH = /home/linloir/.vscode-server/bin/4af164ea3a06f701fe3e89a2bcbb421d2026b68f/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-746ae4db-55d5-4e1d-8173-19c11fdb6bde.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-cfeb5bf7-a3f5-41c5-b681-38588ee79c92.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -139,11 +139,11 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 172.19.8.29 62543 22
+SSH_CLIENT = 192.168.8.215 51813 22
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-BROWSER = /home/linloir/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/helpers/browser.sh
+BROWSER = /home/linloir/.vscode-server/bin/4af164ea3a06f701fe3e89a2bcbb421d2026b68f/bin/helpers/browser.sh
 # environment
 VSCODE_HANDLES_SIGPIPE = true
 # default
@@ -173,6 +173,7 @@ LC_ADDRESS = en_US.UTF-8
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
+ 
 LANG = C
 # environment
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
@@ -245,6 +246,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Mon Jun  6 15:55:08 2022
+# Finished Make data base on Tue Jun 14 14:45:09 2022
 
  

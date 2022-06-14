@@ -1,20 +1,23 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:59:36
- * LastEditTime : 2022-06-03 22:47:33
+ * LastEditTime : 2022-06-13 20:20:11
  * Description  : Page management
  */
 
-#ifndef _PAGING_H_
-#define _PAGING_H_
-
 #include "os_type.h"
 #include "page.h"
+
+#ifndef _PAGING_H_
+#define _PAGING_H_
 
 extern "C" uint32 getCR3();
 extern "C" void setCR3(uint32 table);
 
 class PageManager {
+    private:
+        static PageTableEntry* _mapPage(PageTable* pageTable, uint32 virtualAddr, uint32 physicalAddr, PageFlag flags);
+        static PageTableEntry* _mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags);
     public:
         static void initialize();
         /**
@@ -26,7 +29,8 @@ class PageManager {
          * @param virtualAddr the address of virtual page that is mapped from
          * @param flags the flags of the mapping page
          */
-        static uint32 mapPage(uint32 virtualAddr, uint32 physicalAddr, PageFlag flags);
+        static PageTableEntry* mapPage(PageTable* pageTable, Page page, Frame* frame, PageFlag flags);
+        static PageTableEntry* mapPage(Page page, Frame* frame, PageFlag flags);
         /**
          * Unmap a physical page from a virtual page, actually removes an entry from the page table
          * 
@@ -35,6 +39,8 @@ class PageManager {
          * @param virtualAddr the address of virtual page that is to be unmapped
          */
         static uint32 unmapPage(uint32 virtualAddr);
+        static uint32 unmapPage(Page page);
+        static bool isPageMapped(Page page);
 };
 
 #endif

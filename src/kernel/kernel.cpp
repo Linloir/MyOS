@@ -1,36 +1,67 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-07 18:09:21
+ * LastEditTime : 2022-06-14 21:05:36
  * Description  : 
  */
 #include "interrupt.h"
 #include "std_utils.h"
 #include "display_utils.h"
 #include "kernel.h"
-#include "proc.h"
 #include "lock.h"
 #include "idt.h"
-#include "framing.h"
+#include "framemanager.h"
+#include "processmanager.h"
 #include "paging.h"
 #include "mmu.h"
 #include "allocator.h"
 #include "gdt.h"
 
-void firstThread(void** args);
+void firstThread();
 
-void firstThread(void**) {
+void firstThread() {
 
-    printf("Try writing value 1 to addr 0xBF000000\n");
-    int* test = (int*)0xBF000000;
-    *test = 1;
-    printf("%d\n", *test);
-    int* mallocTest = (int*)malloc(sizeof(int) * 5);
-    mallocTest[0] = 1;
-    mallocTest[1] = 2;
-    printf("%d %d\n", mallocTest[0], mallocTest[1]);
+    // int* test = (int*)0xBF000000;
+    // *test = 1;
+    // printf("Hello World\n");
     
-    while(true){
+    while(true) {
+        // printf("Process 1\n");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+    }
+}
+
+void scndThread() {
+
+    // int* test = (int*)0xBF000000;
+    // *test = 1;
+    printf("Hello World\n");
+    
+    while(true) {
+        printf("Process 2\n");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
     }
 }
 
@@ -50,7 +81,7 @@ extern "C" void kernel() {
     printf("Kernel: {\n");
     printf("    'void kernel()' address: 0x%x\n", &kernel);
     printf("    Mapped pages: %d\n", mappedPages);
-    printf("    Mapped address space: \n        [virtual] 0x%x ~ 0x%x -> [physical] 0x%x ~ 0x%x\n", 0xB0100000, 0xB0100000 + memorySize, 0x0, memorySize);
+    printf("    Mapped address space: \n        [virtual] 0x%x ~ 0x%x -> [physical] 0x%x ~ 0x%x\n", 0xC0100000, 0xC0100000 + memorySize, 0x0, memorySize);
     printf("    Total memory: %d KiB (%d MiB)\n", totalFrames << 2, totalFrames >> 8);
     printf("}\n");
     
@@ -62,15 +93,52 @@ extern "C" void kernel() {
     else
         printf("Heap initializing err: 0x%x -> %d\n", test, *test);
     
-    initFrames(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
-    initPaging();
-    initGlobalDescriptorTable();
-    initScheduler();
+    FrameManager::initialize(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
+    PageManager::initialize();
+    GlobalDescriptorTable::initialize();
+    ProcessManager::initialize();
+    // initScheduler();
     initInterrupt();
 
-    Scheduler::executeThread(firstThread, 0, 1);
+    Process* frstProcess = (Process*)malloc(sizeof(Process));
+    *frstProcess = Process(
+        ProcessManager::allocPID(),
+        ProcessPriviledge::USER,
+        ProcessSegment::defaultUserDataSegment(),
+        ProcessSegment::defaultUserStackSegment(),
+        ProcessManager::processOfPID(0),
+        30,
+        (uint32)firstThread
+    );
+
+    // Process* scndProcess = (Process*)malloc(sizeof(Process));
+    // *scndProcess = Process(
+    //     ProcessManager::allocPID(),
+    //     ProcessPriviledge::USER,
+    //     ProcessSegment::defaultUserDataSegment(),
+    //     ProcessSegment::defaultUserStackSegment(),
+    //     ProcessManager::processOfPID(0),
+    //     30,
+    //     (uint32)scndThread
+    // );
+
+    ProcessManager::executeProcess(frstProcess);
+    // ProcessManager::executeProcess(scndProcess);
+    
     while(true) {
-        //Halt
+        printf("Kernel Process\n");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
     }
 }
 
@@ -78,24 +146,8 @@ void initHeap(uint32 heapStartAddress) {
     malloc_init((void*)(heapStartAddress));
 }
 
-void initFrames(int totalFrames, int mappedFrames) {
-    FrameManager::initialize(totalFrames, mappedFrames);
-}
-
-void initPaging() {
-    PageManager::initialize();
-}
-
-void initGlobalDescriptorTable() {
-    GDT.initialize();
-}
-
-void initScheduler() {
-    Scheduler::initialize();
-}
-
 void initInterrupt() {
-    uint32 idtAddr = FrameManager::physicalFrames.allocateFrame();
+    uint32 idtAddr = FrameManager::allocateFrame(FrameFlag::LOCKED)->physicalAddr();
     InterruptDescriptorTable* idt = InterruptDescriptorTable::fromPhysicalAddr(idtAddr);
     idt->initialize();
     idt->loadToIDTR();

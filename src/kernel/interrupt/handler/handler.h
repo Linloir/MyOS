@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:18
- * LastEditTime : 2022-06-05 11:21:58
+ * LastEditTime : 2022-06-13 10:37:34
  * Description  : 
  */
 
@@ -9,17 +9,15 @@
 #define _HANDLER_H_
 
 #include "os_type.h"
-
-//ASM WRAPPER FUNCTIONS
-extern "C" void asm_empty_interrupt_handler();
-extern "C" void asm_time_interrupt_handler();
-extern "C" void asm_double_fault_interrupt_handler();
-extern "C" void asm_page_fault_interrupt_handler();
+#include "interruptframe.h"
 
 //C HANDLER FUNCTIONS
-extern "C" void emptyHandler();
-extern "C" void timeInterruptHandler();
-extern "C" void doubleFaultInterruptHandler();
-extern "C" void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr);
+// extern "C" void emptyHandler();
+__attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame);
+__attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode);
+// __attribute__ ((interrupt)) void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr);
+__attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame);
+
+void eoi();
 
 #endif

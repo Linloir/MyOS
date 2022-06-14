@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 13:24:34
- * LastEditTime : 2022-06-03 15:24:01
+ * LastEditTime : 2022-06-06 20:46:59
  * Description  : 
  */
 
@@ -31,7 +31,7 @@ void *malloc(long numbytes) {
     void *memory_location;
 
     if (!has_initialized) {
-        return 0;
+        return nullptr;
     }
 
     numbytes = numbytes + sizeof(struct mem_control_block);

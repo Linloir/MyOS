@@ -1,14 +1,19 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-04 15:23:28
+ * LastEditTime : 2022-06-08 22:45:04
  * Description  : 
  */
+
+#include "os_type.h"
+#include "swap.h"
 
 #ifndef _PAGE_H_
 #define _PAGE_H_
 
-#include "os_type.h"
+#define SCND_LEVEL_INDEX_MASK(ADDR) ((ADDR) & 0xFFC00000)
+#define FRST_LEVEL_INDEX_MASK(ADDR) ((ADDR) & 0x003FF000)
+#define PAGE_SHIFT_MASK(ADDR) ((ADDR & 0x00000FFF)
 
 enum class PageFlag{
     PRESENT         = 1,
@@ -34,6 +39,17 @@ PageFlag& operator-=(PageFlag& lhs, PageFlag& rhs);
 PageFlag operator!(PageFlag flag);
 bool contains(PageFlag flagSet, PageFlag flag);
 
+class Page {
+    private:
+        uint32 _addr;
+    public:
+        Page(uint32 addr);
+        uint32 virtualAddr();
+        uint32 physicalAddr();
+        Page higher();
+        Page lower();
+};
+
 class PageTableEntry {
     private:
         uint32 val;
@@ -45,8 +61,10 @@ class PageTableEntry {
         void setValue(uint32 address, PageFlag flags);
         void setAddress(uint32 address);
         void setFlags(PageFlag flags);
+        void clearFlags(PageFlag flags);
         bool isPresent();
         void erase();
+        SwapRecord* toSwapRecord(uint32 startSector);
 };
 
 class PageTable {
