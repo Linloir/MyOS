@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-14 10:25:42
+ * LastEditTime : 2022-06-14 12:33:00
  * Description  : 
  */
 
@@ -52,7 +52,7 @@ void FrameManager::initialize(int totalFrames, int mappedFrames) {
     _availableFrames = Vec<Frame*>(_totalFrames);
     _allocatedFrames = Vec<Frame*>();
     uint32 addr = 0x0;
-    uint32 mappedStart = 0x200000;
+    uint32 mappedStart = 0x100000;
     uint32 mappedEnd = 0x200000 + mappedFrames * PAGE_SIZE;
     Frame* newFrameArr = (Frame*)malloc(sizeof(Frame) * totalFrames);
     if(newFrameArr == nullptr) {

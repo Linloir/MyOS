@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-14 10:25:33
+ * LastEditTime : 2022-06-14 12:26:17
  * Description  : Paging
  */
 
@@ -45,7 +45,7 @@ PageTableEntry* PageManager::_mapPage(uint32 virtualAddr, uint32 physicalAddr, P
 
 PageTableEntry* PageManager::mapPage(Page page, Frame* frame, PageFlag flags) {
     uint32 virtualAddr = page.virtualAddr();
-    uint32 physicalAddr = frame->virtualAddr();
+    uint32 physicalAddr = frame->physicalAddr();
     PageTableEntry* entry = _mapPage(virtualAddr, physicalAddr, flags);
     frame->setPageEntry(entry);
     return entry;
@@ -53,7 +53,7 @@ PageTableEntry* PageManager::mapPage(Page page, Frame* frame, PageFlag flags) {
 
 PageTableEntry* PageManager::mapPage(PageTable* pageTable, Page page, Frame* frame, PageFlag flags) {
     uint32 virtualAddr = page.virtualAddr();
-    uint32 physicalAddr = frame->virtualAddr();
+    uint32 physicalAddr = frame->physicalAddr();
     PageTableEntry* entry = _mapPage(pageTable, virtualAddr, physicalAddr, flags);
     frame->setPageEntry(entry);
     return entry;
