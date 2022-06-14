@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-13 22:44:10
+ * LastEditTime : 2022-06-14 14:44:18
  * Description  : Process Control Block
  */
 
-#ifndef _PCB_H_
-#define _PCB_H_
+#ifndef _PROCESS_H_
+#define _PROCESS_H_
 
 #include "os_type.h"
 #include "page.h"

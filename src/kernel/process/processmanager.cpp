@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-14 12:38:40
+ * LastEditTime : 2022-06-14 14:59:07
  * Description  : 
  */
 
@@ -14,6 +14,7 @@
 BitMap ProcessManager::_pids;
 Vec<Process*> ProcessManager::_readyProcesses;
 Vec<Process*> ProcessManager::_allProcesses;
+Vec<Process*> ProcessManager::_awaitProcesses;
 Process* ProcessManager::_curProcess;
 
 void ProcessManager::_processStart(InterruptFrame* f) {
@@ -38,11 +39,13 @@ void ProcessManager::_schedule() {
     Process* cur = _curProcess;
     Process* next = _readyProcesses.front();
 
+    if(cur->_status == ProcessStatus::RUNNING) {
+        _readyProcesses.pushBack(cur);
+    }
     _readyProcesses.erase(0);
     cur->setStatus(ProcessStatus::READY);
     next->setStatus(ProcessStatus::RUNNING);
     _curProcess = next;
-    _readyProcesses.pushBack(cur);
 
     _switchProcess(cur, next);
 
@@ -50,47 +53,19 @@ void ProcessManager::_schedule() {
 }
 
 void ProcessManager::_switchProcess(Process* cur, Process* next) {
-    //Preserve old process
-    asm volatile(
-        "push %%ds\n\t"
-        "push %%es\n\t"
-        "push %%fs\n\t"
-        "push %%gs\n\t"
-        "push %%esi\n\t"
-        "push %%edi\n\t"
-        "push %%ebp\n\t"
-        "push %%edx\n\t"
-        "push %%ecx\n\t"
-        "push %%ebx\n\t"
-        "push %%eax\n\t"
-        "movl %%esp, %0"
-        : "=r"(_curProcess->_esp)
-    );
-    //Move to new esp
-    setCR3((uint32)next->_table);
-    asm volatile(
-        "movl %[esp], %%esp\n\t"
-        "pop %%eax\n\t"
-        "pop %%ebx\n\t"
-        "pop %%ecx\n\t"
-        "pop %%edx\n\t"
-        "pop %%ebp\n\t"
-        "pop %%edi\n\t"
-        "pop %%edi\n\t"
-        "pop %%esi\n\t"
-        "pop %%gs\n\t"
-        "pop %%fs\n\t"
-        "pop %%es\n\t"
-        "pop %%ds"
-        : 
-        : [esp]"r"(next->_esp)
-    );
+    asm_switch_process(&cur->_esp, next->_table->physicalAddr(), next->_esp);
+}
+
+void ProcessManager::_hasenAwakeProcess(Process* process) {
+    _awaitProcesses.erase(process);
+    _awaitProcesses.insert(0, process);
 }
 
 void ProcessManager::initialize() {
     _pids = BitMap(25536);
     _allProcesses = Vec<Process*>();
     _readyProcesses = Vec<Process*>();
+    _awaitProcesses = Vec<Process*>();
     _curProcess = nullptr;
 
     _pids.set(0, true);
@@ -152,4 +127,34 @@ void ProcessManager::executeProcess(Process* process) {
     _allProcesses.pushBack(process);
     _readyProcesses.pushBack(process);
     setInterruptStatus(interrupt);
+}
+
+void ProcessManager::haltProcess(Process* process) {
+    bool interrupt = getInterruptStatus();
+    setInterruptStatus(false);
+    if(process != _curProcess) {
+        _readyProcesses.erase(process);
+        process->_status = ProcessStatus::BLOCKED;
+        _awaitProcesses.pushBack(process);
+        return;
+    }
+
+    Process* cur = _curProcess;
+    Process* next = _readyProcesses.front();
+
+    _readyProcesses.erase(0);
+    cur->_status = ProcessStatus::BLOCKED;
+    next->_status = ProcessStatus::RUNNING;
+    _awaitProcesses.pushBack(cur);
+    _curProcess = next;
+
+    _switchProcess(cur, next);
+
+    setInterruptStatus(interrupt);
+}
+
+void ProcessManager::awakeProcess(Process* process, AwakeMethod method) {
+    if(method == AwakeMethod::HASEN) {
+        _hasenAwakeProcess(process);
+    }
 }

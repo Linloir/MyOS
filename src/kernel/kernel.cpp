@@ -1,14 +1,13 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-14 09:43:12
+ * LastEditTime : 2022-06-14 14:37:34
  * Description  : 
  */
 #include "interrupt.h"
 #include "std_utils.h"
 #include "display_utils.h"
 #include "kernel.h"
-#include "proc.h"
 #include "lock.h"
 #include "idt.h"
 #include "framemanager.h"
@@ -85,10 +84,6 @@ extern "C" void kernel() {
 
 void initHeap(uint32 heapStartAddress) {
     malloc_init((void*)(heapStartAddress));
-}
-
-void initScheduler() {
-    Scheduler::initialize();
 }
 
 void initInterrupt() {

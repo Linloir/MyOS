@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-13 16:47:05
+ * LastEditTime : 2022-06-14 14:09:51
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
@@ -11,9 +11,9 @@
 #define DATA_SELECTOR 0x10
 #define STACK_SELECTOR 0x18
 
-#define USER_CODE_SELECTOR 0x20
-#define USER_DATA_SELECTOR 0x28
-#define USER_STACK_SELECTOR 0x30
+#define USER_CODE_SELECTOR 0x23
+#define USER_DATA_SELECTOR 0x2B
+#define USER_STACK_SELECTOR 0x33
 
 #define KERNEL_DATA_START 0xC0000000
 #define KERNEL_DATA_END 0xC0100000

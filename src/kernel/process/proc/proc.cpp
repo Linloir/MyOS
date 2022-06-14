@@ -1,12 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-14 11:58:06
+ * LastEditTime : 2022-06-14 16:06:19
  * Description  : 
  */
 
 #include "os_constant.h"
-#include "process.h"
+#include "proc.h"
 #include "processmanager.h"
 #include "paging.h"
 #include "framemanager.h"
@@ -17,7 +17,7 @@
 ProcessSegment::ProcessSegment(uint32 start, uint32 end) : _startAddr(start), _endAddr(end) {}
 
 ProcessSegment ProcessSegment::defaultKernelDataSegment() {
-    return ProcessSegment(KERNEL_DATA_START, KERNEL_DATA_END);
+    return ProcessSegment(0x0, 0x0);
 }
 
 ProcessSegment ProcessSegment::defaultKernelStackSegment() {
@@ -148,8 +148,8 @@ Process::Process(
     
     //    - Copy Kernel Page
     PageTable* kernelTable = ProcessManager::processOfPID(0)->pageTable();
-    for(int i = 768; i < 1023; i++) {
-        table[i] = kernelTable[i];
+    for(int i = 768; i < 1024; i++) {
+        table->entryAt(i) = kernelTable->entryAt(i);
     }
 
     //    - Set ESP0 Stack Page
@@ -193,6 +193,7 @@ Process::Process(
     stack.push((uint32)entryPoint); //eip
 
     stack.push((uint32)ProcessManager::_processStart);  //ret
+    stack.push((uint32)0x0);    //ebp
 
     stack.push((uint32)(priviledge == ProcessPriviledge::KERNEL ? DATA_SELECTOR : USER_DATA_SELECTOR)); //ds
     stack.push((uint32)(priviledge == ProcessPriviledge::KERNEL ? DATA_SELECTOR : USER_DATA_SELECTOR)); //es

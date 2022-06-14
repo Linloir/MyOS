@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-14 11:28:37
+ * LastEditTime : 2022-06-14 14:24:45
  * Description  : 
  */
 
@@ -30,7 +30,9 @@ class Vec {
         void pushBack(const T& item);
         void popBack();
         void insert(unsigned int pos, const T& item);
+        void erase(int pos);
         void erase(unsigned int pos);
+        void erase(const T& item);
         Vec<T>& operator+=(const Vec<T>& other);
         Vec<T>& operator=(const Vec<T>& other);
         T& operator[](int index);
@@ -128,6 +130,17 @@ void Vec<T>::insert(unsigned int pos, const T& item) {
 }
 
 template<typename T>
+void Vec<T>::erase(int pos) {
+    pos = (unsigned int)pos;
+    if(pos < 0 || pos >= _size)  return;
+    if(_size <= 0)  return;
+    for(unsigned int i = pos; i < _size; i++) {
+        _items[i] = _items[i + 1];
+    }
+    _size--;
+}
+
+template<typename T>
 void Vec<T>::erase(unsigned int pos) {
     if(pos < 0 || pos >= _size)  return;
     if(_size <= 0)  return;
@@ -135,6 +148,17 @@ void Vec<T>::erase(unsigned int pos) {
         _items[i] = _items[i + 1];
     }
     _size--;
+}
+
+template<typename T>
+void Vec<T>::erase(const T& item) {
+    if(_size <= 0)  return;
+    for(unsigned int i = 0; i < _size; i++) {
+        if(_items[i] == item) {
+            erase(i);
+            return;
+        }
+    }
 }
 
 template<typename T>

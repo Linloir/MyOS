@@ -1,13 +1,12 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-14 10:20:32
+ * LastEditTime : 2022-06-14 14:10:28
  * Description  : 
  */
 
 #include "handler.h"
 #include "interrupt.h"
-#include "proc.h"
 #include "std_utils.h"
 #include "framemanager.h"
 #include "processmanager.h"

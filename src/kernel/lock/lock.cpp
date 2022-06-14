@@ -1,14 +1,13 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-06-08 11:11:05
+ * LastEditTime : 2022-06-14 14:42:59
  * Description  : 
  */
 
 #include "lock.h"
-#include "lock_utils.h"
-#include "proc.h"
 #include "std_utils.h"
+#include "processmanager.h"
 
 SpinLock::SpinLock() {
     status = 0;
@@ -32,23 +31,21 @@ void SpinLock::release() {
 SemLock::SemLock() {
     availablePermits = 1;
     permitLock = SpinLock();
-    awaitList = List();
+    awaitList = Vec<Process*>();
 }
 
 SemLock::SemLock(int permits) {
     availablePermits = permits;
     permitLock = SpinLock();
-    awaitList = List();
+    awaitList = Vec<Process*>();
 }
 
 void SemLock::acquire() {
     permitLock.lock();
     if(availablePermits == 0) {
-        PCB* currentThread = Scheduler::currentRunningThread();
-        currentThread->status = JobStatus::BLOCKED;
-        awaitList.pushBack(&currentThread->scheduleListNode);
+        Process* proc = ProcessManager::curProcess();
         permitLock.release();
-        Scheduler::schedule();
+        ProcessManager::haltProcess(proc);
         permitLock.lock();
     }
     availablePermits--;
@@ -59,10 +56,10 @@ void SemLock::release() {
     permitLock.lock();
     availablePermits++;
     if(!awaitList.isEmpty()) {
-        PCB* thread = nodeToPCB(awaitList.popFront());
-        thread->status = JobStatus::READY;
+        Process* proc = awaitList.front();
+        awaitList.erase(0);
         permitLock.release();
-        Scheduler::awakeThreadHoare(thread);
+        ProcessManager::awakeProcess(proc, ProcessManager::AwakeMethod::DEFAULT);
     }
     else {
         permitLock.release();
