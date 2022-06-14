@@ -30,10 +30,10 @@ asm_switch_process:
     mov dword [eax], esp    ; *oldEsp = esp
 
     mov dword eax, [ebp + 3 * 4]  ; eax = table
+    mov dword ebx, [ebp + 4 * 4]    ; eax = newEsp
+    
     mov cr3, eax    ; cr3 = table
-
-    mov dword eax, [ebp + 4 * 4]    ; eax = newEsp
-    mov esp, eax
+    mov esp, ebx
 
     ; popad
 
