@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:53
- * LastEditTime : 2022-06-13 19:26:37
+ * LastEditTime : 2022-06-14 09:35:29
  * Description  : 
  */
 
@@ -29,8 +29,8 @@ class FrameManager {
         static void reclaimFrames(uint32 count);
     public:
         static void initialize(int totalFrames, int mappedFrames);
-        static Frame* allocateFrame();
-        static Vec<Frame*> allocateFrames(uint32 count);
+        static Frame* allocateFrame(FrameFlag flags);
+        static Vec<Frame*> allocateFrames(uint32 count, FrameFlag flags);
         static void freeFrame(uint32 physicalAddr);
         static void ageFrames();
 };

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:56
- * LastEditTime : 2022-06-13 22:56:47
+ * LastEditTime : 2022-06-14 10:25:42
  * Description  : 
  */
 
@@ -11,6 +11,7 @@
 #include "linkedlist.h"
 #include "algorithm.h"
 #include "mmu.h"
+#include "std_utils.h"
 
 SemLock FrameManager::_lock;
 uint32 FrameManager::_tickTillRefresh = FrameManager::_defaultRefreshInterval;
@@ -27,8 +28,8 @@ void FrameManager::reclaimFrames(uint32 count) {
     Vec<Frame*> skippedFrames;
     int reclaimedCount = 0;
     while(reclaimedCount < count && _allocatedFrames.size() > 0) {
-        Frame* f = _allocatedFrames.back();
-        _allocatedFrames.popBack();
+        Frame* f = _allocatedFrames.front();
+        _allocatedFrames.erase(0);
         if(contains(f->flags(), FrameFlag::LOCKED)) {
             skippedFrames.pushBack(f);
             continue;
@@ -51,8 +52,8 @@ void FrameManager::initialize(int totalFrames, int mappedFrames) {
     _availableFrames = Vec<Frame*>(_totalFrames);
     _allocatedFrames = Vec<Frame*>();
     uint32 addr = 0x0;
-    uint32 mappedStart = toVirtualAddress(0x200000);
-    uint32 mappedEnd = toVirtualAddress(0x200000 + mappedFrames * PAGE_SIZE);
+    uint32 mappedStart = 0x200000;
+    uint32 mappedEnd = 0x200000 + mappedFrames * PAGE_SIZE;
     Frame* newFrameArr = (Frame*)malloc(sizeof(Frame) * totalFrames);
     if(newFrameArr == nullptr) {
         return;
@@ -76,43 +77,46 @@ void FrameManager::initialize(int totalFrames, int mappedFrames) {
             _availableFrames.pushBack(newFrame);
             _freeFrames++;
         }
+        addr += PAGE_SIZE;
     }
 
     _lock = SemLock(1);
     
-    printf("Frame Manager Initialized!\n");
+    printf("Frame Manager Initialized!, free frames: %d\n", _freeFrames);
 }
 
-Frame* FrameManager::allocateFrame() {
+Frame* FrameManager::allocateFrame(FrameFlag flags) {
     _lock.acquire();
     if(_freeFrames == 0) {
         _lock.release();
         reclaimFrames(1);
         _lock.acquire();
     }
-    Frame* alloc = _availableFrames.back();
-    _availableFrames.popBack();
+    Frame* alloc = _availableFrames.front();
+    alloc->setFlags(flags);
+    _availableFrames.erase(0);
     _allocatedFrames.pushBack(alloc);
     _freeFrames--;
     _lock.release();
     return alloc;
 }
 
-Vec<Frame*> FrameManager::allocateFrames(uint32 count) {
+Vec<Frame*> FrameManager::allocateFrames(uint32 count, FrameFlag flags) {
     _lock.acquire();
-    if(count < _freeFrames) {
+    if(count > _freeFrames) {
         _lock.release();
         reclaimFrames(count - _freeFrames);
         _lock.acquire();
-        if(count < _freeFrames) {
+        if(count > _freeFrames) {
             _lock.release();
             return Vec<Frame*>();
         }
     }
     Vec<Frame*> alloc;
     for(int i = 0; i < count; i++) {
-        Frame* newFrame = _availableFrames.back();
-        _availableFrames.popBack();
+        Frame* newFrame = _availableFrames.front();
+        newFrame->setFlags(flags);
+        _availableFrames.erase(0);
         _allocatedFrames.pushBack(newFrame);
         alloc.pushBack(newFrame);
     }

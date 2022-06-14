@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-13 22:59:12
+ * LastEditTime : 2022-06-14 09:43:12
  * Description  : 
  */
 #include "interrupt.h"
@@ -18,13 +18,13 @@
 #include "allocator.h"
 #include "gdt.h"
 
-void firstThread(void** args);
+void firstThread();
 
-void firstThread(void**) {
+void firstThread() {
 
-    int* test = (int*)0xBF000000;
-    *test = 1;
-    printf("%d\n", *test);
+    // int* test = (int*)0xBF000000;
+    // *test = 1;
+    printf("Hello World\n");
     
     while(true){
     }
@@ -62,20 +62,23 @@ extern "C" void kernel() {
     PageManager::initialize();
     GlobalDescriptorTable::initialize();
     ProcessManager::initialize();
-    initScheduler();
+    // initScheduler();
     initInterrupt();
-    // Scheduler::executeThread(firstThread, 0, 1);
+
+    Process* frstProcess = (Process*)malloc(sizeof(Process));
+    Process* kernelProcess = ProcessManager::processOfPID(0);
+    *frstProcess = Process(
+        ProcessManager::allocPID(),
+        ProcessPriviledge::KERNEL,
+        ProcessSegment::defaultKernelDataSegment(),
+        ProcessSegment::defaultKernelStackSegment(),
+        kernelProcess,
+        30,
+        (uint32)firstThread
+    );
+    ProcessManager::executeProcess(frstProcess);
+    
     while(true) {
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        printf("1\n");
         //Halt
     }
 }
@@ -89,7 +92,7 @@ void initScheduler() {
 }
 
 void initInterrupt() {
-    uint32 idtAddr = FrameManager::allocateFrame()->physicalAddr();
+    uint32 idtAddr = FrameManager::allocateFrame(FrameFlag::LOCKED)->physicalAddr();
     InterruptDescriptorTable* idt = InterruptDescriptorTable::fromPhysicalAddr(idtAddr);
     idt->initialize();
     idt->loadToIDTR();

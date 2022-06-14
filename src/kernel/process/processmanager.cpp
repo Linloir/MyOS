@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-13 22:51:25
+ * LastEditTime : 2022-06-14 10:25:53
  * Description  : 
  */
 
@@ -9,6 +9,7 @@
 #include "processmanager.h"
 #include "paging.h"
 #include "interrupt.h"
+#include "std_utils.h"
 
 BitMap ProcessManager::_pids;
 Vec<Process*> ProcessManager::_readyProcesses;
@@ -27,6 +28,8 @@ void ProcessManager::_processExit() {
 void ProcessManager::_schedule() {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
+
+    printf("In schedule\n");
     
     if(_readyProcesses.isEmpty()) {
         return;
@@ -48,7 +51,6 @@ void ProcessManager::_schedule() {
 
 void ProcessManager::_switchProcess(Process* cur, Process* next) {
     //Preserve old process
-    uint32 oldEsp;
     asm volatile(
         "push %%ds\n\t"
         "push %%es\n\t"
@@ -62,11 +64,10 @@ void ProcessManager::_switchProcess(Process* cur, Process* next) {
         "push %%ebx\n\t"
         "push %%eax\n\t"
         "movl %%esp, %0"
-        : "=r"(oldEsp)
+        : "=r"(_curProcess->_esp)
     );
-    _curProcess->setEsp(oldEsp);
     //Move to new esp
-    uint32 newEsp = next->esp();
+    setCR3((uint32)next->_table);
     asm volatile(
         "movl %[esp], %%esp\n\t"
         "pop %%eax\n\t"
@@ -82,7 +83,7 @@ void ProcessManager::_switchProcess(Process* cur, Process* next) {
         "pop %%es\n\t"
         "pop %%ds"
         : 
-        : [esp]"r"(newEsp)
+        : [esp]"r"(next->_esp)
     );
 }
 
@@ -96,7 +97,8 @@ void ProcessManager::initialize() {
     
     Process* kernelProcess = (Process*)malloc(sizeof(Process));
     *kernelProcess = Process();
-
+    
+    kernelProcess->_pid = 0;
     kernelProcess->_priviledge = ProcessPriviledge::KERNEL;
     kernelProcess->_table = PageTable::fromPhysicalAddr(getCR3());
     kernelProcess->_dataSegment = ProcessSegment::defaultKernelDataSegment();
@@ -109,6 +111,7 @@ void ProcessManager::initialize() {
     kernelProcess->_status = ProcessStatus::RUNNING;
 
     _curProcess = kernelProcess;
+    _allProcesses.pushBack(kernelProcess);
 
     printf("Process Manager Initialized!\n");
 }
@@ -130,7 +133,7 @@ Process* ProcessManager::curProcess() {
 
 Process* ProcessManager::processOfPID(uint32 pid) {
     for(int i = 0; i < _allProcesses.size(); i++) {
-        if(_allProcesses[i]->pid()) {
+        if(_allProcesses[i]->pid() != pid) {
             continue;
         }
         return _allProcesses[i];
@@ -143,7 +146,10 @@ uint32 ProcessManager::allocPID() {
 }
 
 void ProcessManager::executeProcess(Process* process) {
+    bool interrupt = getInterruptStatus();
+    setInterruptStatus(false);
     process->setStatus(ProcessStatus::READY);
     _allProcesses.pushBack(process);
     _readyProcesses.pushBack(process);
+    setInterruptStatus(interrupt);
 }

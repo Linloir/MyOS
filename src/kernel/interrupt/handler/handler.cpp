@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-13 10:42:05
+ * LastEditTime : 2022-06-14 10:20:32
  * Description  : 
  */
 
@@ -22,7 +22,6 @@
 // }
 
 __attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
-    printf("0x%x\n", frame);
     printf("Empty handler\n");
     while(true) {
 
@@ -30,8 +29,8 @@ __attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
 }
 
 __attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame) {
-    printf("Time handler\n");
     eoi();
+    ProcessManager::onTimeTick();
     // Scheduler::onTimeInterrupt();
 }
 

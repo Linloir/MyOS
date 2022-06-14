@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-13 22:28:01
+ * LastEditTime : 2022-06-14 10:18:31
  * Description  : 
  */
 
@@ -124,16 +124,16 @@ Process::Process(
 ///ALLOCATE-------------------------------
     
     // - Allocate space for Lev2 Table
-    Frame* scndLevelTableFrame = FrameManager::allocateFrame();
+    Frame* scndLevelTableFrame = FrameManager::allocateFrame(FrameFlag::LOCKED);
     
     // - Allocate space for ESP0
-    Vec<Frame*> esp0Frames = FrameManager::allocateFrames(_esp0Segment.sizeOfPages());
+    Vec<Frame*> esp0Frames = FrameManager::allocateFrames(_esp0Segment.sizeOfPages(), FrameFlag::LOCKED);
     
     // - Allocate space for User Stack
-    Frame* initStackFrame = FrameManager::allocateFrame();
+    Frame* initStackFrame = FrameManager::allocateFrame(FrameFlag::EMPTY);
     
     // - Allocate space for Data Segment
-    Vec<Frame*> dataFrames = FrameManager::allocateFrames(_dataSegment.sizeOfPages());
+    Vec<Frame*> dataFrames = FrameManager::allocateFrames(_dataSegment.sizeOfPages(), FrameFlag::EMPTY);
     
     // - Allocate new pid
     _pid = ProcessManager::allocPID();
@@ -209,7 +209,10 @@ Process::Process(
     stack.push((uint32)0x0);    //eax
 
     // - Prepare esp
-    _esp = _stackSegment.endAddr();
+    _esp = stack._top;
+
+    // - Prepare table
+    _table = table;
 
 ///END OF PREPARE-------------------------
 

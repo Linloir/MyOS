@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 20:36:42
- * LastEditTime : 2022-06-13 22:12:51
+ * LastEditTime : 2022-06-14 10:19:02
  * Description  : 
  */
 
@@ -11,6 +11,8 @@
 #include "os_type.h"
 
 class StackHandler {
+    friend class Process;
+
     private:
         uint32 _top;
     public:
@@ -21,6 +23,8 @@ class StackHandler {
         
         template<typename T>
         T pop();
+
+        uint32 top();
 };
 
 template<typename T>

@@ -1,13 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-13 22:53:49
+ * LastEditTime : 2022-06-14 10:25:33
  * Description  : Paging
  */
 
 #include "paging.h"
 #include "framemanager.h"
 #include "mmu.h"
+#include "std_utils.h"
 
 void PageManager::initialize() {
     //Free unused page
@@ -25,7 +26,7 @@ PageTableEntry* PageManager::_mapPage(PageTable* pageTable, uint32 virtualAddr, 
     uint32 frstLevelTableIndex = virtualAddr >> 22;
     //create l1 table if not exist
     if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
-        uint32 newTableAddr = FrameManager::allocateFrame()->physicalAddr();
+        uint32 newTableAddr = FrameManager::allocateFrame(FrameFlag::LOCKED)->physicalAddr();
         PageTableEntry newEntry = PageTableEntry(newTableAddr, PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE);
         scndLevelTable->insertAt(frstLevelTableIndex, newEntry);
     }

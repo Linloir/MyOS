@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-05 16:22:09
- * LastEditTime : 2022-06-12 20:01:01
+ * LastEditTime : 2022-06-14 10:25:16
  * Description  : 
  */
 
@@ -9,7 +9,6 @@
 #define _VECTOR_H_
 
 #include "allocator.h"
-#include "std_utils.h"
 
 #define _MIN_(a, b) ((a) < (b) ? (a) : (b))
 #define _MAX_(a, b) ((a) < (b) ? (b) : (a))
@@ -50,7 +49,6 @@ bool Vec<T>::_setCapacity(unsigned int newCapacity) {
     if(newCapacity <= 0)  return false;
     
     T* newItems = (T*)malloc(sizeof(T) * newCapacity);
-    printf("Malloc to size %d, start from 0x%x\n", newCapacity, newItems);
     if(newItems == nullptr) return false;
     _capacity = newCapacity;
     
