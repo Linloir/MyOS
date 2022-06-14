@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-13 23:25:20
+ * LastEditTime : 2022-06-14 18:00:42
  * Description  : Kernel loader
  */
 
@@ -37,7 +37,8 @@ void initializePaging() {
     uint32* frstLevelTableKernel = (uint32*)FRST_LEVEL_TABLE_ADDR_KERNEL;
     uint32 physAddr = 0x0;          //0KiB
     uint32 virtAddr = KERNEL_START_ADDR;   //3GiB
-    uint32 flag = 0x3;              //P, RWX, PRIVILEDGE
+    // uint32 flag = 0x3;              //P, RWX, PRIVILEDGE
+    uint32 flag = 0x7;
 
     //Init second level page table (set all entries to be 0(not present))
     for(int i = 0; i < 1024; i++) {

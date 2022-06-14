@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-14 14:37:34
+ * LastEditTime : 2022-06-14 20:25:14
  * Description  : 
  */
 #include "interrupt.h"
@@ -23,9 +23,45 @@ void firstThread() {
 
     // int* test = (int*)0xBF000000;
     // *test = 1;
+    // printf("Hello World\n");
+    
+    while(true) {
+        // printf("Process 1\n");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+    }
+}
+
+void scndThread() {
+
+    // int* test = (int*)0xBF000000;
+    // *test = 1;
     printf("Hello World\n");
     
-    while(true){
+    while(true) {
+        printf("Process 2\n");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
     }
 }
 
@@ -65,20 +101,44 @@ extern "C" void kernel() {
     initInterrupt();
 
     Process* frstProcess = (Process*)malloc(sizeof(Process));
-    Process* kernelProcess = ProcessManager::processOfPID(0);
     *frstProcess = Process(
         ProcessManager::allocPID(),
-        ProcessPriviledge::KERNEL,
-        ProcessSegment::defaultKernelDataSegment(),
-        ProcessSegment::defaultKernelStackSegment(),
-        kernelProcess,
+        ProcessPriviledge::USER,
+        ProcessSegment::defaultUserDataSegment(),
+        ProcessSegment::defaultUserStackSegment(),
+        ProcessManager::processOfPID(0),
         30,
         (uint32)firstThread
     );
+
+    // Process* scndProcess = (Process*)malloc(sizeof(Process));
+    // *scndProcess = Process(
+    //     ProcessManager::allocPID(),
+    //     ProcessPriviledge::USER,
+    //     ProcessSegment::defaultUserDataSegment(),
+    //     ProcessSegment::defaultUserStackSegment(),
+    //     ProcessManager::processOfPID(0),
+    //     30,
+    //     (uint32)scndThread
+    // );
+
     ProcessManager::executeProcess(frstProcess);
+    // ProcessManager::executeProcess(scndProcess);
     
     while(true) {
-        //Halt
+        printf("Kernel Process\n");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
     }
 }
 

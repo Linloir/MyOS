@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:58
- * LastEditTime : 2022-06-13 22:52:21
+ * LastEditTime : 2022-06-14 20:42:20
  * Description  : 
  */
 
@@ -87,8 +87,6 @@ GlobalDescriptorTable* GlobalDescriptorTable::fromVirtualAddr(uint32 addr) {
 }
 
 void GlobalDescriptorTable::initialize() {
-    TaskStateSegment::initialize();
-
     //Empty Segment
     GlobalDescriptor emptySegmentDescriptor = GlobalDescriptor(
         0x0,
@@ -168,11 +166,13 @@ void GlobalDescriptorTable::initialize() {
         (uint32)&TSS,
         sizeof(TSS) - 1,
         0,
-        GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::IS_TSS | GlobalDescriptorFlag::IS_32_BIT
+        GlobalDescriptorFlag::PRESENT | GlobalDescriptorFlag::IS_TSS | 
+        GlobalDescriptorFlag::IS_32_BIT | GlobalDescriptorFlag::USE_32_BIT
     );
     GDT.descriptors[7] = tssDescriptor;
 
     GDT.loadToGDTR();
+    TaskStateSegment::initialize();
 
     printf("Global Descriptor Table Initialized!\n");
 }

@@ -1,22 +1,9 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-06-08 10:25:10
- * LastEditTime : 2022-06-13 14:23:29
+ * Date         : 2022-06-14 19:51:13
+ * LastEditTime : 2022-06-14 19:51:14
  * Description  : 
  */
-
-extern "C" int __cxa_atexit( 
-    void *object, 
-    void (*destructor)(void *), 
-    void *dso_handle) 
-{ 
-    static_cast<void>(object); 
-    static_cast<void>(destructor); 
-    static_cast<void>(dso_handle); 
-    return 0; 
-}
-
-void* __dso_handle = nullptr;
 
 extern "C" void* memcpy(void* dest, const void* src, unsigned int count) {
   char* dst8 = (char*)dest;

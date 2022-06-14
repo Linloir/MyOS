@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 11:27:29
- * LastEditTime : 2022-06-13 15:58:03
+ * LastEditTime : 2022-06-14 20:05:36
  * Description  : 
  */
 
@@ -12,59 +12,47 @@
 
 class TaskStateSegment {
     private:
-        uint16 _link;
-        uint16 _reserved_0 = 0x0;
+        uint32 _previous = 0x0;
 
-        uint32 _esp0;
-        uint16 _ss0;
-        uint16 _reserved_1 = 0x0;
+        uint32 _esp0 = 0x0;
+        uint32 _ss0 = 0x0;
 
-        uint32 _esp1;
-        uint16 _ss1;
-        uint16 _reserved_2 = 0x0;
+        uint32 _esp1 = 0x0;
+        uint32 _ss1 = 0x0;
 
-        uint32 _esp2;
-        uint16 _ss2;
-        uint16 _reserved_3 = 0x0;
+        uint32 _esp2 = 0x0;
+        uint32 _ss2 = 0x0;
 
-        uint32 _cr3;
-        uint32 _eip;
+        uint32 _cr3 = 0x0;
+        uint32 _eip = 0x0;
         uint32 _eflags = 0x0;
 
-        uint32 _eax;
-        uint32 _ecx;
-        uint32 _edx;
-        uint32 _ebx;
+        uint32 _eax = 0x0;
+        uint32 _ecx = 0x0;
+        uint32 _edx = 0x0;
+        uint32 _ebx = 0x0;
 
-        uint32 _esp;
-        uint32 _ebp;
-        uint32 _esi;
-        uint32 _edi;
+        uint32 _esp = 0x0;
+        uint32 _ebp = 0x0;
+        uint32 _esi = 0x0;
+        uint32 _edi = 0x0;
 
-        uint16 _es;
-        uint16 _reserved_4 = 0x0;
-        uint16 _cs;
-        uint16 _reserved_5 = 0x0;
-        uint16 _ss;
-        uint16 _reserved_6 = 0x0;
-        uint16 _ds;
-        uint16 _reserved_7 = 0x0;
-        uint16 _fs;
-        uint16 _reserved_8 = 0x0;
-        uint16 _gs;
-        uint16 _reserved_9 = 0x0;
+        uint32 _es = 0x0; //!!THE VALUE TO LOAD INTO ES WHEN CHANGED TO KERNEL MODE
+        uint32 _cs = 0x0; //!!THE VALUE TO LOAD INTO CS WHEN CHANGED TO KERNEL MODE
+        uint32 _ss = 0x0; //!!THE VALUE TO LOAD INTO SS WHEN CHANGED TO KERNEL MODE
+        uint32 _ds = 0x0; //!!THE VALUE TO LOAD INTO DS WHEN CHANGED TO KERNEL MODE
+        uint32 _fs = 0x0; //!!THE VALUE TO LOAD INTO FS WHEN CHANGED TO KERNEL MODE
+        uint32 _gs = 0x0; //!!THE VALUE TO LOAD INTO GS WHEN CHANGED TO KERNEL MODE
 
-        uint16 _ldtr;
-        uint16 _reserved_10;
+        uint32 _ldt = 0x0;
 
-        uint16 _reserved_11;
-        uint16 _iobp;
+        uint32 _iopb = 0x0;
         
-        uint32 _ssp;
+        uint32 _ssp = 0x0;
     public:
         static void initialize();
         void loadTR();
-};
+} __attribute__((packed));
 
 extern TaskStateSegment TSS;
 
