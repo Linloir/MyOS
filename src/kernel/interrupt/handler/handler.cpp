@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-14 14:10:28
+ * LastEditTime : 2022-06-14 16:21:06
  * Description  : 
  */
 
@@ -35,7 +35,7 @@ __attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame) {
 
 __attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode) {
 
-    printf("Double fault\n");
+    printf("Double fault, err code: %d\n", errCode);
     while(true) {
         
     }

@@ -24,6 +24,8 @@ asm_switch_process:
     push ebx
     push eax
 
+    ; pushad
+
     mov dword eax, [ebp + 2 * 4]  ; eax = *oldEsp
     mov dword [eax], esp    ; *oldEsp = esp
 
@@ -32,6 +34,8 @@ asm_switch_process:
 
     mov dword eax, [ebp + 4 * 4]    ; eax = newEsp
     mov esp, eax
+
+    ; popad
 
     pop eax
     pop ebx

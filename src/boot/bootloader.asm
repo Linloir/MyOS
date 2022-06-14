@@ -52,10 +52,9 @@ protect_mode:
     mov ds, eax
     mov es, eax
     mov fs, eax
+    mov gs, eax
     mov eax, STACK_SELECTOR
     mov ss, eax
-    mov eax, VIDEO_SELECTOR
-    mov gs, eax
 
     ; Load kernel loader
     xor eax, eax
