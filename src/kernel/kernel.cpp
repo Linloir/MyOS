@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-15 10:09:49
+ * LastEditTime : 2022-06-15 10:33:11
  * Description  : 
  */
 #include "interrupt.h"
@@ -26,22 +26,23 @@ void firstThread() {
     // *test = 1;
     // printf("Hello World\n");
     
-    syscall(0, 1, 2, 3, 4, 5);
+    uint32 result = syscall(0, 1, 2, 3, 4, 5);
+    syscall(0, result);
 
     while(true) {
         // printf("Process 1\n");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
+        // asm("hlt");
     }
 }
 
@@ -53,18 +54,8 @@ void scndThread() {
     
     while(true) {
         printf("Process 2\n");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
-        asm("hlt");
+        asm("hlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\t");
+        asm("hlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\thlt\n\t");
     }
 }
 

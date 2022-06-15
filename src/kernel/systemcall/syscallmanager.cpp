@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-14 21:41:21
- * LastEditTime : 2022-06-15 10:09:03
+ * LastEditTime : 2022-06-15 10:21:08
  * Description  : 
  */
 /***
@@ -59,6 +59,7 @@ uint32 syscall(uint32 vec) {
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(
@@ -100,6 +101,7 @@ uint32 syscall(uint32 vec, uint32 p0) {
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(
@@ -142,6 +144,7 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1) {
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(
@@ -185,6 +188,7 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2) {
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(
@@ -229,6 +233,7 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3) {
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(
@@ -274,6 +279,7 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4
         "popal\n\t"
         "movl 4(%ebp), %eax\n\t"
         "pop %ebp\n\t"
+        "addl $4, %esp\n\t"
     );
     //Return
     asm volatile(

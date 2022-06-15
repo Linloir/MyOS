@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-15 10:07:38
+ * LastEditTime : 2022-06-15 10:41:32
  * Description  : 
  */
 
@@ -78,9 +78,9 @@ Naked void syscallInterruptHandler() {
     );
     //Call
     asm volatile(
-        "sti\n\t"
+        // "sti\n\t"
         "call %P0\n\t"
-        "cli\n\t"
+        // "cli\n\t"
         :
         : "i"(SyscallManager::_handler)
     );
@@ -88,6 +88,14 @@ Naked void syscallInterruptHandler() {
     asm volatile(
         "addl $24, %esp\n\t"
     );
+    // //Send eoi
+    // asm volatile(
+    //     "pushal\n\t"
+    //     "call %P0\n\t"
+    //     "popal\n\t"
+    //     : 
+    //     : "i"((uint32)eoi)
+    // );
     //Restore state
     asm volatile(
         "pop %ds\n\t"
@@ -98,6 +106,7 @@ Naked void syscallInterruptHandler() {
     );
     //return
     asm volatile(
+        // "sti\n\t"
         "iret\n\t"
     );
 }
@@ -136,9 +145,8 @@ Naked void syscallInterruptHandler() {
 
 void eoi() {
     asm(
-        ".intel_syntax noprefix\n\t"
-        "mov al, 0x20\n\t"
-        "out 0x20, al\n\t"
-        "out 0xA0, al\n\t"
+        "movb $0x20, %al\n\t"
+        "outb %al, $0x20\n\t"
+        "outb %al, $0xA0\n\t"
     );
 }
