@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-14 14:59:07
+ * LastEditTime : 2022-06-15 21:26:38
  * Description  : 
  */
 
@@ -124,6 +124,7 @@ void ProcessManager::executeProcess(Process* process) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
     process->setStatus(ProcessStatus::READY);
+    process->_pid = allocPID();
     _allProcesses.pushBack(process);
     _readyProcesses.pushBack(process);
     setInterruptStatus(interrupt);
@@ -157,4 +158,11 @@ void ProcessManager::awakeProcess(Process* process, AwakeMethod method) {
     if(method == AwakeMethod::HASEN) {
         _hasenAwakeProcess(process);
     }
+}
+
+void ProcessManager::forkProcess(Process* process) {
+    Process* parent = process;
+    Process* child = (Process*)malloc(sizeof(Process));
+    *child = Process::inheritFrom(parent);
+    parent->addChild(child);
 }

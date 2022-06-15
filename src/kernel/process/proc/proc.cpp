@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-14 16:18:48
+ * LastEditTime : 2022-06-15 21:59:21
  * Description  : 
  */
 
@@ -89,7 +89,6 @@ Vec<Page> ProcessSegment::toPages(int offset) {
 }
 
 Process::Process(
-    uint32 pid,
     ProcessPriviledge priviledge,
 
     ProcessSegment dataSegment,
@@ -103,7 +102,7 @@ Process::Process(
 ) {
 
 ///INITIALIZE-----------------------------
-    _pid = pid;
+    _pid = 0;
     _priviledge = priviledge;
     _table = nullptr;
     _esp = 0x0;
@@ -134,9 +133,6 @@ Process::Process(
     
     // - Allocate space for Data Segment
     Vec<Frame*> dataFrames = FrameManager::allocateFrames(_dataSegment.sizeOfPages(), FrameFlag::EMPTY);
-    
-    // - Allocate new pid
-    _pid = ProcessManager::allocPID();
     
 ///END OF ALLOCATE------------------------
 
@@ -216,6 +212,63 @@ Process::Process(
     _table = table;
 
 ///END OF PREPARE-------------------------
+
+}
+
+Process Process::inheritFrom(
+    const Process* parentProcess
+) {
+
+///INITIALIZE-----------------------------
+    _pid = 0;
+    _priviledge = parentProcess->_priviledge;
+    _table = nullptr;
+    _esp = 0x0;
+
+    _dataSegment = parentProcess->_dataSegment;
+    _stackSegment = parentProcess->_stackSegment;
+    _esp0Segment = parentProcess->_esp0Segment;
+
+    _parent = parentProcess;
+    _children = Vec<Process*>();
+
+    _ticks = parentProcess->_ticks;
+    _remainingTicks = parentProcess->_ticks;
+
+    _status = ProcessStatus::NEW;
+///END OF INITIALIZE----------------------
+
+///ALLOCATE-------------------------------
+
+    // - Allocate space for Lev2 Table
+    Frame* scndLevelTableFrame = FrameManager::allocateFrame(FrameFlag::LOCKED);
+
+    // - Allocate space for private esp0 stack
+    Vec<Frame*> esp0Frames = FrameManager::allocateFrames(_esp0Segment.sizeOfPages(), FrameFlag::LOCKED);
+
+    // - Allocate space for private stack
+    Frame* initStackFrame = FrameManager::allocateFrame(FrameFlag::EMPTY);
+
+///END OF ALLOCATE------------------------
+
+///PREPARE--------------------------------
+
+    // - Prepare Page Table
+    PageTable* table = PageTable::fromPhysicalAddr(scndLevelTableFrame->physicalAddr());
+    
+    //    - Copy Kernel Pages
+    PageTable* kernelTable = ProcessManager::processOfPID(0)->pageTable();
+    for(int i = 768; i < 1024; i++) {
+        table->entryAt(i) = kernelTable->entryAt(i);
+    }
+    //    - Copy Parent Data Pages
+    PageTable* parentTable = parentProcess->_table;
+    Vec<Page> dataPages = parentProcess->_dataSegment.toPages();
+    for(int i = 0; i < dataPages.size(); i++) {
+        PageTableEntry parentEntry = parentTable->entryOf(pages[i]);
+        Frame hypothesis
+    }
+    //    - 
 
 }
 

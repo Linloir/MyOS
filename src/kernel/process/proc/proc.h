@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-14 14:44:18
+ * LastEditTime : 2022-06-15 21:24:38
  * Description  : Process Control Block
  */
 
@@ -70,7 +70,6 @@ class Process {
         Process() {}
         Process(
             //Process info
-            uint32 pid, 
             ProcessPriviledge priviledge, 
 
             ProcessSegment dataSegment,
@@ -83,6 +82,7 @@ class Process {
             //Execute info
             uint32 entryPoint
         );
+        static Process inheritFrom(const Process* parent);
         uint32 pid();
         PageTable* pageTable();
         ProcessPriviledge priviledge();

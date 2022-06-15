@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-13 22:19:55
+ * LastEditTime : 2022-06-15 21:56:17
  * Description  : 
  */
 
@@ -129,6 +129,15 @@ PageTableEntry& PageTable::operator[](int index) {
 
 PageTableEntry& PageTable::entryAt(int index) {
     return entries[index];
+}
+
+PageTableEntry& PageTable::entryOf(Page page) {
+    PageTableEntry frstLevelTableEntry = entries[page.virtualAddr() >> 22];
+    if(!frstLevelTableEntry.isPresent()) {
+        return frstLevelTableEntry;
+    }
+    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(frstLevelTable->physicalAddr());
+    return frstLevelTable->entryAt((page.virtualAddr() << 10) >> 22);
 }
 
 uint32 PageTable::physicalAddr() {

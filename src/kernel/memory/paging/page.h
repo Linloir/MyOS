@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-08 22:45:04
+ * LastEditTime : 2022-06-15 21:52:36
  * Description  : 
  */
 
@@ -16,6 +16,7 @@
 #define PAGE_SHIFT_MASK(ADDR) ((ADDR & 0x00000FFF)
 
 enum class PageFlag{
+    _EMPTY          = 0,
     PRESENT         = 1,
     WRITABLE        = 1 << 1,
     USER_ACCESSIBLE = 1 << 2,
@@ -75,6 +76,7 @@ class PageTable {
         static PageTable* fromPhysicalAddr(uint32 virtualAddress);
         PageTableEntry& operator[](int index);
         PageTableEntry& entryAt(int index);
+        PageTableEntry& entryOf(Page page);
         uint32 physicalAddr();
         uint32 virtualAddr();
         void insertAt(int index, PageTableEntry entry);

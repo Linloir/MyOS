@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-15 10:33:11
+ * LastEditTime : 2022-06-15 21:23:39
  * Description  : 
  */
 #include "interrupt.h"
@@ -96,7 +96,6 @@ extern "C" void kernel() {
 
     Process* frstProcess = (Process*)malloc(sizeof(Process));
     *frstProcess = Process(
-        ProcessManager::allocPID(),
         ProcessPriviledge::USER,
         ProcessSegment::defaultUserDataSegment(),
         ProcessSegment::defaultUserStackSegment(),
