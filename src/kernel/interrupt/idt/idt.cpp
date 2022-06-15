@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 09:42:01
- * LastEditTime : 2022-06-13 10:23:26
+ * LastEditTime : 2022-06-14 22:32:11
  * Description  : Interrupt Descriptor structures
  */
 
@@ -11,6 +11,7 @@
 #include "allocator.h"
 #include "os_constant.h"
 #include "interrupt.h"
+#include "syscallmanager.h"
 
 InterruptDescriptorFlag operator|(InterruptDescriptorFlag lhs, InterruptDescriptorFlag rhs) {
     return static_cast<InterruptDescriptorFlag>(static_cast<uint32>(lhs) | static_cast<uint32>(rhs));

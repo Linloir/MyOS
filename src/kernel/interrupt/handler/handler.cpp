@@ -1,16 +1,18 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-14 21:06:03
+ * LastEditTime : 2022-06-15 09:42:36
  * Description  : 
  */
 
+#include "os_constant.h"
 #include "handler.h"
 #include "interrupt.h"
 #include "std_utils.h"
 #include "framemanager.h"
 #include "processmanager.h"
 #include "paging.h"
+#include "syscallmanager.h"
 
 // extern "C" void emptyHandler() {
 //     asm_disable_interrupt();
@@ -20,25 +22,82 @@
 //     }
 // }
 
-__attribute__ ((interrupt)) void emptyHandler(InterruptFrame* frame) {
+Interrupt void emptyHandler(InterruptFrame* frame) {
     printf("Empty handler\n");
     while(true) {
 
     }
 }
 
-__attribute__ ((interrupt)) void timeInterruptHandler(InterruptFrame* frame) {
+Interrupt void timeInterruptHandler(InterruptFrame* frame) {
     eoi();
     ProcessManager::onTimeTick();
     // Scheduler::onTimeInterrupt();
 }
 
-__attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode) {
+Interrupt void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode) {
 
     printf("Double fault, err code: %d\n", errCode);
     while(true) {
         
     }
+}
+
+Naked void syscallInterruptHandler() {
+    //WARNING:
+    //%%eax is used for return value
+    //Therefore DO NOT restore state of eax
+    
+    //Preserve used registers
+    asm volatile(
+        "push %ebp\n\t"
+        "movl %esp, %ebp\n\t"
+        "push %gs\n\t"
+        "push %fs\n\t"
+        "push %es\n\t"
+        "push %ds\n\t"
+    );
+    //Push parameters
+    asm volatile(
+        "push %eax\n\t"    //p4
+        "push %ebx\n\t"    //p3
+        "push %ecx\n\t"    //p2
+        "push %edx\n\t"    //p1
+        "push %esi\n\t"    //p0
+        "push %edi\n\t"    //vec
+    );
+    //Push segment selectors
+    asm volatile(
+        "movl %[ds], %%eax\n\t"
+        "movl %%eax, %%ds\n\t"
+        "movl %%eax, %%es\n\t"
+        "movl %%eax, %%fs\n\t"
+        "movl %%eax, %%gs\n\t"
+        :
+        : [ds]"r"(DATA_SELECTOR)
+    );
+    //Call
+    asm volatile(
+        "call %P0\n\t"
+        :
+        : "i"(SyscallManager::_handler)
+    );
+    //Free stack
+    asm volatile(
+        "addl $24, %esp\n\t"
+    );
+    //Restore state
+    asm volatile(
+        "pop %ds\n\t"
+        "pop %es\n\t"
+        "pop %fs\n\t"
+        "pop %gs\n\t"
+        "pop %ebp\n\t"
+    );
+    //return
+    asm volatile(
+        "iret\n\t"
+    );
 }
 
 // extern "C" void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr) {
@@ -70,6 +129,8 @@ __attribute__ ((interrupt)) void doubleFaultInterruptHandler(InterruptFrame* fra
 
 //     printf("Visiting wrong address\n");
 // }
+
+
 
 void eoi() {
     asm(

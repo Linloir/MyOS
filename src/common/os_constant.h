@@ -1,11 +1,15 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-14 20:05:16
+ * LastEditTime : 2022-06-14 22:00:00
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
 #define _OS_CONSTANT_H_
+
+#define PAGE_SIZE 4096
+
+#define MEMORY_INFO_ADDR 0x0
 
 #define CODE_SELECTOR 0x08
 #define DATA_SELECTOR 0x10
@@ -25,11 +29,6 @@
 #define ESP_0_ADDR 0xC0000000
 #define USER_STACK_ADDR 0xBFF00000
 
-#define PCB_MAX_SIZE 4096
-#define MAX_PROCESS_COUNT 16
-
-#define PAGE_SIZE 4096
-
-#define MEMORY_INFO_ADDR 0x0
+#define MAX_SYSTEM_CALL 256
 
 #endif
