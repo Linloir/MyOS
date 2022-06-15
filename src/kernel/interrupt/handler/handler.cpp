@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:21
- * LastEditTime : 2022-06-15 09:42:36
+ * LastEditTime : 2022-06-15 10:07:38
  * Description  : 
  */
 
@@ -78,7 +78,9 @@ Naked void syscallInterruptHandler() {
     );
     //Call
     asm volatile(
+        "sti\n\t"
         "call %P0\n\t"
+        "cli\n\t"
         :
         : "i"(SyscallManager::_handler)
     );

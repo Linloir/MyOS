@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-14 21:41:21
- * LastEditTime : 2022-06-15 10:04:05
+ * LastEditTime : 2022-06-15 10:09:03
  * Description  : 
  */
 /***
@@ -26,7 +26,7 @@ void SyscallManager::initialize() {
     _syscall[0] = syscallTest;
 }
 
-uint32 SyscallManager::syscall(uint32 vec) {
+uint32 syscall(uint32 vec) {
     //Previous on stack:
     //uint32 vec
     //uint32 eip
@@ -66,7 +66,7 @@ uint32 SyscallManager::syscall(uint32 vec) {
     );
 }
 
-uint32 SyscallManager::syscall(uint32 vec, uint32 p0) {
+uint32 syscall(uint32 vec, uint32 p0) {
     //Previous on stack:
     //uint32 p0
     //uint32 vec
@@ -107,7 +107,7 @@ uint32 SyscallManager::syscall(uint32 vec, uint32 p0) {
     );
 }
 
-uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1) {
+uint32 syscall(uint32 vec, uint32 p0, uint32 p1) {
     //Previous on stack:
     //uint32 p1
     //uint32 p0
@@ -149,7 +149,7 @@ uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1) {
     );
 }
 
-uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2) {
+uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2) {
     //Previous on stack:
     //uint32 p2
     //uint32 p1
@@ -192,7 +192,7 @@ uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2) {
     );
 }
 
-uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3) {
+uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3) {
     //Previous on stack:
     //uint32 p3
     //uint32 p2
@@ -236,7 +236,7 @@ uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint
     );
 }
 
-uint32 SyscallManager::syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
+uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
     //Previous on stack:
     //uint32 p4
     //uint32 p3

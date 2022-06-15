@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-14 21:05:36
+ * LastEditTime : 2022-06-15 10:08:08
  * Description  : 
  */
 #include "interrupt.h"
@@ -16,6 +16,7 @@
 #include "mmu.h"
 #include "allocator.h"
 #include "gdt.h"
+#include "syscallmanager.h"
 
 void firstThread();
 
@@ -97,7 +98,7 @@ extern "C" void kernel() {
     PageManager::initialize();
     GlobalDescriptorTable::initialize();
     ProcessManager::initialize();
-    // initScheduler();
+    SyscallManager::initialize();
     initInterrupt();
 
     Process* frstProcess = (Process*)malloc(sizeof(Process));
