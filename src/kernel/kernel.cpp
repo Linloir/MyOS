@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-15 10:08:08
+ * LastEditTime : 2022-06-15 10:09:49
  * Description  : 
  */
 #include "interrupt.h"
@@ -26,20 +26,22 @@ void firstThread() {
     // *test = 1;
     // printf("Hello World\n");
     
+    syscall(0, 1, 2, 3, 4, 5);
+
     while(true) {
         // printf("Process 1\n");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
-        // asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
+        asm("hlt");
     }
 }
 

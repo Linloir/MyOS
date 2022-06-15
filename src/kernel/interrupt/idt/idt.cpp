@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 09:42:01
- * LastEditTime : 2022-06-14 22:32:11
+ * LastEditTime : 2022-06-15 10:16:01
  * Description  : Interrupt Descriptor structures
  */
 
@@ -119,6 +119,14 @@ void InterruptDescriptorTable::initialize() {
     //     InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
     // );
     // setAt(0xE, pageFaultInterruptHandler);
+
+    InterruptDescriptor syscallInterruptDescriptor = InterruptDescriptor(
+        (uint32)syscallInterruptHandler,
+        CODE_SELECTOR,
+        0x3,
+        InterruptDescriptorFlag::IS_32_BIT | InterruptDescriptorFlag::NOT_TASK | InterruptDescriptorFlag::PRESENT
+    );
+    setAt(0x80, syscallInterruptDescriptor);
 }
 
 uint32 InterruptDescriptorTable::physicalAddr() {
