@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-04 20:24:53
- * LastEditTime : 2022-06-13 15:49:09
+ * LastEditTime : 2022-06-16 10:31:14
  * Description  : 
  */
 
@@ -52,24 +52,29 @@ class GlobalDescriptor {
 };
 
 class GlobalDescriptorTable {
+    friend class GDTManager;
+
     private:
         GlobalDescriptor descriptors[GDT_MAX_SIZE];
     public:
-        static GlobalDescriptorTable* fromPhysicalAddr(uint32 addr);
-        static GlobalDescriptorTable* fromVirtualAddr(uint32 addr);
-        static void initialize();
-        GlobalDescriptorTable(){}
+        GlobalDescriptorTable();
         uint32 physicalAddr();
         uint32 virtualAddr();
         GlobalDescriptor& operator[](int index);
-        GlobalDescriptor& getAt(int index);
-        void setAt(int index, GlobalDescriptor descriptor);
-        void removeAt(int index);
-        int append(GlobalDescriptor descriptor);
-        void loadToGDTR();
 };
 
-extern GlobalDescriptorTable GDT;
+class GDTManager {
+    private:
+        static GlobalDescriptorTable _gdt;
+        static void _load();
+    public:
+        static void initialize();
+        static uint32 physicalAddr();
+        static uint32 virtualAddr();
+        static void set(int index, GlobalDescriptor descriptor);
+        static void remove(int index);
+        static int append(GlobalDescriptor descriptor);
+};
 
 extern "C" void asm_load_gdtr(uint32 addr);
 

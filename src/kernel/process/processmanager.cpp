@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-15 21:26:38
+ * LastEditTime : 2022-06-16 10:54:43
  * Description  : 
  */
 
@@ -10,6 +10,7 @@
 #include "paging.h"
 #include "interrupt.h"
 #include "std_utils.h"
+#include "tss.h"
 
 BitMap ProcessManager::_pids;
 Vec<Process*> ProcessManager::_readyProcesses;
@@ -48,6 +49,7 @@ void ProcessManager::_schedule() {
     _curProcess = next;
 
     _switchProcess(cur, next);
+    TSSManager::setESP0(next->esp0());
 
     setInterruptStatus(interrupt);
 }

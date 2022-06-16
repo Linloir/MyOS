@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-15 21:23:39
+ * LastEditTime : 2022-06-16 10:53:44
  * Description  : 
  */
 #include "interrupt.h"
@@ -16,6 +16,7 @@
 #include "mmu.h"
 #include "allocator.h"
 #include "gdt.h"
+#include "tss.h"
 #include "syscallmanager.h"
 
 void firstThread();
@@ -89,7 +90,8 @@ extern "C" void kernel() {
     
     FrameManager::initialize(totalFrames, 256 + 2 + mappedPages + heapFrameCount);
     PageManager::initialize();
-    GlobalDescriptorTable::initialize();
+    GDTManager::initialize();
+    TSSManager::initialize();
     ProcessManager::initialize();
     SyscallManager::initialize();
     initInterrupt();

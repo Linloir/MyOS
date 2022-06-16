@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 11:27:29
- * LastEditTime : 2022-06-14 20:05:36
+ * LastEditTime : 2022-06-16 10:29:49
  * Description  : 
  */
 
@@ -11,6 +11,8 @@
 #include "os_type.h"
 
 class TaskStateSegment {
+    friend class TSSManager;
+
     private:
         uint32 _previous = 0x0;
 
@@ -49,11 +51,15 @@ class TaskStateSegment {
         uint32 _iopb = 0x0;
         
         uint32 _ssp = 0x0;
-    public:
-        static void initialize();
-        void loadTR();
 } __attribute__((packed));
 
-extern TaskStateSegment TSS;
+class TSSManager {
+    private:
+        static TaskStateSegment _tss;
+        static void _load();
+    public:
+        static void initialize();
+        static void setESP0(uint32 esp0);
+};
 
 #endif

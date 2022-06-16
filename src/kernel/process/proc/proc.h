@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-15 21:24:38
+ * LastEditTime : 2022-06-16 10:54:11
  * Description  : Process Control Block
  */
 
@@ -88,6 +88,7 @@ class Process {
         ProcessPriviledge priviledge();
         ProcessStatus status();
         uint32 esp();
+        uint32 esp0();
         uint32 remainingTicks();
         bool stackIncludeAddr(uint32 addr);
         bool dataIncludeAddr(uint32 addr);
