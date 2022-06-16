@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-16 10:54:11
+ * LastEditTime : 2022-06-16 11:29:12
  * Description  : Process Control Block
  */
 
@@ -31,9 +31,8 @@ class ProcessSegment {
         uint32 _endAddr = 0x0;
     public:
         static ProcessSegment defaultKernelDataSegment();
-        static ProcessSegment defaultKernelStackSegment();
         static ProcessSegment defaultUserDataSegment();
-        static ProcessSegment defaultUserStackSegment();
+        static ProcessSegment defaultStackSegment();
         static ProcessSegment defaultESP0Segment();
         ProcessSegment() {}
         ProcessSegment(uint32 start, uint32 end);
@@ -57,6 +56,8 @@ class Process {
 
         ProcessSegment _dataSegment;
         ProcessSegment _stackSegment;
+        //Refreshed by page fault
+        ProcessSegment _usedStackSegment;
         //For user mode process only
         ProcessSegment _esp0Segment;
 
@@ -71,18 +72,13 @@ class Process {
         Process(
             //Process info
             ProcessPriviledge priviledge, 
-
             ProcessSegment dataSegment,
-            ProcessSegment stackSegment,
-            
             Process* parent,
-
             uint32 ticks,
-
             //Execute info
             uint32 entryPoint
         );
-        static Process inheritFrom(const Process* parent);
+        static Process inheritFrom(Process* const parent);
         uint32 pid();
         PageTable* pageTable();
         ProcessPriviledge priviledge();

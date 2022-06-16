@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-14 22:00:00
+ * LastEditTime : 2022-06-16 11:24:05
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
@@ -26,8 +26,8 @@
 #define KERNEL_STACK_START 0xFFE00000
 #define KERNEL_STACK_END 0xFFFFFFFC
 
-#define ESP_0_ADDR 0xC0000000
-#define USER_STACK_ADDR 0xBFF00000
+#define DEFAULT_ESP0_STACK_SIZE 0x2000
+#define DEFAULT_STACK_SIZE  0x200000
 
 #define MAX_SYSTEM_CALL 256
 

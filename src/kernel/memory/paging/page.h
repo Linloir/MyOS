@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-15 21:52:36
+ * LastEditTime : 2022-06-16 11:10:13
  * Description  : 
  */
 
@@ -80,6 +80,8 @@ class PageTable {
         uint32 physicalAddr();
         uint32 virtualAddr();
         void insertAt(int index, PageTableEntry entry);
+        void clone(PageTable* origin);
+        int emptySlot();
         void removeAt(int index);
         void removeAt(int start, int size);
         void clear();

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-16 10:53:55
+ * LastEditTime : 2022-06-16 11:47:57
  * Description  : 
  */
 
@@ -11,8 +11,9 @@
 #include "paging.h"
 #include "framemanager.h"
 #include "swap.h"
-#include "stackhandler.h"
 #include "mmu.h"
+#include "stackhandler.h"
+#include "miscellaneous.h"
 
 ProcessSegment::ProcessSegment(uint32 start, uint32 end) : _startAddr(start), _endAddr(end) {}
 
@@ -20,20 +21,22 @@ ProcessSegment ProcessSegment::defaultKernelDataSegment() {
     return ProcessSegment(0x0, 0x0);
 }
 
-ProcessSegment ProcessSegment::defaultKernelStackSegment() {
-    return ProcessSegment(KERNEL_DATA_START - 0x100000, KERNEL_DATA_START);
-}
-
 ProcessSegment ProcessSegment::defaultUserDataSegment() {
     return ProcessSegment(0x0, 0x100000);
 }
 
-ProcessSegment ProcessSegment::defaultUserStackSegment() {
-    return ProcessSegment(KERNEL_DATA_START - 0x200000, KERNEL_DATA_START - 0x100000);
+ProcessSegment ProcessSegment::defaultStackSegment() {
+    return ProcessSegment(
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE - DEFAULT_STACK_SIZE, 
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE
+    );
 }
 
 ProcessSegment ProcessSegment::defaultESP0Segment() {
-    return ProcessSegment(KERNEL_DATA_START - 0x100000, KERNEL_DATA_START);
+    return ProcessSegment(
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE, 
+        KERNEL_DATA_START
+    );
 }
 
 bool ProcessSegment::includeAddr(uint32 addr) {
@@ -90,14 +93,9 @@ Vec<Page> ProcessSegment::toPages(int offset) {
 
 Process::Process(
     ProcessPriviledge priviledge,
-
     ProcessSegment dataSegment,
-    ProcessSegment stackSegment,
-    
     Process* parent,
-
     uint32 ticks,
-
     uint32 entryPoint
 ) {
 
@@ -108,7 +106,8 @@ Process::Process(
     _esp = 0x0;
 
     _dataSegment = dataSegment;
-    _stackSegment = stackSegment;
+    _stackSegment = ProcessSegment::defaultStackSegment();
+    _usedStackSegment = ProcessSegment(_stackSegment.endAddr() - PAGE_SIZE, _stackSegment.endAddr());
     _esp0Segment = priviledge == ProcessPriviledge::USER ? ProcessSegment::defaultESP0Segment() : ProcessSegment();
     
     _parent = parent;
@@ -216,26 +215,28 @@ Process::Process(
 }
 
 Process Process::inheritFrom(
-    const Process* parentProcess
+    Process* const parentProcess
 ) {
 
+    Process childProcess = Process();
+
 ///INITIALIZE-----------------------------
-    _pid = 0;
-    _priviledge = parentProcess->_priviledge;
-    _table = nullptr;
-    _esp = 0x0;
+    childProcess._pid = 0;
+    childProcess._priviledge = parentProcess->_priviledge;
+    childProcess._table = nullptr;
+    childProcess._esp = 0x0;
 
-    _dataSegment = parentProcess->_dataSegment;
-    _stackSegment = parentProcess->_stackSegment;
-    _esp0Segment = parentProcess->_esp0Segment;
+    childProcess._dataSegment = parentProcess->_dataSegment;
+    //stack will be initialized later
+    //esp0 will be initialized later
 
-    _parent = parentProcess;
-    _children = Vec<Process*>();
+    childProcess._parent = parentProcess;
+    childProcess._children = Vec<Process*>();
 
-    _ticks = parentProcess->_ticks;
-    _remainingTicks = parentProcess->_ticks;
+    childProcess._ticks = parentProcess->_ticks;
+    childProcess._remainingTicks = parentProcess->_ticks;
 
-    _status = ProcessStatus::NEW;
+    childProcess._status = ProcessStatus::NEW;
 ///END OF INITIALIZE----------------------
 
 ///ALLOCATE-------------------------------
@@ -244,10 +245,16 @@ Process Process::inheritFrom(
     Frame* scndLevelTableFrame = FrameManager::allocateFrame(FrameFlag::LOCKED);
 
     // - Allocate space for private esp0 stack
-    Vec<Frame*> esp0Frames = FrameManager::allocateFrames(_esp0Segment.sizeOfPages(), FrameFlag::LOCKED);
+    Vec<Frame*> esp0Frames = FrameManager::allocateFrames(
+        parentProcess->_esp0Segment.sizeOfPages(), 
+        FrameFlag::LOCKED
+    );
 
     // - Allocate space for private stack
-    Frame* initStackFrame = FrameManager::allocateFrame(FrameFlag::EMPTY);
+    Vec<Frame*> initStackFrames = FrameManager::allocateFrames(
+        parentProcess->_usedStackSegment.sizeOfPages(), 
+        FrameFlag::EMPTY
+    );
 
 ///END OF ALLOCATE------------------------
 
@@ -256,19 +263,63 @@ Process Process::inheritFrom(
     // - Prepare Page Table
     PageTable* table = PageTable::fromPhysicalAddr(scndLevelTableFrame->physicalAddr());
     
-    //    - Copy Kernel Pages
-    PageTable* kernelTable = ProcessManager::processOfPID(0)->pageTable();
-    for(int i = 768; i < 1024; i++) {
-        table->entryAt(i) = kernelTable->entryAt(i);
-    }
-    //    - Copy Parent Data Pages
+    //    - Copy Parent Pages
     PageTable* parentTable = parentProcess->_table;
-    Vec<Page> dataPages = parentProcess->_dataSegment.toPages();
-    for(int i = 0; i < dataPages.size(); i++) {
-        PageTableEntry parentEntry = parentTable->entryOf(pages[i]);
-        Frame hypothesis
+    table->clone(parentTable);
+
+    //    - Find an empty entry
+    int emptySlot = table->emptySlot();
+    if(emptySlot == -1) {
+        //Do something
     }
-    //    - 
+
+    //    - Set stack addr
+    uint32 emptyAddrStart = emptySlot << 22;
+    uint32 emptyAddrEnd = (emptySlot + 1) << 22;
+    childProcess._esp0Segment = ProcessSegment(
+        emptyAddrEnd - parentProcess->_esp0Segment.sizeOfBytes(), 
+        emptyAddrEnd
+    );
+    childProcess._stackSegment = ProcessSegment(
+        childProcess._esp0Segment.startAddr() - parentProcess->_stackSegment.sizeOfBytes(), 
+        childProcess._esp0Segment.startAddr()
+    );
+    childProcess._usedStackSegment = ProcessSegment(
+        childProcess._stackSegment.endAddr() - parentProcess->_usedStackSegment.sizeOfBytes(),
+        childProcess._stackSegment.endAddr()
+    );
+
+    //    - Set ESP0 Stack Page
+    Vec<Page> esp0Pages = childProcess._esp0Segment.toPages();
+    for(int i = 0; i < esp0Pages.size(); i++) {
+        PageManager::mapPage(
+            table, 
+            esp0Pages[i], 
+            esp0Frames[i],
+            PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE
+        );
+    }
+
+    //    - Set Stack Page
+    Vec<Page> initStackPages = childProcess._usedStackSegment.toPages();
+    for(int i = 0; i < initStackPages.size(); i++) {
+        PageManager::mapPage(
+            table,
+            initStackPages[i],
+            initStackFrames[i],
+            PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE
+        );
+    }
+
+    // - Copy stack
+    memcpy(
+        (void*)childProcess._usedStackSegment.startAddr(), 
+        (void*)parentProcess->_usedStackSegment.startAddr(), 
+        parentProcess->_usedStackSegment.sizeOfBytes()
+    );
+
+    // - Prepare table
+    childProcess._table = table;
 
 }
 
