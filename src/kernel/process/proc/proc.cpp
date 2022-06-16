@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-14 16:18:48
+ * LastEditTime : 2022-06-16 10:45:16
  * Description  : 
  */
 
@@ -233,6 +233,10 @@ ProcessPriviledge Process::priviledge() {
 
 uint32 Process::esp() {
     return _esp;
+}
+
+uint32 Process::esp0() {
+    return _esp0Segment.endAddr();
 }
 
 ProcessStatus Process::status() {

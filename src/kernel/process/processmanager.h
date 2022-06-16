@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-14 14:58:56
+ * LastEditTime : 2022-06-16 10:42:18
  * Description  : 
  */
 
@@ -13,6 +13,8 @@
 #include "vector.h"
 #include "proc.h"
 #include "interruptframe.h"
+
+class Process;
 
 class ProcessManager {
     private:
