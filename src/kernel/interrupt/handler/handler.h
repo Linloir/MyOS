@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:18
- * LastEditTime : 2022-06-16 09:03:28
+ * LastEditTime : 2022-06-16 09:56:46
  * Description  : 
  */
 
@@ -33,7 +33,7 @@
             "push %%eax" \
             "call %[handler]\n\t" \
             ".return:\n\t" \
-            "pop %%eax"
+            "pop %%eax" \
             : \
             : [handler]"i"((fn)) \
         ); \
