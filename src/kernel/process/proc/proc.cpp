@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-16 11:47:57
+ * LastEditTime : 2022-06-16 15:00:09
  * Description  : 
  */
 
@@ -214,8 +214,9 @@ Process::Process(
 
 }
 
-Process Process::inheritFrom(
-    Process* const parentProcess
+Process* Process::_fork(
+    Process* parentProcess,
+    uint32 stackTop
 ) {
 
     Process childProcess = Process();

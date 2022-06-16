@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-16 10:54:55
+ * LastEditTime : 2022-06-16 14:56:11
  * Description  : 
  */
 
@@ -41,7 +41,7 @@ class ProcessManager {
         static void executeProcess(Process* process);
         static void haltProcess(Process* process);
         static void awakeProcess(Process* process, AwakeMethod method);
-        static void forkProcess(Process* process);
+        static uint32 forkCurrent();
 };
 
 extern "C" void asm_switch_process(uint32* curEsp, uint32 cr3, uint32 nextEsp);

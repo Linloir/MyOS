@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-16 10:54:43
+ * LastEditTime : 2022-06-16 19:44:58
  * Description  : 
  */
 
@@ -162,9 +162,23 @@ void ProcessManager::awakeProcess(Process* process, AwakeMethod method) {
     }
 }
 
-void ProcessManager::forkProcess(Process* process) {
-    Process* parent = process;
-    Process* child = (Process*)malloc(sizeof(Process));
-    *child = Process::inheritFrom(parent);
+uint32 ProcessManager::forkCurrent() {
+    Process* parent = _curProcess;
+    Process* child;
+    // asm(
+    //     "movl %%esp, %%eax\n\t"
+    //     "subl $12, %%eax\n\t"
+    //     "push %%eax\n\t"
+    //     "push %[parent]\n\t"
+    //     "call %[fork\n\t]"
+    //     "mov %%eax, %[child]\n\t"
+    //     : [child]"=r"(child)
+    //     : [parent]"r"(parent), [fork]"i"(Process::_fork)
+    // );
+    if(_curProcess == child) {
+        return 0;
+    }
     parent->addChild(child);
+    _readyProcesses.insert(0, child);
+    _schedule();
 }

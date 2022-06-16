@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 14:51:41
- * LastEditTime : 2022-06-16 10:32:02
+ * LastEditTime : 2022-06-16 17:52:13
  * Description  : 
  */
 
@@ -24,7 +24,7 @@ void TSSManager::_load() {
 void TSSManager::initialize() {
     //init TSS
     _tss = TaskStateSegment();
-    _tss._esp0 = ESP_0_ADDR;
+    _tss._esp0 = ESP0_STACK_TOP;
     _tss._ss0 = STACK_SELECTOR;
     _tss._es = DATA_SELECTOR;
     _tss._cs = CODE_SELECTOR;

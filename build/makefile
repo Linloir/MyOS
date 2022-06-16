@@ -19,9 +19,6 @@ CPP_OBJ := $(patsubst %.cpp,%.o,$(notdir $(CPP_SRC)))
 ASM_OBJ := $(patsubst %.asm,%.o,$(notdir $(ASM_SRC)))
 
 .PHONY:
-test: cppAll.o
-
-.PHONY:
 build: mbr.bin bootloader.bin kernelloader.bin kernel.bin debug.o kernelloaderdebug.o
 	qemu-img create $(RUN_PATH)/hd.img 10m
 	dd if=mbr.bin of=$(RUN_PATH)/hd.img bs=512 count=1 seek=0 conv=notrunc
@@ -73,3 +70,7 @@ debug:
 	qemu-system-i386 -S -s -parallel stdio -hda $(RUN_PATH)/hd.img -serial null -no-reboot -d int,cpu_reset &
 	@sleep 1
 	gnome-terminal -- gdb -q -x $(RUN_PATH)/gdbinit
+
+.PHONY:
+test: ../src/kernel/interrupt/handler/handler.cpp
+	$(CPP_COMPILER) $(INCLUDE_PATH) -E $^ -o log.log

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-16 10:53:44
+ * LastEditTime : 2022-06-16 17:53:32
  * Description  : 
  */
 #include "interrupt.h"
@@ -100,7 +100,6 @@ extern "C" void kernel() {
     *frstProcess = Process(
         ProcessPriviledge::USER,
         ProcessSegment::defaultUserDataSegment(),
-        ProcessSegment::defaultUserStackSegment(),
         ProcessManager::processOfPID(0),
         30,
         (uint32)firstThread

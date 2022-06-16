@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-16 11:29:12
+ * LastEditTime : 2022-06-16 17:37:54
  * Description  : Process Control Block
  */
 
@@ -23,6 +23,28 @@ enum class ProcessStatus {
 enum class ProcessPriviledge {
     KERNEL = 0,
     USER = 3,
+};
+
+class ProcessState {
+    friend class Process;
+
+    private:
+        uint32 _eax;
+        uint32 _ebx;
+        uint32 _ecx;
+        uint32 _edx;
+        uint32 _ebp;
+        uint32 _edi;
+        uint32 _esi;
+        uint32 _ds;
+        uint32 _es;
+        uint32 _fs;
+        uint32 _gs;
+        uint32 _eip;
+        uint32 _cs;
+        uint32 _eflags;
+        uint32 _ss;
+        uint32 _esp;
 };
 
 class ProcessSegment {
@@ -67,6 +89,7 @@ class Process {
         uint32 _ticks;
         uint32 _remainingTicks;
         ProcessStatus _status;
+        static Process* _fork(Process* parent, uint32 stackTop);
     public:
         Process() {}
         Process(
@@ -78,7 +101,6 @@ class Process {
             //Execute info
             uint32 entryPoint
         );
-        static Process inheritFrom(Process* const parent);
         uint32 pid();
         PageTable* pageTable();
         ProcessPriviledge priviledge();

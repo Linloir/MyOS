@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-14 21:41:53
- * LastEditTime : 2022-06-15 21:05:05
+ * LastEditTime : 2022-06-16 14:56:17
  * Description  : 
  */
 
@@ -14,5 +14,5 @@ uint32 syscallTest(uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
 }
 
 uint32 __fork(uint32, uint32, uint32, uint32, uint32) {
-    ProcessManager::forkProcess(ProcessManager::curProcess());
+    return ProcessManager::forkCurrent();
 }
