@@ -59,7 +59,6 @@ class TSSManager {
         static void _load();
     public:
         static void initialize();
-        static void setESP0(uint32 esp0);
 };
 
 #endif

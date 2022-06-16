@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-31 21:27:18
- * LastEditTime : 2022-06-14 18:00:42
+ * LastEditTime : 2022-06-16 22:24:58
  * Description  : Kernel loader
  */
 
@@ -18,7 +18,7 @@
 extern "C" void kernelLoader() {
     loadKernel();
     initializePaging();
-    jumpKernel(0xFFFFFFFC, KERNEL_START_ADDR);
+    jumpKernel(0xFFFFFFFC - 0x2000, KERNEL_START_ADDR);
 }
 
 void loadKernel() {

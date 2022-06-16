@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-16 14:56:11
+ * LastEditTime : 2022-06-16 20:53:56
  * Description  : 
  */
 
@@ -23,27 +23,17 @@ class ProcessManager {
         static Vec<Process*> _readyProcesses;
         static Vec<Process*> _awaitProcesses;
         static Process* _curProcess;
-        static void _schedule();
-        static void _switchProcess(Process* cur, Process* next);
-        static void _hasenAwakeProcess(Process* cur);
+        static void _schedule(ProcessState* state);
     public:
-        enum AwakeMethod {
-            DEFAULT = 1,
-            HASEN = 1,
-        };
-        __attribute__ ((interrupt)) static void _processStart(InterruptFrame* f);
         static void _processExit();
         static void initialize();
-        static void onTimeTick();
-        static Process* curProcess();
+        static void schedule(ProcessState* state);
+        static Process* current();
         static Process* processOfPID(uint32 pid);
-        static uint32 allocPID();
-        static void executeProcess(Process* process);
-        static void haltProcess(Process* process);
-        static void awakeProcess(Process* process, AwakeMethod method);
-        static uint32 forkCurrent();
+        static void execute(Process* process);
+        static void sleep(ProcessState* state);
+        static void awake(uint32 pid, ProcessState* state);
+        static uint32 fork(ProcessState* state);
 };
-
-extern "C" void asm_switch_process(uint32* curEsp, uint32 cr3, uint32 nextEsp);
 
 #endif

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-16 11:24:05
+ * LastEditTime : 2022-06-16 22:23:46
  * Description  : 
  */
 #ifndef _OS_CONSTANT_H_
@@ -24,7 +24,7 @@
 #define KERNEL_DATA_START 0xC0000000
 #define KERNEL_DATA_END 0xC0100000
 #define KERNEL_STACK_START 0xFFE00000
-#define KERNEL_STACK_END 0xFFFFFFFC
+#define KERNEL_STACK_END 0xFFFFFFFC - 0x2000
 
 #define ESP0_STACK_TOP 0xFFFFFFFC
 #define DEFAULT_ESP0_STACK_SIZE 0x2000

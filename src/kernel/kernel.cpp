@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-16 17:53:32
+ * LastEditTime : 2022-06-16 23:24:27
  * Description  : 
  */
 #include "interrupt.h"
@@ -18,6 +18,7 @@
 #include "gdt.h"
 #include "tss.h"
 #include "syscallmanager.h"
+#include "systemcall.h"
 
 void firstThread();
 
@@ -27,8 +28,8 @@ void firstThread() {
     // *test = 1;
     // printf("Hello World\n");
     
-    uint32 result = syscall(0, 1, 2, 3, 4, 5);
-    syscall(0, result);
+    // uint32 result = sysTest(0, 1, 2, 3, 4);
+    // sysTest(result, 0, 0, 0, 0);
 
     while(true) {
         // printf("Process 1\n");
@@ -99,7 +100,7 @@ extern "C" void kernel() {
     Process* frstProcess = (Process*)malloc(sizeof(Process));
     *frstProcess = Process(
         ProcessPriviledge::USER,
-        ProcessSegment::defaultUserDataSegment(),
+        ProcessSegment::userDataSegment,
         ProcessManager::processOfPID(0),
         30,
         (uint32)firstThread
@@ -116,7 +117,7 @@ extern "C" void kernel() {
     //     (uint32)scndThread
     // );
 
-    ProcessManager::executeProcess(frstProcess);
+    ProcessManager::execute(frstProcess);
     // ProcessManager::executeProcess(scndProcess);
     
     while(true) {

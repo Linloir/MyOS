@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-16 17:37:54
+ * LastEditTime : 2022-06-16 22:50:05
  * Description  : Process Control Block
  */
 
@@ -26,25 +26,25 @@ enum class ProcessPriviledge {
 };
 
 class ProcessState {
-    friend class Process;
-
-    private:
-        uint32 _eax;
-        uint32 _ebx;
-        uint32 _ecx;
-        uint32 _edx;
-        uint32 _ebp;
-        uint32 _edi;
-        uint32 _esi;
-        uint32 _ds;
-        uint32 _es;
-        uint32 _fs;
-        uint32 _gs;
-        uint32 _eip;
-        uint32 _cs;
-        uint32 _eflags;
-        uint32 _ss;
-        uint32 _esp;
+    public:
+        uint32 _cr3 = 0x0;
+        uint32 _eax = 0x0;
+        uint32 _ebx = 0x0;
+        uint32 _ecx = 0x0;
+        uint32 _edx = 0x0;
+        uint32 _ebp = 0x0;
+        uint32 _edi = 0x0;
+        uint32 _esi = 0x0;
+        uint32 _ds = 0x0;
+        uint32 _es = 0x0;
+        uint32 _fs = 0x0;
+        uint32 _gs = 0x0;
+        uint32 _stack = 0x0;
+        uint32 _eip = 0x0;
+        uint32 _cs = 0x0;
+        uint32 _eflags = 0x0;
+        uint32 _ss = 0x0;
+        uint32 _esp = 0x0;
 };
 
 class ProcessSegment {
@@ -52,10 +52,11 @@ class ProcessSegment {
         uint32 _startAddr = 0x0;
         uint32 _endAddr = 0x0;
     public:
-        static ProcessSegment defaultKernelDataSegment();
-        static ProcessSegment defaultUserDataSegment();
-        static ProcessSegment defaultStackSegment();
-        static ProcessSegment defaultESP0Segment();
+        static ProcessSegment kernelDataSegment;
+        static ProcessSegment kernelStackSegment;
+        static ProcessSegment userDataSegment;
+        static ProcessSegment userStackSegment;
+        static ProcessSegment ESP0Segment;
         ProcessSegment() {}
         ProcessSegment(uint32 start, uint32 end);
         bool includeAddr(uint32 addr);
@@ -74,14 +75,11 @@ class Process {
         uint32 _pid;
         ProcessPriviledge _priviledge;
         PageTable* _table;
-        uint32 _esp;
+        ProcessState _state;
 
         ProcessSegment _dataSegment;
         ProcessSegment _stackSegment;
-        //Refreshed by page fault
         ProcessSegment _usedStackSegment;
-        //For user mode process only
-        ProcessSegment _esp0Segment;
 
         Process* _parent;
         Vec<Process*> _children;
@@ -98,24 +96,20 @@ class Process {
             ProcessSegment dataSegment,
             Process* parent,
             uint32 ticks,
-            //Execute info
-            uint32 entryPoint
+            uint32 startPoint
         );
         uint32 pid();
         PageTable* pageTable();
         ProcessPriviledge priviledge();
         ProcessStatus status();
-        uint32 esp();
-        uint32 esp0();
         uint32 remainingTicks();
         bool stackIncludeAddr(uint32 addr);
         bool dataIncludeAddr(uint32 addr);
-        bool esp0IncludeAddr(uint32 addr);
         void tickOnce();
         void resetTick();
         void addChild(Process* child);
-        void setEsp(uint32 esp);
-        void setStatus(ProcessStatus status);
+        void save(ProcessState* state);
+        void restore(ProcessState* state);
 };
 
 #endif

@@ -1,13 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-06-14 14:42:59
+ * LastEditTime : 2022-06-16 21:52:09
  * Description  : 
  */
 
 #include "lock.h"
 #include "std_utils.h"
 #include "processmanager.h"
+#include "systemcall.h"
 
 SpinLock::SpinLock() {
     status = 0;
@@ -43,9 +44,9 @@ SemLock::SemLock(int permits) {
 void SemLock::acquire() {
     permitLock.lock();
     if(availablePermits == 0) {
-        Process* proc = ProcessManager::curProcess();
+        Process* proc = ProcessManager::current();
         permitLock.release();
-        ProcessManager::haltProcess(proc);
+        sleep();
         permitLock.lock();
     }
     availablePermits--;
@@ -59,7 +60,7 @@ void SemLock::release() {
         Process* proc = awaitList.front();
         awaitList.erase(0);
         permitLock.release();
-        ProcessManager::awakeProcess(proc, ProcessManager::AwakeMethod::DEFAULT);
+        awake(proc->pid());
     }
     else {
         permitLock.release();

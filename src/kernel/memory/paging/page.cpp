@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-16 11:08:22
+ * LastEditTime : 2022-06-16 22:17:43
  * Description  : 
  */
 
@@ -156,6 +156,15 @@ void PageTable::clone(PageTable* table) {
     for(int i = 0; i < 1024; i++) {
         entries[i] = table->entries[i];
     }
+}
+
+int PageTable::emptySlot() {
+    for(int i = 0; i < 1024; i++) {
+        if(!entries[i].isPresent()) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void PageTable::removeAt(int index) {

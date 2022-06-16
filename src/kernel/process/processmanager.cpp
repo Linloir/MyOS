@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-16 19:44:58
+ * LastEditTime : 2022-06-16 23:32:21
  * Description  : 
  */
 
@@ -18,16 +18,11 @@ Vec<Process*> ProcessManager::_allProcesses;
 Vec<Process*> ProcessManager::_awaitProcesses;
 Process* ProcessManager::_curProcess;
 
-void ProcessManager::_processStart(InterruptFrame* f) {
-    asm("sti");
-}
-
 void ProcessManager::_processExit() {
-    _curProcess->setStatus(ProcessStatus::DEAD);
-    _schedule();
+    
 }
 
-void ProcessManager::_schedule() {
+void ProcessManager::_schedule(ProcessState* state) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
 
@@ -43,27 +38,40 @@ void ProcessManager::_schedule() {
     if(cur->_status == ProcessStatus::RUNNING) {
         _readyProcesses.pushBack(cur);
     }
+    if(cur->_status == ProcessStatus::BLOCKED) {
+        _awaitProcesses.pushBack(cur);
+    }
     _readyProcesses.erase(0);
-    cur->setStatus(ProcessStatus::READY);
-    next->setStatus(ProcessStatus::RUNNING);
+
+    cur->_status = ProcessStatus::READY;
+    next->_status = ProcessStatus::RUNNING;
+
     _curProcess = next;
 
-    _switchProcess(cur, next);
-    TSSManager::setESP0(next->esp0());
+
+    cur->save(state);
+    next->restore(state);
 
     setInterruptStatus(interrupt);
 }
 
-void ProcessManager::_switchProcess(Process* cur, Process* next) {
-    asm_switch_process(&cur->_esp, next->_table->physicalAddr(), next->_esp);
-}
-
-void ProcessManager::_hasenAwakeProcess(Process* process) {
-    _awaitProcesses.erase(process);
-    _awaitProcesses.insert(0, process);
-}
-
 void ProcessManager::initialize() {
+    //Initialize Process Segment
+    ProcessSegment::kernelDataSegment = ProcessSegment(0x0, 0x0);
+    ProcessSegment::kernelStackSegment = ProcessSegment(
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE - DEFAULT_STACK_SIZE, 
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE
+    );
+    ProcessSegment::userDataSegment = ProcessSegment(0x0, 0x100000);
+    ProcessSegment::userStackSegment = ProcessSegment(
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE - DEFAULT_STACK_SIZE, 
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE
+    );
+    ProcessSegment::ESP0Segment = ProcessSegment(
+        KERNEL_DATA_START - DEFAULT_ESP0_STACK_SIZE, 
+        KERNEL_DATA_START
+    );
+
     _pids = BitMap(25536);
     _allProcesses = Vec<Process*>();
     _readyProcesses = Vec<Process*>();
@@ -80,7 +88,6 @@ void ProcessManager::initialize() {
     kernelProcess->_table = PageTable::fromPhysicalAddr(getCR3());
     kernelProcess->_dataSegment = ProcessSegment(0xC0000000, 0xC0100000);
     kernelProcess->_stackSegment = ProcessSegment(0xFFE00000, 0xFFFFFFFC);
-    kernelProcess->_esp0Segment = ProcessSegment();
     kernelProcess->_parent = nullptr;
     kernelProcess->_children = Vec<Process*>();
     kernelProcess->_ticks = 30;
@@ -93,18 +100,18 @@ void ProcessManager::initialize() {
     printf("Process Manager Initialized!\n");
 }
 
-void ProcessManager::onTimeTick() {
+void ProcessManager::schedule(ProcessState* state) {
     if(_curProcess->remainingTicks() > 0) {
         _curProcess->tickOnce();
         return;
     }
     else {
         _curProcess->resetTick();
-        _schedule();
+        _schedule(state);
     }
 }
 
-Process* ProcessManager::curProcess() {
+Process* ProcessManager::current() {
     return _curProcess;
 }
 
@@ -118,67 +125,33 @@ Process* ProcessManager::processOfPID(uint32 pid) {
     return nullptr;
 }
 
-uint32 ProcessManager::allocPID() {
-    return _pids.alloc();
-}
-
-void ProcessManager::executeProcess(Process* process) {
+void ProcessManager::execute(Process* process) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
-    process->setStatus(ProcessStatus::READY);
-    process->_pid = allocPID();
+    process->_status = ProcessStatus::READY;
+    process->_pid = _pids.alloc();
     _allProcesses.pushBack(process);
     _readyProcesses.pushBack(process);
     setInterruptStatus(interrupt);
 }
 
-void ProcessManager::haltProcess(Process* process) {
+void ProcessManager::sleep(ProcessState* state) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
-    if(process != _curProcess) {
-        _readyProcesses.erase(process);
-        process->_status = ProcessStatus::BLOCKED;
-        _awaitProcesses.pushBack(process);
-        return;
-    }
 
-    Process* cur = _curProcess;
-    Process* next = _readyProcesses.front();
-
-    _readyProcesses.erase(0);
-    cur->_status = ProcessStatus::BLOCKED;
-    next->_status = ProcessStatus::RUNNING;
-    _awaitProcesses.pushBack(cur);
-    _curProcess = next;
-
-    _switchProcess(cur, next);
+    _curProcess->_status = ProcessStatus::BLOCKED;
+    _schedule(state);
 
     setInterruptStatus(interrupt);
 }
 
-void ProcessManager::awakeProcess(Process* process, AwakeMethod method) {
-    if(method == AwakeMethod::HASEN) {
-        _hasenAwakeProcess(process);
-    }
+void ProcessManager::awake(uint32 pid, ProcessState* state) {
+    Process* proc = processOfPID(pid);
+    proc->_status = ProcessStatus::READY;
+    _readyProcesses.insert(0, proc);
+    _schedule(state);
 }
 
-uint32 ProcessManager::forkCurrent() {
-    Process* parent = _curProcess;
-    Process* child;
-    // asm(
-    //     "movl %%esp, %%eax\n\t"
-    //     "subl $12, %%eax\n\t"
-    //     "push %%eax\n\t"
-    //     "push %[parent]\n\t"
-    //     "call %[fork\n\t]"
-    //     "mov %%eax, %[child]\n\t"
-    //     : [child]"=r"(child)
-    //     : [parent]"r"(parent), [fork]"i"(Process::_fork)
-    // );
-    if(_curProcess == child) {
-        return 0;
-    }
-    parent->addChild(child);
-    _readyProcesses.insert(0, child);
-    _schedule();
+uint32 ProcessManager::fork(ProcessState* state) {
+    
 }

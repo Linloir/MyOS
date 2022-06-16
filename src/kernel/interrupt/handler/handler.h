@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:18
- * LastEditTime : 2022-06-16 19:52:33
+ * LastEditTime : 2022-06-16 22:53:33
  * Description  : 
  */
 
@@ -14,7 +14,7 @@
 
 #define Interrupt __attribute__((interrupt))
 #define Naked __attribute__((naked))
-#define DeclareConsistentHandler(fn) Naked void fn(); void __##fn##_asm__ (ProcessState* preservedState)
+#define ConsistentHandler(fn) Naked void fn(); void __##fn##_wrapped__
 
 #define __consistent_handler__(fn)                                                          \
     Naked void fn()                                                                         \
@@ -39,15 +39,21 @@
             "movl %%ebx, 4(%%eax)\n\t"                                                      \
             "movl 8(%%ebp), %%ebx\n\t"                                                      \
             "movl %%ebx, 8(%%eax)\n\t"   /*copy eip, cs, eflags to esp0 stack*/             \
+            "movl -4(%%ebp), %%ebx\n\t"                                                      \
+            "movl %%ebx, -4(%%eax)\n\t"                                                      \
+            "movl -8(%%ebp), %%ebx\n\t"                                                      \
+            "movl %%ebx, -8(%%eax)\n\t"                                                      \
+            "movl -12(%%ebp), %%ebx\n\t"                                                      \
+            "movl %%ebx, -12(%%eax)\n\t"                                                      \
                                                                                             \
-            "subl $8, %%ebp\n\t"                                                            \
-            "movl %%ebp, -4(%%ebp)\n\t"  /*copy actual esp to esp0 stack top*/              \
+            "movl %%ebp, -4(%%eax)\n\t"  /*copy actual esp to esp0 stack top*/              \
+            "movl %%eax, %%esp\n\t" /*move to esp0 stack*/                                  \
                                                                                             \
+            "subl $16, %%esp\n\t"                                                            \
             "pop %%ebx\n\t"                                                                 \
             "pop %%eax\n\t"                                                                 \
             "pop %%ebp\n\t"                                                                 \
                                                                                             \
-            "movl %%eax, %%esp\n\t" /*move to esp0 stack*/                                  \
             :                                                                               \
             : [esp0]"i"(ESP0_STACK_TOP)                                                     \
         );                                                                                  \
@@ -63,10 +69,14 @@
             "push %%ecx\n\t"                                                                \
             "push %%ebx\n\t"                                                                \
             "push %%eax\n\t"                                                                \
+            "movl %%cr3, %%eax\n\t"                                                         \
+            "push %%eax\n\t"                                                                \
             "movl %%esp, %%eax\n\t"                                                         \
             "push %%eax\n\t"                                                                \
             "call %P0\n\t"                                                                  \
             "addl $4, %%esp\n\t"                                                            \
+            "pop %%eax\n\t"                                                                 \
+            "movl %%eax, %%cr3\n\t"                                                         \
             "pop %%eax\n\t"                                                                 \
             "pop %%ebx\n\t"                                                                 \
             "pop %%ecx\n\t"                                                                 \
@@ -79,7 +89,7 @@
             "pop %%fs\n\t"                                                                  \
             "pop %%gs\n\t"                                                                  \
             :                                                                               \
-            : "i"(__##fn##_asm__)                                                           \
+            : "i"(__##fn##_wrapped__)                                                       \
         );                                                                                  \
         /*Update change to whatever stack it used to be*/                                   \
         asm volatile(                                                                       \
@@ -111,17 +121,16 @@
             "iret\n\t" /*iret*/                                                             \
         );                                                                                  \
     }                                                                                       \
-    void __##fn##_asm__ (ProcessState* preservedState)
+    void __##fn##_wrapped__ 
 
 //C HANDLER FUNCTIONS
 // extern "C" void emptyHandler();
-// Interrupt void timeInterruptHandler(InterruptFrame* frame);
 Interrupt void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode);
-// __attribute__ ((interrupt)) void pageFaultInterruptHandler(uint32 errCode, uint32 virtualAddr);
 Interrupt void emptyHandler(InterruptFrame* frame);
 Naked void syscallInterruptHandler();
 
-DeclareConsistentHandler(timeInterruptHandler);
+ConsistentHandler(timeInterruptHandler) (ProcessState* state);
+ConsistentHandler(syscallHandler) (ProcessState* state);
 
 void eoi();
 
