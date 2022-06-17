@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-17 09:41:28
+ * LastEditTime : 2022-06-17 09:59:59
  * Description  : 
  */
 
@@ -262,9 +262,15 @@ Process* Process::_fork(
     childProcess->_state = parentProcess->_state;
     if(childProcess->_stackSegment.endAddr() > parentProcess->_stackSegment.endAddr()) {
         childProcess->_state._esp += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
+        if(childProcess->_priviledge == ProcessPriviledge::KERNEL) {
+            childProcess->_state._stack += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
+        }
     }
     else {
         childProcess->_state._esp -= parentProcess->_stackSegment.endAddr() - childProcess->_stackSegment.endAddr();
+        if(childProcess->_priviledge == ProcessPriviledge::KERNEL) {
+            childProcess->_state._stack += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
+        }
     }
     childProcess->_state._cr3 = toPhysicalAddress((uint32)table);
     childProcess->_state._eax = 0;
