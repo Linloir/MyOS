@@ -7,7 +7,7 @@
 #ifndef _INTERRUPT_UTILS_H_
 #define _INTERRUPT_UTILS_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 #define IRQ0_8259A_MASTER 0x20
 #define IRQ0_8259A_SLAVE 0x28

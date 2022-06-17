@@ -6,7 +6,7 @@
  */
 
 #include "kernelloader.h"
-#include "os_constant.h"
+#include "systemconstant.h"
 
 /**
  * Kernel loader:

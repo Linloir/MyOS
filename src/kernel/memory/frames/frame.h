@@ -5,7 +5,7 @@
  * Description  : 
  */
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "page.h"
 
 #ifndef _FRAME_H_

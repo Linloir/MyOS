@@ -8,7 +8,7 @@
 #ifndef _IDT_H_
 #define _IDT_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 #define IDT_MAX_SIZE 256
 #define IDT_ADDR 0x8800

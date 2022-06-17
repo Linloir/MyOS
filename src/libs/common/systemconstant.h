@@ -1,11 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-16 22:23:46
+ * LastEditTime : 2022-06-17 11:52:03
  * Description  : 
  */
-#ifndef _OS_CONSTANT_H_
-#define _OS_CONSTANT_H_
+#ifndef _SYSTEM_CONSTANT_H_
+#define _SYSTEM_CONSTANT_H_
 
 #define PAGE_SIZE 4096
 

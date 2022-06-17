@@ -6,7 +6,7 @@
  */
 
 #include "mmu.h"
-#include "os_constant.h"
+#include "systemconstant.h"
 
 uint32 toVirtualAddress(uint32 addr){
     return addr + OFFSET;

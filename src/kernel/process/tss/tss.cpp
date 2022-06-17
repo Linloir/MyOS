@@ -5,7 +5,7 @@
  * Description  : 
  */
 
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "gdt.h"
 #include "tss.h"
 #include "gdt.h"

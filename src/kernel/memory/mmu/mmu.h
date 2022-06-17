@@ -5,7 +5,7 @@
  * Description  : Transform address
  */
 
-#include "os_type.h"
+#include "systemtype.h"
 
 #ifndef _MMU_H_
 #define _MMU_H_

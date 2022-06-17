@@ -1,9 +1,11 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-06-14 19:51:13
- * LastEditTime : 2022-06-14 19:51:14
+ * Date         : 2022-06-17 10:09:07
+ * LastEditTime : 2022-06-17 11:35:11
  * Description  : 
  */
+
+#include "mem.h"
 
 extern "C" void* memcpy(void* dest, const void* src, unsigned int count) {
   char* dst8 = (char*)dest;

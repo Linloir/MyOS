@@ -1,14 +1,15 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-05-17 20:29:39
- * LastEditTime : 2022-05-17 17:03:55
- * Description  : Temporary standard library
+ * Date         : 2022-06-17 10:08:08
+ * LastEditTime : 2022-06-17 11:51:44
+ * Description  : 
  */
 
-#ifndef _STD_UTILS_H_
-#define _STD_UTILS_H_
+#ifndef _SYSTEM_IO_H_
+#define _SYETEM_IO_H_
 
-#include "os_type.h"
+#include "systemtype.h"
+#include "algorithm.h"
 
 #define INT_SIZE_OF(n) ((sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1))
 #define va_start(ap, v) (ap = (va_list)&v + INT_SIZE_OF(v))
@@ -17,11 +18,7 @@
 
 typedef char* va_list;
 
-template<typename T>
-void swap(T &x, T &y);
-
 int printf_add_to_buffer(char* buffer, char c, int &idx, const int BUF_LEN);
-void itos(char* numStr, uint32 num, uint32 mod);
 int printf(const char* format, ...);
 
 #endif

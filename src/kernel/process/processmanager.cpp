@@ -1,15 +1,15 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 00:34:38
+ * LastEditTime : 2022-06-17 11:09:54
  * Description  : 
  */
 
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "processmanager.h"
 #include "paging.h"
 #include "interrupt.h"
-#include "std_utils.h"
+#include "systemio.h"
 #include "tss.h"
 
 BitMap ProcessManager::_pids;
@@ -135,7 +135,7 @@ void ProcessManager::execute(Process* process) {
     setInterruptStatus(interrupt);
 }
 
-void ProcessManager::sleep(ProcessState* state) {
+void ProcessManager::hibernate(ProcessState* state) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
 
@@ -163,4 +163,12 @@ void ProcessManager::fork(ProcessState* state) {
     _readyProcesses.pushBack(parent);
     _curProcess = child;
     child->restore(state);
+}
+
+void ProcessManager::exit(ProcessState* state, int retval) {
+    while(true){}
+}
+
+void ProcessManager::wait(ProcessState* state, int* retptr) {
+    while(true){}
 }

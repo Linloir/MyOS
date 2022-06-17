@@ -10,7 +10,4 @@
 extern "C" int __cxa_atexit(void *object, void (*destructor)(void *), void *dso_handle);
 extern void* __dso_handle;
 
-extern "C" void* memcpy(void* dest, const void* src, unsigned int count);
-extern "C" void* memset(void* mem, int value, unsigned int num);
-
 #endif

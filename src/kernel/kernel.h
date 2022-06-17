@@ -7,7 +7,7 @@
 #ifndef _KERNEL_H_
 #define _KERNEL_H_
 
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "mmu.h"
 
 extern "C" void kernel();

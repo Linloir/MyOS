@@ -8,7 +8,7 @@
 #ifndef _KERNEL_LOADER_H_
 #define _KERNEL_LAODER_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 #define KERNEL_START_ADDR 0xC0000000    //3GiB
 #define KERNEL_START_SECTOR 16

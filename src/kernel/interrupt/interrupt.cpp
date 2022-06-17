@@ -6,7 +6,7 @@
  */
 
 #include "interrupt.h"
-#include "ports_utils.h"
+#include "ports.h"
 
 void set8259A() {
     uint8 ICW1M = 0x11;
@@ -17,26 +17,26 @@ void set8259A() {
     uint8 ICW2S = IRQ0_8259A_SLAVE;
     uint8 ICW3S = 0x02;
     uint8 ICW4S = 0x01;
-    asm_ports_write(0x20, ICW1M);
-    asm_ports_write(0xA0, ICW1S);
-    asm_ports_write(0x21, ICW2M);
-    asm_ports_write(0xA1, ICW2S);
-    asm_ports_write(0x21, ICW3M);
-    asm_ports_write(0xA1, ICW3S);
-    asm_ports_write(0x21, ICW4M);
-    asm_ports_write(0xA1, ICW4S);
+    writePort(0x20, ICW1M);
+    writePort(0xA0, ICW1S);
+    writePort(0x21, ICW2M);
+    writePort(0xA1, ICW2S);
+    writePort(0x21, ICW3M);
+    writePort(0xA1, ICW3S);
+    writePort(0x21, ICW4M);
+    writePort(0xA1, ICW4S);
 }
 
 void enableTimeInterrupt() {
-    uint8 OCW = asm_ports_read(0x21);
+    uint8 OCW = readPort(0x21);
     OCW &= 0xFE;
-    asm_ports_write(0x21, OCW);
+    writePort(0x21, OCW);
 }
 
 void disableTimeInterrupt() {
-    uint8 OCW = asm_ports_read(0x21);
+    uint8 OCW = readPort(0x21);
     OCW |= 0x01;
-    asm_ports_write(0x21, OCW);
+    writePort(0x21, OCW);
 }
 
 bool getInterruptStatus() {

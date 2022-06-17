@@ -1,14 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:20
- * LastEditTime : 2022-06-14 14:46:36
+ * LastEditTime : 2022-06-17 11:21:09
  * Description  : Spin lock and 
  */
 
 #ifndef _LOCK_H_
 #define _LOCK_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "vector.h"
 
 class Process;
@@ -27,7 +27,7 @@ class SemLock {
     private:
         int availablePermits = 0;
         SpinLock permitLock;
-        Vec<Process*> awaitList;
+        Vec<uint32> awaitList;
     public:
         SemLock();
         SemLock(int permits);

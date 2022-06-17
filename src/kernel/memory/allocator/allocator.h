@@ -8,7 +8,7 @@
 #ifndef _ALLOCATOR_H_
 #define _ALLOCATOR_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 struct mem_control_block {
   int is_available;

@@ -1,30 +1,38 @@
-#include "display_utils.h"
+/*** 
+ * Author       : Linloir
+ * Date         : 2022-06-17 11:01:19
+ * LastEditTime : 2022-06-17 12:20:08
+ * Description  : 
+ */
+
+#include "display.h"
+#include "ports.h"
 
 //Reference: [TextModeCursor](https://wiki.osdev.org/Text_Mode_Cursor)
 
 void enableCursor(uint8 strtLine, uint8 endLine) {
     uint8 tmp;
-    asm_ports_write(0x03D4, 0x0A);
-    tmp = asm_ports_read(0x03D5);
+    writePort(0x03D4, 0x0A);
+    tmp = readPort(0x03D5);
     tmp = (tmp & 0xC0) | strtLine;
-    asm_ports_write(0x03D5, tmp);
-    asm_ports_write(0x03D4, 0x0B);
-    tmp = asm_ports_read(0x03D5);
+    writePort(0x03D5, tmp);
+    writePort(0x03D4, 0x0B);
+    tmp = readPort(0x03D5);
     tmp = (tmp & 0xE0) | endLine;
-    asm_ports_write(0x03D5, tmp);
+    writePort(0x03D5, tmp);
 }
 
 void disableCursor() {
-    asm_ports_write(0x03D4, 0x0A);
-    asm_ports_write(0x03D5, 0x20);
+    writePort(0x03D4, 0x0A);
+    writePort(0x03D5, 0x20);
 }
 
 uint16 getCursor() {
     uint16 position = 0;
-    asm_ports_write(0x03D4, 0x0E);
-    position |= (uint16)(asm_ports_read(0x03D5)) << 8;
-    asm_ports_write(0x03D4, 0x0F);
-    position |= asm_ports_read(0x03D5);
+    writePort(0x03D4, 0x0E);
+    position |= (uint16)(readPort(0x03D5)) << 8;
+    writePort(0x03D4, 0x0F);
+    position |= readPort(0x03D5);
     return position;
 }
 
@@ -37,10 +45,10 @@ void setCursor(uint8 row, uint8 col) {
         --row;
     }
     uint16 pos = row * VGA_WIDTH + col;
-    asm_ports_write(0x03D4, 0x0E);
-    asm_ports_write(0x03D5, (uint8)((pos >> 8) & 0xFF));
-    asm_ports_write(0x03D4, 0x0F);
-    asm_ports_write(0x03D5, (uint8)(pos & 0xFF));
+    writePort(0x03D4, 0x0E);
+    writePort(0x03D5, (uint8)((pos >> 8) & 0xFF));
+    writePort(0x03D4, 0x0F);
+    writePort(0x03D5, (uint8)(pos & 0xFF));
 }
 
 void setCursor(uint16 position) {
@@ -49,10 +57,10 @@ void setCursor(uint16 position) {
         position -= VGA_WIDTH;
         screenScrollUp();
     }
-    asm_ports_write(0x03D4, 0x0E);
-    asm_ports_write(0x03D5, (uint8)((position >> 8) & 0xFF));
-    asm_ports_write(0x03D4, 0x0F);
-    asm_ports_write(0x03D5, (uint8)(position & 0xFF));
+    writePort(0x03D4, 0x0E);
+    writePort(0x03D5, (uint8)((position >> 8) & 0xFF));
+    writePort(0x03D4, 0x0F);
+    writePort(0x03D5, (uint8)(position & 0xFF));
 }
 
 int print(char ch) {

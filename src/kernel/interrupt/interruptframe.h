@@ -8,7 +8,7 @@
 #ifndef _INTERRUPT_FRAME_H_
 #define _INTERRUPT_FRAME_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "eflags.h"
 
 class InterruptFrame {

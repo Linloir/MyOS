@@ -5,7 +5,7 @@
  * Description  : Page management
  */
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "page.h"
 
 #ifndef _PAGING_H_

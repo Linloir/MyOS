@@ -1,14 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-16 23:46:35
+ * LastEditTime : 2022-06-17 10:57:31
  * Description  : 
  */
 
 #ifndef _PROCESS_MANAGER_H_
 #define _PROCESS_MANAGER_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "bitmap.h"
 #include "vector.h"
 #include "proc.h"
@@ -31,9 +31,11 @@ class ProcessManager {
         static Process* current();
         static Process* processOfPID(uint32 pid);
         static void execute(Process* process);
-        static void sleep(ProcessState* state);
+        static void hibernate(ProcessState* state);
         static void awake(uint32 pid, ProcessState* state);
         static void fork(ProcessState* state);
+        static void exit(ProcessState* state, int retval);
+        static void wait(ProcessState* state, int* retptr);
 };
 
 #endif

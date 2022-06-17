@@ -1,11 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-17 09:59:59
+ * LastEditTime : 2022-06-17 12:14:04
  * Description  : 
  */
 
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "proc.h"
 #include "processmanager.h"
 #include "paging.h"
@@ -13,7 +13,7 @@
 #include "swap.h"
 #include "mmu.h"
 #include "stackhandler.h"
-#include "miscellaneous.h"
+#include "mem.h"
 #include "systemcall.h"
 
 ProcessSegment ProcessSegment::kernelDataSegment;
@@ -164,7 +164,7 @@ Process::Process(
 
     // - Set exit point
     StackHandler stack = StackHandler(initStackFrame->virtualAddr() + PAGE_SIZE);
-    stack.push((uint32)exit);
+    stack.push((uint32)syscall_exit);
     if(priviledge == ProcessPriviledge::USER) {
         stack.push(USER_STACK_SELECTOR);
         stack.push(_state._esp);

@@ -1,12 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 20:38:14
- * LastEditTime : 2022-06-17 00:30:03
+ * LastEditTime : 2022-06-17 12:32:27
  * Description  : 
  */
 
 #include "systemcall.h"
-#include "std_utils.h"
 
 uint32 syscall(uint32 vec) {
     //Previous on stack:
@@ -269,22 +268,46 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4
     );
 }
 
-uint32 printNum(uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
-    return syscall(0, p0, p1, p2, p3, p4);
+void syscall_panic(uint32 code) {
+    syscall(0x0);
 }
 
-uint32 exit(uint32 retval) {
-    return syscall(2, retval);
+void syscall_sleep(uint32 time) {
+    syscall(0x1, time);
 }
 
-uint32 fork() {
-    return syscall(1);
+void syscall_exit(uint32 retval) {
+    syscall(0x2, retval);
 }
 
-uint32 sleep() {
-    return syscall(0);
+void syscall_wait(int* retptr) {
+    syscall(0x3, (uint32)retptr);
 }
 
-uint32 awake(uint32 pid) {
-    return syscall(0);
+void syscall_hibernate() {
+    syscall(0x4);
+}
+
+void syscall_awake(uint32 pid) {
+    syscall(0x5, pid);
+}
+
+uint32 syscall_fork() {
+    return syscall(0x6);
+}
+
+uint32 syscall_span() {
+    return syscall(0x7);
+}
+
+void syscall_portWrite(uint32 port, uint32 val) {
+    syscall(0x8, port, val);
+}
+
+uint32 syscall_portRead(uint32 port) {
+    return syscall(0x9, port);
+}
+
+uint32 syscall_pid() {
+    return syscall(0xA);
 }

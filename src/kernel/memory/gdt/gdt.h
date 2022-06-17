@@ -5,7 +5,7 @@
  * Description  : 
  */
 
-#include "os_type.h"
+#include "systemtype.h"
 
 #ifndef _GDT_H_
 #define _GDT_H_

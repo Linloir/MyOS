@@ -8,8 +8,8 @@
 #ifndef _SYSCALL_MANAGER_H_
 #define _SYSCALL_MANAGER_H_
 
-#include "os_constant.h"
-#include "os_type.h"
+#include "systemconstant.h"
+#include "systemtype.h"
 #include "syscallhandler.h"
 
 using Syscall = void (*)(ProcessState*, uint32, uint32, uint32, uint32, uint32);

@@ -1,11 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-04 10:13:26
+ * LastEditTime : 2022-06-17 11:51:55
  * Description  : 
  */
-#ifndef _OS_TYPE_H_
-#define _OS_TYPE_H_
+#ifndef _SYSTEM_TYPE_H_
+#define _SYSTEM_TYPE_H_
 
 #define NULL 0
 

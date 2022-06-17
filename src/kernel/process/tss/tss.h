@@ -8,7 +8,7 @@
 #ifndef _TSS_H_
 #define _TSS_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 class TaskStateSegment {
     friend class TSSManager;

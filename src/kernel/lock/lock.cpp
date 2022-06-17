@@ -1,13 +1,11 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-17 16:58:13
- * LastEditTime : 2022-06-16 21:52:09
+ * LastEditTime : 2022-06-17 12:05:19
  * Description  : 
  */
 
 #include "lock.h"
-#include "std_utils.h"
-#include "processmanager.h"
 #include "systemcall.h"
 
 SpinLock::SpinLock() {
@@ -32,21 +30,21 @@ void SpinLock::release() {
 SemLock::SemLock() {
     availablePermits = 1;
     permitLock = SpinLock();
-    awaitList = Vec<Process*>();
+    awaitList = Vec<uint32>();
 }
 
 SemLock::SemLock(int permits) {
     availablePermits = permits;
     permitLock = SpinLock();
-    awaitList = Vec<Process*>();
+    awaitList = Vec<uint32>();
 }
 
 void SemLock::acquire() {
     permitLock.lock();
     if(availablePermits == 0) {
-        Process* proc = ProcessManager::current();
         permitLock.release();
-        sleep();
+        awaitList.pushBack(syscall_pid());
+        syscall_hibernate();
         permitLock.lock();
     }
     availablePermits--;
@@ -57,10 +55,10 @@ void SemLock::release() {
     permitLock.lock();
     availablePermits++;
     if(!awaitList.isEmpty()) {
-        Process* proc = awaitList.front();
+        uint32 pid = awaitList.front();
         awaitList.erase(0);
         permitLock.release();
-        awake(proc->pid());
+        syscall_awake(pid);
     }
     else {
         permitLock.release();

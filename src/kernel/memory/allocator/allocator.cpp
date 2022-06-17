@@ -6,7 +6,7 @@
  */
 
 #include "allocator.h"
-#include "std_utils.h"
+#include "systemio.h"
 
 int has_initialized = 0;
 void *managed_memory_start;

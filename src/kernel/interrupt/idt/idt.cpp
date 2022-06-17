@@ -9,7 +9,7 @@
 #include "handler.h"
 #include "mmu.h"
 #include "allocator.h"
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "interrupt.h"
 #include "syscallmanager.h"
 

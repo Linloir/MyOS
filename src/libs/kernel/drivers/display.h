@@ -1,14 +1,20 @@
 /*** 
  * Author       : Linloir
- * Date         : 2022-05-15 22:14:21
- * LastEditTime : 2022-06-04 00:15:53
+ * Date         : 2022-06-17 12:10:53
+ * LastEditTime : 2022-06-17 12:14:39
  * Description  : 
  */
-#ifndef _DISPLAY_UTILS_H_
-#define _DISPLAY_UTILS_H_
+/*** 
+ * Author       : Linloir
+ * Date         : 2022-06-17 11:01:14
+ * LastEditTime : 2022-06-17 11:56:55
+ * Description  : 
+ */
 
-#include "os_type.h"
-#include "ports_utils.h"
+#ifndef _DISPLAY_H_
+#define _DISPLAY_H_
+
+#include "systemtype.h"
 #include "mmu.h"
 
 #define VGA_WIDTH 80

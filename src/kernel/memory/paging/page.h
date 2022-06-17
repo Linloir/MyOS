@@ -5,7 +5,7 @@
  * Description  : 
  */
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "swap.h"
 
 #ifndef _PAGE_H_

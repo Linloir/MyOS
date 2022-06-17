@@ -8,7 +8,7 @@
 #ifndef _HANDLER_H_
 #define _HANDLER_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 #include "interruptframe.h"
 #include "proc.h"
 

@@ -8,7 +8,7 @@
 #ifndef _STACK_HANDLER_H_
 #define _STACK_HANDLER_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 class StackHandler {
     friend class Process;

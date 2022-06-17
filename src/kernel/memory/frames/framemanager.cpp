@@ -6,12 +6,12 @@
  */
 
 #include "framemanager.h"
-#include "os_constant.h"
+#include "systemconstant.h"
 #include "paging.h"
 #include "linkedlist.h"
 #include "algorithm.h"
 #include "mmu.h"
-#include "std_utils.h"
+#include "systemio.h"
 
 SemLock FrameManager::_lock;
 uint32 FrameManager::_tickTillRefresh = FrameManager::_defaultRefreshInterval;

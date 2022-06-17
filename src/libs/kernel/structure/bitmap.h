@@ -8,7 +8,7 @@
 #ifndef _BIT_MAP_H_
 #define _BIT_MAP_H_
 
-#include "os_type.h"
+#include "systemtype.h"
 
 /* WARNING:
  *  BITMAP IS NOT AVAILABLE BEFORE HEAP IS INITIALIZED
