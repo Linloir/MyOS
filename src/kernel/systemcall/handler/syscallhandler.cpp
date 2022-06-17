@@ -1,13 +1,14 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 21:11:21
- * LastEditTime : 2022-06-17 11:43:28
+ * LastEditTime : 2022-06-17 13:27:34
  * Description  : 
  */
 
 #include "syscallhandler.h"
 #include "systemio.h"
 #include "processmanager.h"
+#include "tss.h"
 
 void __syscall_panic__(ProcessState* state, uint32 code, uint32, uint32, uint32, uint32) {
     printf("[Panic] Kernel Panic with code %d\n", code);
@@ -27,13 +28,7 @@ void __syscall_wait__(ProcessState* state, uint32 retptr, uint32, uint32, uint32
 }
 
 void __syscall_sleep__(ProcessState* state, uint32 time, uint32, uint32, uint32, uint32) {
-    while(time--) {
-        asm(
-            "sti\n\t"
-            "hlt\n\t"
-            "cli\n\t"
-        );
-    }
+    
 }
 
 void __syscall_hibernate__(ProcessState* state, uint32, uint32, uint32, uint32, uint32) {

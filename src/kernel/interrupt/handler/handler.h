@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 22:54:18
- * LastEditTime : 2022-06-17 09:55:35
+ * LastEditTime : 2022-06-17 13:37:24
  * Description  : 
  */
 
@@ -21,6 +21,7 @@
     {                                                                                       \
         /*Force change to ESP0 stack*/                                                      \
         asm volatile(                                                                       \
+            "cli\n\t"                                                                       \
             "subl $4, %%esp\n\t"    /*make space for esp*/                                  \
                                                                                             \
             "push %%ebp\n\t"                                                                \
@@ -112,22 +113,25 @@
             "movl 8(%%eax), %%ebx\n\t"                                                      \
             "movl %%ebx, 8(%%ebp)\n\t" /*copy eip, cs, eflags to prev stack*/               \
                                                                                             \
+            "movb $0x20, %%al\n\t"                                                          \
+            "outb %%al, $0x20\n\t"                                                          \
+            "outb %%al, $0xA0\n\t"                                                          \
+                                                                                            \
             "pop %%ebx\n\t"                                                                 \
             "pop %%eax\n\t"                                                                 \
             "pop %%ebp\n\t"                                                                 \
             :                                                                               \
             : [esp0] "i"(ESP0_STACK_TOP));                                                  \
         asm volatile(                                                                       \
+            "sti\n\t"                                                                       \
             "iret\n\t" /*iret*/                                                             \
         );                                                                                  \
     }                                                                                       \
     void __##fn##_wrapped__ 
 
-//C HANDLER FUNCTIONS
-// extern "C" void emptyHandler();
-Interrupt void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode);
+//ANDLER FUNCTIONS
 Interrupt void emptyHandler(InterruptFrame* frame);
-Naked void syscallInterruptHandler();
+Interrupt void doubleFaultInterruptHandler(InterruptFrame* frame, uint32 errCode);
 
 ConsistentHandler(timeInterruptHandler) (ProcessState* state);
 ConsistentHandler(syscallHandler) (ProcessState* state);

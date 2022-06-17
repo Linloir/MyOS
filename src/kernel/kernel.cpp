@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-17 12:20:44
+ * LastEditTime : 2022-06-17 13:31:44
  * Description  : 
  */
 #include "interrupt.h"
@@ -20,21 +20,7 @@
 #include "syscallmanager.h"
 #include "systemcall.h"
 
-#include "userio.h"
-
-void firstThread();
-
-void firstThread() {
-    uint32 pid = syscall_fork();
-    userlib::printf("pid: %d\n", pid);
-    if(pid == 0) {
-        pid = syscall_fork();
-        userlib::printf("pid: %d\n", pid);
-    }
-    while(true) {
-        syscall_sleep(5);
-    }
-}
+#include "lab.h"
 
 extern "C" void kernel() {
     clearScreen();
@@ -72,20 +58,11 @@ extern "C" void kernel() {
     SyscallManager::initialize();
     initInterrupt();
 
-    Process* frstProcess = (Process*)malloc(sizeof(Process));
-    *frstProcess = Process(
-        ProcessPriviledge::USER,
-        ProcessSegment(0x0, 0x0),
-        ProcessManager::processOfPID(0),
-        30,
-        (uint32)firstThread
-    );
-
-    ProcessManager::execute(frstProcess);
+    lab8();
     
     while(true) {
-        printf("Kernel Process\n");
-        syscall_sleep(5);
+        // printf("Kernel\n");
+        // for(int i = 0; i < 0xFFFFFFF; i++) {}
     }
 }
 

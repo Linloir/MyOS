@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 14:51:41
- * LastEditTime : 2022-06-16 20:30:50
+ * LastEditTime : 2022-06-17 13:16:10
  * Description  : 
  */
 
@@ -43,4 +43,12 @@ void TSSManager::initialize() {
     GDTManager::set(TSS_SELECTOR >> 3, tssDescriptor);
     //load tr
     _load();
+}
+
+uint32 TSSManager::esp0() {
+    return _tss._esp0;
+}
+
+void TSSManager::setEsp0(uint32 esp0) {
+    _tss._esp0 = esp0;
 }

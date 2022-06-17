@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-13 11:27:29
- * LastEditTime : 2022-06-16 10:29:49
+ * LastEditTime : 2022-06-17 13:15:39
  * Description  : 
  */
 
@@ -59,6 +59,8 @@ class TSSManager {
         static void _load();
     public:
         static void initialize();
+        static uint32 esp0();
+        static void setEsp0(uint32 esp0);
 };
 
 #endif

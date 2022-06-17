@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 11:09:54
+ * LastEditTime : 2022-06-17 12:50:50
  * Description  : 
  */
 
@@ -25,8 +25,6 @@ void ProcessManager::_processExit() {
 void ProcessManager::_schedule(ProcessState* state) {
     bool interrupt = getInterruptStatus();
     setInterruptStatus(false);
-
-    printf("In schedule\n");
     
     if(_readyProcesses.isEmpty()) {
         return;
