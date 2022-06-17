@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 16:46:55
+ * LastEditTime : 2022-06-17 16:57:19
  * Description  : 
  */
 
@@ -206,6 +206,7 @@ void ProcessManager::exit(ProcessState* state, int retval) {
     for(int i = 0; i < proc->_children.size(); i++) {
         proc->_children[i]->_parent = processOfPID(0);
     }
+    proc->_parent->_children.erase(proc);
     
     next->restore(state);
     next->_status = ProcessStatus::RUNNING;
@@ -213,21 +214,36 @@ void ProcessManager::exit(ProcessState* state, int retval) {
 }
 
 void ProcessManager::wait(ProcessState* state, int* retptr) {
-    if(_curProcess->_children.isEmpty()) {
-        state->_eax = -1;
-        *retptr = 0;
-        return;
-    }
+    // 20220617.note
+    // the child property should be removed as long as child calls exit
+    // instead of when parent calls wait
+    //
+    // therefore it's hard to tell whether there is a child outside
+    // by just checking _children.isEmpty, since no child and all child
+    // ends results the same.
+    //
+    // if(_curProcess->_children.isEmpty()) {
+    //     state->_eax = -1;
+    //     *retptr = 0;
+    //     return;
+    // }
+    bool hasChild = false;
     for(int i = 0; i < _allProcesses.size(); i++) {
-        if(_allProcesses[i]->_status != ProcessStatus::DEAD) {
+        if(_allProcesses[i]->_parent != _curProcess) {
             continue;
         }
-        if(_allProcesses[i]->_parent != _curProcess) {
+        hasChild = true;
+        if(_allProcesses[i]->_status != ProcessStatus::DEAD) {
             continue;
         }
         state->_eax = _allProcesses[i]->_pid;
         *retptr = _allProcesses[i]->_ret;
         _allProcesses.erase(i);
+        return;
+    }
+    if(!hasChild) {
+        state->_eax = -1;
+        *retptr = 0;
         return;
     }
     //Since kernel will never return, 0 can be preserved for indicating that
