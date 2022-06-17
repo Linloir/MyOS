@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-17 14:50:23
+ * LastEditTime : 2022-06-17 18:14:17
  * Description  : 
  */
 
@@ -140,7 +140,7 @@ PageTableEntry& PageTable::entryOf(Page page) {
     if(!frstLevelTableEntry.isPresent()) {
         return frstLevelTableEntry;
     }
-    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(frstLevelTable->physicalAddr());
+    PageTable* frstLevelTable = PageTable::fromPhysicalAddr(frstLevelTableEntry.address());
     return frstLevelTable->entryAt((page.virtualAddr() << 10) >> 22);
 }
 

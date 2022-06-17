@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 16:57:19
+ * LastEditTime : 2022-06-17 18:22:10
  * Description  : 
  */
 
@@ -85,8 +85,8 @@ void ProcessManager::initialize() {
     kernelProcess->_stackSegment = ProcessSegment(0xFFE00000, 0xFFFFFFFC);
     kernelProcess->_parent = nullptr;
     kernelProcess->_children = Vec<Process*>();
-    kernelProcess->_ticks = 30;
-    kernelProcess->_remainingTicks = 30;
+    kernelProcess->_ticks = 10;
+    kernelProcess->_remainingTicks = 10;
     kernelProcess->_status = ProcessStatus::RUNNING;
 
     _curProcess = kernelProcess;
@@ -173,35 +173,38 @@ void ProcessManager::exit(ProcessState* state, int retval) {
     Process* next = _readyProcesses.front();
     _readyProcesses.erase(0);
 
-    while(true) {
-        if(proc->_parent->_table == proc->_table) {
-            break;
-        }
-        bool shouldReclaim = true;
-        for(int i = 0; i < proc->_children.size(); i++) {
-            if(proc->_children[i]->_table == proc->_table) {
-                shouldReclaim = false;
-            }
-        }
-        if(!shouldReclaim) {
-            break;
-        }
-        Vec<Page> dataPages = proc->_dataSegment.toPages();
-        Vec<Page> stackPages = proc->_usedStackSegment.toPages();
-        for(int i = 0; i < dataPages.size(); i++) {
-            FrameManager::freeFrame(proc->_table->entryOf(dataPages[i]).address());
-        }
-        for(int i = 0; i < stackPages.size(); i++) {
-            FrameManager::freeFrame(proc->_table->entryOf(stackPages[i]).address());
-        }
-        for(int i = proc->_dataSegment.startAddr(); i < proc->_dataSegment.endAddr(); i += PAGE_SIZE * 1024) {
-            FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
-        }
-        for(int i = proc->_usedStackSegment.startAddr(); i < proc->_usedStackSegment.endAddr(); i += PAGE_SIZE * 1024) {
-            FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
-        }
-        FrameManager::freeFrame(toPhysicalAddress((uint32)proc->_table));
-    }
+    // while(true) {
+    //     if(proc->_parent->_table == proc->_table) {
+    //         break;
+    //     }
+    //     bool shouldReclaim = true;
+    //     for(int i = 0; i < proc->_children.size(); i++) {
+    //         if(proc->_children[i]->_table == proc->_table) {
+    //             shouldReclaim = false;
+    //         }
+    //     }
+    //     if(!shouldReclaim) {
+    //         break;
+    //     }
+    //     Vec<Page> dataPages = proc->_dataSegment.toPages();
+    //     Vec<Page> stackPages = proc->_usedStackSegment.toPages();
+    //     for(int i = 0; i < dataPages.size(); i++) {
+    //         FrameManager::freeFrame(proc->_table->entryOf(dataPages[i]).address());
+    //     }
+    //     for(int i = 0; i < stackPages.size(); i++) {
+    //         Page p = stackPages[i];
+    //         PageTableEntry entry = proc->_table->entryOf(p);
+    //         uint32 addr = entry.address();
+    //         FrameManager::freeFrame(addr);
+    //     }
+    //     for(int i = proc->_dataSegment.startAddr(); i < proc->_dataSegment.endAddr(); i += PAGE_SIZE * 1024) {
+    //         FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
+    //     }
+    //     for(int i = proc->_usedStackSegment.startAddr(); i < proc->_usedStackSegment.endAddr(); i += PAGE_SIZE * 1024) {
+    //         FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
+    //     }
+    //     FrameManager::freeFrame(toPhysicalAddress((uint32)proc->_table));
+    // }
 
     for(int i = 0; i < proc->_children.size(); i++) {
         proc->_children[i]->_parent = processOfPID(0);

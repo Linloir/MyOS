@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-17 12:38:45
- * LastEditTime : 2022-06-17 16:34:31
+ * LastEditTime : 2022-06-17 18:06:36
  * Description  : 
  */
 
@@ -45,6 +45,19 @@ void parent() {
     uint32 pid = syscall_wait(&ret);
     userlib::printf("[Parent] Received return val %d from pid %d\n", ret, pid);
 
+    userlib::printf("[Parent] Testing zombie reclaiming strategy..\n");
+    childPid = syscall_fork();
+    if(childPid != 0) {
+        userlib::printf("[Child3] Forked from parent...\n");
+        for(int i = 0; i < 0xFFFFFFF; i++) {}
+        userlib::printf("[Child3] Child returning...\n");
+        syscall_exit(-1);
+    }
+    else {
+        userlib::printf("[Parent] Parent returning...\n");
+        syscall_exit(0);
+    }
+
     while(true) {
         // userlib::printf("process of pid %d\n", syscall_pid());
         // for(int i = 0; i < 0xFFFFFFF; i++) {}
@@ -52,7 +65,7 @@ void parent() {
 }
 
 void lab8() {
-    //DO THIS IN KERNEL MODE
+    //DO THIS IN SHELL
     printf("\n");
     printf("[LAB8] =======================================\n");
     printf("- 20303042 Linloir\n");
@@ -62,7 +75,7 @@ void lab8() {
         ProcessPriviledge::USER,
         ProcessSegment(0x0, 0x0),
         ProcessManager::processOfPID(0),
-        30,
+        10,
         (uint32)parent
     );
     ProcessManager::execute(newProcess);

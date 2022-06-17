@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-17 13:31:44
+ * LastEditTime : 2022-06-17 17:38:56
  * Description  : 
  */
 #include "interrupt.h"
@@ -19,8 +19,7 @@
 #include "tss.h"
 #include "syscallmanager.h"
 #include "systemcall.h"
-
-#include "lab.h"
+#include "shell.h"
 
 extern "C" void kernel() {
     clearScreen();
@@ -57,12 +56,14 @@ extern "C" void kernel() {
     ProcessManager::initialize();
     SyscallManager::initialize();
     initInterrupt();
-
-    lab8();
+    Shell::initialize();
     
     while(true) {
-        // printf("Kernel\n");
-        // for(int i = 0; i < 0xFFFFFFF; i++) {}
+        int ret = 0;
+        uint32 pid = syscall_wait(&ret);
+        if(pid > 0) {
+            printf("Found zombie process with return value %d, released\n", ret);
+        }
     }
 }
 
