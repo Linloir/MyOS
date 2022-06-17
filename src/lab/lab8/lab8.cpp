@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-17 12:38:45
- * LastEditTime : 2022-06-17 16:03:04
+ * LastEditTime : 2022-06-17 16:34:31
  * Description  : 
  */
 
@@ -17,8 +17,22 @@ void parent() {
     uint32 childPid = syscall_fork();
     if(childPid == 0) {
         userlib::printf("[Child] Forked from parent, pid = %d\n", syscall_pid());
-        userlib::printf("[Child] Returning..\n");
-        syscall_exit(1);
+        userlib::printf("[Child] Forking another child..\n");
+        childPid = syscall_fork();
+        if(childPid == 0) {
+            userlib::printf("[Child2] Forked from child, pid = %d\n", syscall_pid());
+            userlib::printf("[Child2] Returning without using syscall..\n");
+            return;
+        }
+        else {
+            userlib::printf("[Child] Forked child, pid = %d\n", childPid);
+            userlib::printf("[Child] Calling wait syscall..\n");
+            int ret = -1;
+            uint32 pid = syscall_wait(&ret);
+            userlib::printf("[Child] Received return val %d from pid %d\n", ret, pid);
+        }
+        userlib::printf("[Child] Returning by calling syscall with return value 255\n");
+        syscall_exit(255);
     }
     else {
         userlib::printf("[Parent] Forked to child, parent pid = %d, child pid = %d\n", syscall_pid(), childPid);
@@ -26,6 +40,10 @@ void parent() {
         uint32 pid = syscall_wait(&ret);
         userlib::printf("[Parent] Received return val %d from pid %d\n", ret, pid);
     }
+    userlib::printf("[Parent] Making another wait attempt, expect to retrieve -1 pid...\n");
+    int ret = 0;
+    uint32 pid = syscall_wait(&ret);
+    userlib::printf("[Parent] Received return val %d from pid %d\n", ret, pid);
 
     while(true) {
         // userlib::printf("process of pid %d\n", syscall_pid());
@@ -41,7 +59,7 @@ void lab8() {
     printf("==============================================\n");
     Process* newProcess = (Process*)malloc(sizeof(Process));
     *newProcess = Process(
-        ProcessPriviledge::KERNEL,
+        ProcessPriviledge::USER,
         ProcessSegment(0x0, 0x0),
         ProcessManager::processOfPID(0),
         30,

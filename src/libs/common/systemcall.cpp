@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 20:38:14
- * LastEditTime : 2022-06-17 16:02:42
+ * LastEditTime : 2022-06-17 16:48:59
  * Description  : 
  */
 
@@ -281,7 +281,15 @@ void syscall_exit(uint32 retval) {
 }
 
 uint32 syscall_wait(int* retptr) {
-    return syscall(0x3, (uint32)retptr);
+    int pid = 0;
+    do {
+        //pid
+        //-1: no child
+        //0 : found child but it's still running
+        //other: child pid
+        pid = syscall(0x3, (uint32)retptr);
+    } while(pid == 0);
+    return pid;
 }
 
 void syscall_hibernate() {

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-17 15:13:06
+ * LastEditTime : 2022-06-17 16:28:13
  * Description  : 
  */
 
@@ -149,10 +149,22 @@ Process::Process(
     }
 
     // - Prepare init stack
+
+    // Save area is for stack exchange macro in syscall handler when the process returns
+    // =========================== <- stack top
+    //     preserved for copy           ↑
+    //   (faked interrupt frame)    5 * 4 bytes
+    //   (faked eflags, cs, eip)        ↓
+    //============================ <- save area bottom
+    //      exit return val
+    //        exit point
+    //============================ <- esp points here (where the stack for process actually starts)
+    //             ↓  process stack
+    
     _state = ProcessState();
     _state._cr3 = toPhysicalAddress((uint32)table);
-    _state._stack = _stackSegment.endAddr() - 24;
-    _state._esp = _stackSegment.endAddr() - 4;
+    _state._stack = _stackSegment.endAddr() - 20 - 12;
+    _state._esp = _stackSegment.endAddr() - 8 - 12;
     _state._cs = priviledge == ProcessPriviledge::KERNEL ? CODE_SELECTOR : USER_CODE_SELECTOR;
     _state._ss = priviledge == ProcessPriviledge::KERNEL ? STACK_SELECTOR : USER_STACK_SELECTOR;
     _state._ds = priviledge == ProcessPriviledge::KERNEL ? DATA_SELECTOR : USER_DATA_SELECTOR;
@@ -164,10 +176,15 @@ Process::Process(
 
     // - Set exit point
     StackHandler stack = StackHandler(initStackFrame->virtualAddr() + PAGE_SIZE);
+    for(int i = 0; i < 3; i++) {    //Saved area
+        stack.push(0);
+    }
+    stack.push(0);  //syscall_exit ret val
     stack.push((uint32)syscall_exit);
     if(priviledge == ProcessPriviledge::USER) {
         stack.push(USER_STACK_SELECTOR);
         stack.push(_state._esp);
+        _state._stack -= 8;
     }
 
     // - Prepare table

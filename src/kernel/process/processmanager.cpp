@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 16:06:16
+ * LastEditTime : 2022-06-17 16:46:55
  * Description  : 
  */
 
@@ -218,18 +218,20 @@ void ProcessManager::wait(ProcessState* state, int* retptr) {
         *retptr = 0;
         return;
     }
-    while(true){
-        for(int i = 0; i < _allProcesses.size(); i++) {
-            if(_allProcesses[i]->_status != ProcessStatus::DEAD) {
-                continue;
-            }
-            if(_allProcesses[i]->_parent != _curProcess) {
-                continue;
-            }
-            state->_eax = _allProcesses[i]->_pid;
-            *retptr = _allProcesses[i]->_ret;
-            _allProcesses.erase(i);
-            return;
+    for(int i = 0; i < _allProcesses.size(); i++) {
+        if(_allProcesses[i]->_status != ProcessStatus::DEAD) {
+            continue;
         }
+        if(_allProcesses[i]->_parent != _curProcess) {
+            continue;
+        }
+        state->_eax = _allProcesses[i]->_pid;
+        *retptr = _allProcesses[i]->_ret;
+        _allProcesses.erase(i);
+        return;
     }
+    //Since kernel will never return, 0 can be preserved for indicating that
+    //there is a child but it haven't returned
+    state->_eax = 0;
+    //20220617.note: while will be placed outside the syscall
 }
