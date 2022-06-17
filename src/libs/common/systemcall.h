@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 20:33:49
- * LastEditTime : 2022-06-17 12:04:42
+ * LastEditTime : 2022-06-17 16:02:23
  * Description  : system calls
  */
 
@@ -22,7 +22,7 @@ Naked uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uin
 void syscall_panic(uint32 code);
 void syscall_sleep(uint32 time);
 void syscall_exit(uint32 retval);
-void syscall_wait(int* retptr);
+uint32 syscall_wait(int* retptr);
 void syscall_hibernate();
 void syscall_awake(uint32 pid);
 uint32 syscall_fork();

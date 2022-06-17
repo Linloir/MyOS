@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:35
- * LastEditTime : 2022-06-16 22:17:43
+ * LastEditTime : 2022-06-17 14:50:23
  * Description  : 
  */
 
@@ -60,6 +60,10 @@ Page Page::lower() {
 PageTableEntry::PageTableEntry(uint32 address, PageFlag flags) {
     address &= 0xFFFFF000;
     val = address | static_cast<uint32>(flags);
+}
+
+bool PageTableEntry::operator==(const PageTableEntry& other) {
+    return val == other.val;
 }
 
 uint32 PageTableEntry::value() {

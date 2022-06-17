@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-03 16:40:32
- * LastEditTime : 2022-06-16 11:10:13
+ * LastEditTime : 2022-06-17 14:49:31
  * Description  : 
  */
 
@@ -56,6 +56,7 @@ class PageTableEntry {
         uint32 val;
     public:
         PageTableEntry(uint32 address, PageFlag flags);
+        bool operator==(const PageTableEntry& other);
         uint32 value();
         uint32 address();
         PageFlag flags();

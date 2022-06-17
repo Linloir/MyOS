@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 20:38:14
- * LastEditTime : 2022-06-17 12:32:27
+ * LastEditTime : 2022-06-17 16:02:42
  * Description  : 
  */
 
@@ -280,8 +280,8 @@ void syscall_exit(uint32 retval) {
     syscall(0x2, retval);
 }
 
-void syscall_wait(int* retptr) {
-    syscall(0x3, (uint32)retptr);
+uint32 syscall_wait(int* retptr) {
+    return syscall(0x3, (uint32)retptr);
 }
 
 void syscall_hibernate() {

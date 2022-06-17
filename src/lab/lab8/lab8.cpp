@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-17 12:38:45
- * LastEditTime : 2022-06-17 13:34:02
+ * LastEditTime : 2022-06-17 16:03:04
  * Description  : 
  */
 
@@ -17,9 +17,14 @@ void parent() {
     uint32 childPid = syscall_fork();
     if(childPid == 0) {
         userlib::printf("[Child] Forked from parent, pid = %d\n", syscall_pid());
+        userlib::printf("[Child] Returning..\n");
+        syscall_exit(1);
     }
     else {
         userlib::printf("[Parent] Forked to child, parent pid = %d, child pid = %d\n", syscall_pid(), childPid);
+        int ret = 0;
+        uint32 pid = syscall_wait(&ret);
+        userlib::printf("[Parent] Received return val %d from pid %d\n", ret, pid);
     }
 
     while(true) {

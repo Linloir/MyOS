@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-17 09:40:34
+ * LastEditTime : 2022-06-17 14:07:57
  * Description  : Process Control Block
  */
 
@@ -76,6 +76,7 @@ class Process {
         ProcessPriviledge _priviledge;
         PageTable* _table;
         ProcessState _state;
+        int _ret;
 
         ProcessSegment _dataSegment;
         ProcessSegment _stackSegment;
@@ -110,6 +111,7 @@ class Process {
         void addChild(Process* child);
         void save(ProcessState* state);
         void restore(ProcessState* state);
+        void reclaim();
 };
 
 #endif

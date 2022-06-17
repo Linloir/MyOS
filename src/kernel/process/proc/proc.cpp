@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-17 12:14:04
+ * LastEditTime : 2022-06-17 15:13:06
  * Description  : 
  */
 
@@ -216,12 +216,13 @@ Process* Process::_fork(
 
 ///PREPARE--------------------------------
 
-    // - Prepare Page Table
-    PageTable* table = PageTable::fromPhysicalAddr(scndLevelTableFrame->physicalAddr());
+    // // - Prepare Page Table
+    // PageTable* table = PageTable::fromPhysicalAddr(scndLevelTableFrame->physicalAddr());
     
-    //    - Copy Parent Pages
-    PageTable* parentTable = parentProcess->_table;
-    table->clone(parentTable);
+    // //    - Copy Parent Pages
+    // PageTable* parentTable = parentProcess->_table;
+    // table->clone(parentTable);
+    PageTable* table = parentProcess->_table;
 
     //    - Find an empty entry
     int emptySlot = table->emptySlot();

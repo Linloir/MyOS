@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-06 16:07:53
- * LastEditTime : 2022-06-14 09:35:29
+ * LastEditTime : 2022-06-17 15:00:03
  * Description  : 
  */
 
@@ -17,7 +17,7 @@ class FrameManager {
     private:
         static const uint32 _defaultRefreshInterval = 500;
 
-        static SemLock _lock;
+        static SpinLock _lock;
         static uint32 _tickTillRefresh;
 
         static uint32 _totalFrames;
@@ -25,6 +25,7 @@ class FrameManager {
 
         static Vec<Frame*> _availableFrames;
         static Vec<Frame*> _allocatedFrames;
+        static Frame* _allFrames;
 
         static void reclaimFrames(uint32 count);
     public:

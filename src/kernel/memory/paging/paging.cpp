@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-30 19:43:15
- * LastEditTime : 2022-06-14 12:26:17
+ * LastEditTime : 2022-06-17 15:34:55
  * Description  : Paging
  */
 
@@ -59,23 +59,28 @@ PageTableEntry* PageManager::mapPage(PageTable* pageTable, Page page, Frame* fra
     return entry;
 }
 
-uint32 PageManager::unmapPage(uint32 virtualAddr) {
-    //fetch l2 table
-    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+void PageManager::unmapPage(PageTable* pageTable, Page page) {
+    uint32 virtualAddr = page.virtualAddr();
+    PageTable* scndLevelTable = pageTable;
     uint32 frstLevelTableIndex = virtualAddr >> 22;
     //check existence of l1 table
     if(!scndLevelTable->entryAt(frstLevelTableIndex).isPresent()) {
-        return toPhysicalAddress(virtualAddr);
+        return;
     }
     //remove entry from l1 table
     PageTable* frstLevelTable = PageTable::fromPhysicalAddr(scndLevelTable->entryAt(frstLevelTableIndex).address());
     uint32 entryIndex = (virtualAddr << 10) >> 22;
+    if(!frstLevelTable->entryAt(entryIndex).isPresent()) {
+        return;
+    }
+    FrameManager::freeFrame(frstLevelTable->entryAt(entryIndex).address());
     frstLevelTable->removeAt(entryIndex);
-    return toPhysicalAddress(virtualAddr);
+    return;
 }
 
-uint32 PageManager::unmapPage(Page page) {
-    return unmapPage(page.virtualAddr());
+void PageManager::unmapPage(Page page) {
+    PageTable* scndLevelTable = PageTable::fromPhysicalAddr(getCR3());
+    return unmapPage(scndLevelTable, page);
 }
 
 bool PageManager::isPageMapped(Page page) {

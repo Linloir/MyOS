@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-17 12:50:50
+ * LastEditTime : 2022-06-17 16:06:16
  * Description  : 
  */
 
@@ -11,6 +11,8 @@
 #include "interrupt.h"
 #include "systemio.h"
 #include "tss.h"
+#include "framemanager.h"
+#include "mmu.h"
 
 BitMap ProcessManager::_pids;
 Vec<Process*> ProcessManager::_readyProcesses;
@@ -23,9 +25,6 @@ void ProcessManager::_processExit() {
 }
 
 void ProcessManager::_schedule(ProcessState* state) {
-    bool interrupt = getInterruptStatus();
-    setInterruptStatus(false);
-    
     if(_readyProcesses.isEmpty()) {
         return;
     }
@@ -49,8 +48,6 @@ void ProcessManager::_schedule(ProcessState* state) {
 
     cur->save(state);
     next->restore(state);
-
-    setInterruptStatus(interrupt);
 }
 
 void ProcessManager::initialize() {
@@ -153,9 +150,13 @@ void ProcessManager::awake(uint32 pid, ProcessState* state) {
 void ProcessManager::fork(ProcessState* state) {
     Process* parent = _curProcess;
     parent->save(state);
+
     Process* child = Process::_fork(parent);
+    _allProcesses.pushBack(child);
     child->_pid = _pids.alloc();
     parent->_state._eax = child->_pid;
+    parent->addChild(child);
+    
     child->_status = ProcessStatus::RUNNING;
     parent->_status = ProcessStatus::READY;
     _readyProcesses.pushBack(parent);
@@ -164,9 +165,71 @@ void ProcessManager::fork(ProcessState* state) {
 }
 
 void ProcessManager::exit(ProcessState* state, int retval) {
-    while(true){}
+    Process* proc = _curProcess;
+    proc->save(state);
+    proc->_ret = retval;
+    proc->_status = ProcessStatus::DEAD;
+
+    Process* next = _readyProcesses.front();
+    _readyProcesses.erase(0);
+
+    while(true) {
+        if(proc->_parent->_table == proc->_table) {
+            break;
+        }
+        bool shouldReclaim = true;
+        for(int i = 0; i < proc->_children.size(); i++) {
+            if(proc->_children[i]->_table == proc->_table) {
+                shouldReclaim = false;
+            }
+        }
+        if(!shouldReclaim) {
+            break;
+        }
+        Vec<Page> dataPages = proc->_dataSegment.toPages();
+        Vec<Page> stackPages = proc->_usedStackSegment.toPages();
+        for(int i = 0; i < dataPages.size(); i++) {
+            FrameManager::freeFrame(proc->_table->entryOf(dataPages[i]).address());
+        }
+        for(int i = 0; i < stackPages.size(); i++) {
+            FrameManager::freeFrame(proc->_table->entryOf(stackPages[i]).address());
+        }
+        for(int i = proc->_dataSegment.startAddr(); i < proc->_dataSegment.endAddr(); i += PAGE_SIZE * 1024) {
+            FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
+        }
+        for(int i = proc->_usedStackSegment.startAddr(); i < proc->_usedStackSegment.endAddr(); i += PAGE_SIZE * 1024) {
+            FrameManager::freeFrame(proc->_table->entryAt(i >> 22).address());
+        }
+        FrameManager::freeFrame(toPhysicalAddress((uint32)proc->_table));
+    }
+
+    for(int i = 0; i < proc->_children.size(); i++) {
+        proc->_children[i]->_parent = processOfPID(0);
+    }
+    
+    next->restore(state);
+    next->_status = ProcessStatus::RUNNING;
+    _curProcess = next;
 }
 
 void ProcessManager::wait(ProcessState* state, int* retptr) {
-    while(true){}
+    if(_curProcess->_children.isEmpty()) {
+        state->_eax = -1;
+        *retptr = 0;
+        return;
+    }
+    while(true){
+        for(int i = 0; i < _allProcesses.size(); i++) {
+            if(_allProcesses[i]->_status != ProcessStatus::DEAD) {
+                continue;
+            }
+            if(_allProcesses[i]->_parent != _curProcess) {
+                continue;
+            }
+            state->_eax = _allProcesses[i]->_pid;
+            *retptr = _allProcesses[i]->_ret;
+            _allProcesses.erase(i);
+            return;
+        }
+    }
 }
