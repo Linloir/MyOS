@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:47
- * LastEditTime : 2022-06-16 23:32:21
+ * LastEditTime : 2022-06-17 00:34:38
  * Description  : 
  */
 
@@ -152,6 +152,15 @@ void ProcessManager::awake(uint32 pid, ProcessState* state) {
     _schedule(state);
 }
 
-uint32 ProcessManager::fork(ProcessState* state) {
-    
+void ProcessManager::fork(ProcessState* state) {
+    Process* parent = _curProcess;
+    parent->save(state);
+    Process* child = Process::_fork(parent);
+    child->_pid = _pids.alloc();
+    parent->_state._eax = child->_pid;
+    child->_status = ProcessStatus::RUNNING;
+    parent->_status = ProcessStatus::READY;
+    _readyProcesses.pushBack(parent);
+    _curProcess = child;
+    child->restore(state);
 }

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-05-15 22:14:20
- * LastEditTime : 2022-06-16 23:24:27
+ * LastEditTime : 2022-06-17 09:47:20
  * Description  : 
  */
 #include "interrupt.h"
@@ -30,6 +30,13 @@ void firstThread() {
     
     // uint32 result = sysTest(0, 1, 2, 3, 4);
     // sysTest(result, 0, 0, 0, 0);
+    printNum(1, 2, 3, 4, 5);
+    uint32 pid = fork();
+    printNum(pid, 0, 0, 0, 0);
+    if(pid == 0) {
+        pid = fork();
+        printNum(pid, 0, 0, 0, 0);
+    }
 
     while(true) {
         // printf("Process 1\n");
@@ -99,8 +106,8 @@ extern "C" void kernel() {
 
     Process* frstProcess = (Process*)malloc(sizeof(Process));
     *frstProcess = Process(
-        ProcessPriviledge::USER,
-        ProcessSegment::userDataSegment,
+        ProcessPriviledge::KERNEL,
+        ProcessSegment(0x0, 0x0),
         ProcessManager::processOfPID(0),
         30,
         (uint32)firstThread

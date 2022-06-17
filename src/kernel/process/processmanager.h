@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:29:38
- * LastEditTime : 2022-06-16 20:53:56
+ * LastEditTime : 2022-06-16 23:46:35
  * Description  : 
  */
 
@@ -33,7 +33,7 @@ class ProcessManager {
         static void execute(Process* process);
         static void sleep(ProcessState* state);
         static void awake(uint32 pid, ProcessState* state);
-        static uint32 fork(ProcessState* state);
+        static void fork(ProcessState* state);
 };
 
 #endif

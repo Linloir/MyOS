@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:46
- * LastEditTime : 2022-06-16 22:50:05
+ * LastEditTime : 2022-06-17 09:40:34
  * Description  : Process Control Block
  */
 
@@ -43,8 +43,8 @@ class ProcessState {
         uint32 _eip = 0x0;
         uint32 _cs = 0x0;
         uint32 _eflags = 0x0;
-        uint32 _ss = 0x0;
         uint32 _esp = 0x0;
+        uint32 _ss = 0x0;
 };
 
 class ProcessSegment {
@@ -87,7 +87,7 @@ class Process {
         uint32 _ticks;
         uint32 _remainingTicks;
         ProcessStatus _status;
-        static Process* _fork(Process* parent, uint32 stackTop);
+        static Process* _fork(Process* parent);
     public:
         Process() {}
         Process(

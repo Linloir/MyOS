@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 14:36:06
- * LastEditTime : 2022-06-16 21:56:47
+ * LastEditTime : 2022-06-17 00:18:05
  * Description  : 
  */
 /***
@@ -52,6 +52,7 @@ Interrupt void doubleFaultInterruptHandler(InterruptFrame *frame, uint32 errCode
 }
 
 __consistent_handler__ (syscallHandler) (ProcessState* state) {
+    eoi();
     SyscallManager::handler(state, state->_edi, state->_esi, state->_edx, state->_ecx, state->_ebx, state->_eax);
 }
 

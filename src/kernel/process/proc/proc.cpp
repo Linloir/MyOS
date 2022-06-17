@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-08 20:24:55
- * LastEditTime : 2022-06-16 23:30:18
+ * LastEditTime : 2022-06-17 09:41:28
  * Description  : 
  */
 
@@ -178,8 +178,7 @@ Process::Process(
 }
 
 Process* Process::_fork(
-    Process* parentProcess,
-    uint32 stackTop
+    Process* parentProcess
 ) {
 
     Process* childProcess = (Process*)malloc(sizeof(Process));
@@ -244,6 +243,7 @@ Process* Process::_fork(
 
     //    - Set Stack Page
     Vec<Page> initStackPages = childProcess->_usedStackSegment.toPages();
+    Vec<Page> parentStackPages = parentProcess->_usedStackSegment.toPages();
     for(int i = 0; i < initStackPages.size(); i++) {
         PageManager::mapPage(
             table,
@@ -251,24 +251,23 @@ Process* Process::_fork(
             initStackFrames[i],
             PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE
         );
+        memcpy(
+            (void*)initStackFrames[i]->virtualAddr(),
+            (void*)parentStackPages[i].virtualAddr(),
+            PAGE_SIZE
+        );
     }
-
-    // - Copy stack
-    memcpy(
-        (void*)childProcess->_usedStackSegment.startAddr(), 
-        (void*)parentProcess->_usedStackSegment.startAddr(), 
-        parentProcess->_usedStackSegment.sizeOfBytes()
-    );
 
     // - Copy state
     childProcess->_state = parentProcess->_state;
     if(childProcess->_stackSegment.endAddr() > parentProcess->_stackSegment.endAddr()) {
-        childProcess->_state._stack += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
+        childProcess->_state._esp += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
     }
     else {
-        childProcess->_state._stack -= parentProcess->_stackSegment.endAddr() - childProcess->_stackSegment.endAddr();
+        childProcess->_state._esp -= parentProcess->_stackSegment.endAddr() - childProcess->_stackSegment.endAddr();
     }
-    childProcess->_state._cr3 = (uint32)table;
+    childProcess->_state._cr3 = toPhysicalAddress((uint32)table);
+    childProcess->_state._eax = 0;
 
     // - Prepare table
     childProcess->_table = table;

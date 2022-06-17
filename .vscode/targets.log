@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 16 23:15:07 2022
+# Make data base, printed on Fri Jun 17 08:49:38 2022
 
 # Variables
 
@@ -61,7 +61,7 @@ LC_NAME = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/linloir
 # environment
-SSH_CONNECTION = 192.168.8.215 60590 192.168.87.128 22
+SSH_CONNECTION = 192.168.8.215 53842 192.168.87.128 22
 # environment
 PATH = /home/linloir/.vscode-server/bin/30d9c6cd9483b2cc586687151bcbcd635f373630/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-24b85bf6-e860-41ae-a3e0-e3974d3f0a9a.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-3ade5830-d42f-44ee-be07-d94f96048ac0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -115,7 +115,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-XDG_SESSION_ID = 2
+XDG_SESSION_ID = 24
 # environment
 USER = linloir
 # environment
@@ -141,7 +141,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.8.215 60590 22
+SSH_CLIENT = 192.168.8.215 53842 22
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
@@ -208,6 +208,7 @@ all:
 
 # Not a target:
 Makefile:
+ 
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
@@ -247,6 +248,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Thu Jun 16 23:15:07 2022
+# Finished Make data base on Fri Jun 17 08:49:38 2022
 
  

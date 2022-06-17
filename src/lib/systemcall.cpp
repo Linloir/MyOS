@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-06-16 20:38:14
- * LastEditTime : 2022-06-16 22:22:35
+ * LastEditTime : 2022-06-17 00:30:03
  * Description  : 
  */
 
@@ -269,22 +269,22 @@ uint32 syscall(uint32 vec, uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4
     );
 }
 
-uint32 sysTest(uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
-    syscall(0, p0, p1, p2, p3, p4);
+uint32 printNum(uint32 p0, uint32 p1, uint32 p2, uint32 p3, uint32 p4) {
+    return syscall(0, p0, p1, p2, p3, p4);
 }
 
 uint32 exit(uint32 retval) {
-    syscall(2, retval);
+    return syscall(2, retval);
 }
 
 uint32 fork() {
-    syscall(1);
+    return syscall(1);
 }
 
 uint32 sleep() {
-    syscall(0);
+    return syscall(0);
 }
 
 uint32 awake(uint32 pid) {
-    syscall(0);
+    return syscall(0);
 }
