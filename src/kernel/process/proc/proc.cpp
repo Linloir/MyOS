@@ -77,7 +77,7 @@ Vec<Page> ProcessSegment::toPages(int offset) {
 }
 
 Process::Process(
-    ProcessPriviledge priviledge,
+    ProcessPriviledge privilege,
     ProcessSegment dataSegment,
     Process* parent,
     uint32 ticks,
@@ -86,11 +86,11 @@ Process::Process(
 
 ///INITIALIZE-----------------------------
     _pid = 0;
-    _priviledge = priviledge;
+    _privilege = privilege;
     _table = nullptr;
 
     _dataSegment = dataSegment;
-    _stackSegment = priviledge == ProcessPriviledge::USER ? ProcessSegment::userStackSegment : ProcessSegment::kernelStackSegment;
+    _stackSegment = privilege == ProcessPriviledge::USER ? ProcessSegment::userStackSegment : ProcessSegment::kernelStackSegment;
     _usedStackSegment = ProcessSegment(
         _stackSegment.endAddr() - PAGE_SIZE,
         _stackSegment.endAddr()  
@@ -165,9 +165,9 @@ Process::Process(
     _state._cr3 = toPhysicalAddress((uint32)table);
     _state._stack = _stackSegment.endAddr() - 20 - 12;
     _state._esp = _stackSegment.endAddr() - 8 - 12;
-    _state._cs = priviledge == ProcessPriviledge::KERNEL ? CODE_SELECTOR : USER_CODE_SELECTOR;
-    _state._ss = priviledge == ProcessPriviledge::KERNEL ? STACK_SELECTOR : USER_STACK_SELECTOR;
-    _state._ds = priviledge == ProcessPriviledge::KERNEL ? DATA_SELECTOR : USER_DATA_SELECTOR;
+    _state._cs = privilege == ProcessPriviledge::KERNEL ? CODE_SELECTOR : USER_CODE_SELECTOR;
+    _state._ss = privilege == ProcessPriviledge::KERNEL ? STACK_SELECTOR : USER_STACK_SELECTOR;
+    _state._ds = privilege == ProcessPriviledge::KERNEL ? DATA_SELECTOR : USER_DATA_SELECTOR;
     _state._es = _state._ds;
     _state._fs = _state._ds;
     _state._gs = _state._ds;
@@ -181,7 +181,7 @@ Process::Process(
     }
     stack.push(0);  //syscall_exit ret val
     stack.push((uint32)syscall_exit);
-    if(priviledge == ProcessPriviledge::USER) {
+    if(privilege == ProcessPriviledge::USER) {
         stack.push(USER_STACK_SELECTOR);
         stack.push(_state._esp);
         _state._stack -= 8;
@@ -202,7 +202,7 @@ Process* Process::_fork(
 
 ///INITIALIZE-----------------------------
     childProcess->_pid = 0;
-    childProcess->_priviledge = parentProcess->_priviledge;
+    childProcess->_privilege = parentProcess->_privilege;
     childProcess->_table = nullptr;
 
     childProcess->_dataSegment = parentProcess->_dataSegment;
@@ -280,13 +280,13 @@ Process* Process::_fork(
     childProcess->_state = parentProcess->_state;
     if(childProcess->_stackSegment.endAddr() > parentProcess->_stackSegment.endAddr()) {
         childProcess->_state._esp += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
-        if(childProcess->_priviledge == ProcessPriviledge::KERNEL) {
+        if(childProcess->_privilege == ProcessPriviledge::KERNEL) {
             childProcess->_state._stack += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
         }
     }
     else {
         childProcess->_state._esp -= parentProcess->_stackSegment.endAddr() - childProcess->_stackSegment.endAddr();
-        if(childProcess->_priviledge == ProcessPriviledge::KERNEL) {
+        if(childProcess->_privilege == ProcessPriviledge::KERNEL) {
             childProcess->_state._stack += childProcess->_stackSegment.endAddr() - parentProcess->_stackSegment.endAddr();
         }
     }
@@ -308,8 +308,8 @@ PageTable* Process::pageTable() {
     return _table;
 }
 
-ProcessPriviledge Process::priviledge() {
-    return _priviledge;
+ProcessPriviledge Process::privilege() {
+    return _privilege;
 }
 
 ProcessStatus Process::status() {

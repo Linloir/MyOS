@@ -79,7 +79,7 @@ void ProcessManager::initialize() {
     *kernelProcess = Process();
     
     kernelProcess->_pid = 0;
-    kernelProcess->_priviledge = ProcessPriviledge::KERNEL;
+    kernelProcess->_privilege = ProcessPriviledge::KERNEL;
     kernelProcess->_table = PageTable::fromPhysicalAddr(getCR3());
     kernelProcess->_dataSegment = ProcessSegment(0xC0000000, 0xC0100000);
     kernelProcess->_stackSegment = ProcessSegment(0xFFE00000, 0xFFFFFFFC);

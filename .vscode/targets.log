@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 17 15:06:50 2022
+# Make data base, printed on Sat Jun 25 09:22:14 2022
 
 # Variables
 
@@ -61,7 +61,7 @@ LC_NAME = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/linloir
 # environment
-SSH_CONNECTION = 192.168.8.215 53842 192.168.87.128 22
+SSH_CONNECTION = 192.168.8.215 59311 192.168.87.128 22
 # environment
 PATH = /home/linloir/.vscode-server/bin/30d9c6cd9483b2cc586687151bcbcd635f373630/bin/remote-cli:/home/linloir/SDK/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 # environment
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-16584bd3-d676-434c-a706-f9ed042bedb3.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1000/vscode-ipc-a569213f-2aee-4957-90fe-e1c7be843241.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -115,7 +115,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-XDG_SESSION_ID = 24
+XDG_SESSION_ID = 251
 # environment
 USER = linloir
 # environment
@@ -141,7 +141,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.8.215 53842 22
+SSH_CLIENT = 192.168.8.215 59311 22
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
@@ -189,9 +189,9 @@ MOTD_SHOWN = pam
 
 # Directories
 
-# . (device 2051, inode 1053165): 9 files, no impossibilities.
+# . (device 2051, inode 1053165): 10 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 10 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -241,12 +241,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 17 / storage = 138 B / avg = 8 B
-# current buf: size = 8162 B / used = 138 B / count = 17 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 18 / storage = 143 B / avg = 7 B
+# current buf: size = 8162 B / used = 143 B / count = 18 / avg = 7 B
 
-# strcache performance: lookups = 20 / hit rate = 15%
+# strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
-# Load=17/8192=0%, Rehash=0, Collisions=1/20=5%
-# Finished Make data base on Fri Jun 17 15:06:50 2022
+# Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
+# Finished Make data base on Sat Jun 25 09:22:14 2022
 
  

@@ -73,7 +73,7 @@ class Process {
 
     private:
         uint32 _pid;
-        ProcessPriviledge _priviledge;
+        ProcessPriviledge _privilege;
         PageTable* _table;
         ProcessState _state;
         int _ret;
@@ -93,7 +93,7 @@ class Process {
         Process() {}
         Process(
             //Process info
-            ProcessPriviledge priviledge, 
+            ProcessPriviledge privilege, 
             ProcessSegment dataSegment,
             Process* parent,
             uint32 ticks,
@@ -101,7 +101,7 @@ class Process {
         );
         uint32 pid();
         PageTable* pageTable();
-        ProcessPriviledge priviledge();
+        ProcessPriviledge privilege();
         ProcessStatus status();
         uint32 remainingTicks();
         bool stackIncludeAddr(uint32 addr);

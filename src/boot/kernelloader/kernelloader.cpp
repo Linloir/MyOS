@@ -37,7 +37,7 @@ void initializePaging() {
     uint32* frstLevelTableKernel = (uint32*)FRST_LEVEL_TABLE_ADDR_KERNEL;
     uint32 physAddr = 0x0;          //0KiB
     uint32 virtAddr = KERNEL_START_ADDR;   //3GiB
-    // uint32 flag = 0x3;              //P, RWX, PRIVILEDGE
+    // uint32 flag = 0x3;              //P, RWX, PRIVILEGE
     uint32 flag = 0x7;
 
     //Init second level page table (set all entries to be 0(not present))
