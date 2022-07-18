@@ -1,9 +1,0 @@
-#ifndef _OS_CONSTANT_H_
-#define _OS_CONSTANT_H_
-
-#define DATA_SELECTOR 0x08
-#define CODE_SELECTOR 0x10
-#define STACK_SELECTOR 0x18
-#define VEDIO_SELECTOR 0x20
-
-#endif

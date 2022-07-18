@@ -1,1 +1,0 @@
-build: mbr.bin bootloader.bin kernel.bin
