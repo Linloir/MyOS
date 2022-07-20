@@ -1,0 +1,10 @@
+# Ignore annoy vscode folder
+.vscode/
+
+# Ignore all generated files
+.img
+.o
+.bin
+
+# Ignore gdb history file
+/.gdb_history
