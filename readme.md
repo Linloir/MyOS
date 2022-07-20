@@ -17,3 +17,7 @@ make clean build run
 ```bash
 make debug
 ```
+
+## References
+
+Below are articles that had helped me a lot
