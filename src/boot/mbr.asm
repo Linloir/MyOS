@@ -68,7 +68,7 @@ read_sectors:
     .wait_disk:
         mov dx, 0x1F7
         in  al, dx
-        and al, 0x88
+        and al, 0x89
         cmp al, 0x08
         jnz .wait_disk
 

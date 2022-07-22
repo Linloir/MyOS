@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jul 18 20:41:14 2022
+# Make data base, printed on Fri Jul 22 15:04:29 2022
 
 # Variables
 
@@ -17,7 +15,7 @@ make: *** No rule to make target 'all'.  Stop.
 # automatic
 ?F = $(notdir $?)
 # environment
-WSLENV = VSCODE_WSL_EXT_LOCATION/up
+WSLENV = ELECTRON_RUN_AS_NODE/w:WT_SESSION::WT_PROFILE_ID
 # default
 .SHELLFLAGS := -c
 # automatic
@@ -31,9 +29,9 @@ CURDIR := /home/linloir/MyOS
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"1d735750dbb1b9066c7513078396ba0f.zh-cn","_translationsConfigFile":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/tcf.json","_cacheRoot":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn","_resolvedLanguagePackCoreLocation":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a","_corruptedFile":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"1d735750dbb1b9066c7513078396ba0f.zh-cn","_translationsConfigFile":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/tcf.json","_cacheRoot":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn","_resolvedLanguagePackCoreLocation":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/3b889b090b5ad5793f524b5d1d39fda662b96a2a","_corruptedFile":"/home/linloir/.vscode-server/data/clp/1d735750dbb1b9066c7513078396ba0f.zh-cn/corrupted.info","_languagePackSupport":true}
 # environment
-_ = /home/linloir/.vscode-server/bin/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a/node
+_ = /mnt/d/Microsoft VS Code/bin/code
 # makefile
 MAKEFILE_LIST := 
 # 'override' directive
@@ -45,7 +43,7 @@ VSCODE_CWD = /mnt/d/Microsoft VS Code
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/linloir/.vscode-server/bin/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/d/VMware/VMware Workstation/bin/:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/d/NetSarang/Xshell 7/:/mnt/d/NetSarang/Xftp 7/:/mnt/d/mingw64/bin:/mnt/d/Java/jdk-16.0.2/bin:/mnt/d/Git/cmd:/mnt/d/texlive/2021/bin/win32:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Wolfram Research/WolframScript/:/mnt/d/platform-tools:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/d/nodejs/:/mnt/c/Users/Linloir/anaconda3:/mnt/c/Users/Linloir/anaconda3/Library/mingw-w64/bin:/mnt/c/Users/Linloir/anaconda3/Library/usr/bin:/mnt/c/Users/Linloir/anaconda3/Library/bin:/mnt/c/Users/Linloir/anaconda3/Scripts:/mnt/c/Users/Linloir/AppData/Local/Microsoft/WindowsApps:/mnt/d/Bandizip/:/mnt/d/Microsoft VS Code/bin:/mnt/d/JetBains/IntelliJ IDEA Educational 2020.3.4/IntelliJ IDEA Educational Edition 2020.3.4/bin:/mnt/c/Users/Linloir/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/Linloir/.dotnet/tools:/mnt/d/flutter/bin:/mnt/c/Users/Linloir/AppData/Local/atom/bin:/mnt/c/Users/Linloir/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Linloir/AppData/Roaming/npm
+PATH = /home/linloir/.vscode-server/bin/3b889b090b5ad5793f524b5d1d39fda662b96a2a/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/PowerShell/7:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/d/VMware/VMware Workstation/bin/:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/d/NetSarang/Xshell 7/:/mnt/d/NetSarang/Xftp 7/:/mnt/d/mingw64/bin:/mnt/d/Java/jdk-16.0.2/bin:/mnt/d/Git/cmd:/mnt/d/texlive/2021/bin/win32:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Wolfram Research/WolframScript/:/mnt/d/platform-tools:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/d/nodejs/:/mnt/c/Users/Linloir/anaconda3:/mnt/c/Users/Linloir/anaconda3/Library/mingw-w64/bin:/mnt/c/Users/Linloir/anaconda3/Library/usr/bin:/mnt/c/Users/Linloir/anaconda3/Library/bin:/mnt/c/Users/Linloir/anaconda3/Scripts:/mnt/c/Users/Linloir/AppData/Local/Microsoft/WindowsApps:/mnt/d/Bandizip/:/mnt/d/Microsoft VS Code/bin:/mnt/d/JetBains/IntelliJ IDEA Educational 2020.3.4/IntelliJ IDEA Educational Edition 2020.3.4/bin:/mnt/c/Users/Linloir/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/Linloir/.dotnet/tools:/mnt/d/flutter/bin:/mnt/c/Users/Linloir/AppData/Local/atom/bin:/mnt/c/Users/Linloir/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Linloir/AppData/Roaming/npm
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -53,7 +51,7 @@ XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-6ed05657-f00c-409a-8bb0-4ffe66cb74e1.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-f41ebbe6-e54a-49cb-bd9b-d6e23944fc30.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -67,9 +65,11 @@ PWD = /home/linloir/MyOS
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/2405_interop
+WSL_INTEROP = /run/WSL/8_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
+# environment
+WT_SESSION = 1c2069cd-4e96-42b3-aede-bf0e73dfd806
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -91,7 +91,7 @@ MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 0
+SHLVL = 1
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -99,7 +99,7 @@ USER = linloir
 # makefile
 .DEFAULT_GOAL := 
 # environment
-NAME = LAPTOP-LINLOIR
+NAME = Code
 # environment
 LESS = -R
 # automatic
@@ -126,6 +126,8 @@ MFLAGS = -pqrR
 +F = $(notdir $+)
 # environment
 VSCODE_HANDLES_SIGPIPE = true
+# environment
+WT_PROFILE_ID = {574e775e-4f2a-5b96-ac1e-a2962a402336}
 # default
 MAKEFILES := 
 # automatic
@@ -136,6 +138,8 @@ PAGER = less
 LC_ALL = C
 # environment
 HOSTTYPE = x86_64
+# environment
+P9K_TTY = old
 # automatic
 ^F = $(notdir $^)
 # default
@@ -151,9 +155,11 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
+_P9K_TTY = /dev/pts/0
+# environment
 WSL_DISTRO_NAME = Ubuntu-20.04
 # variable set hash-table stats:
-# Load=70/1024=7%, Rehash=0, Collisions=4/92=4%
+# Load=74/1024=7%, Rehash=0, Collisions=4/96=4%
 
 # Pattern-specific Variable Values
 
@@ -161,9 +167,9 @@ WSL_DISTRO_NAME = Ubuntu-20.04
 
 # Directories
 
-# . (device 2080, inode 57730): 7 files, no impossibilities.
+# . (device 2080, inode 57730): 10 files, no impossibilities.
 
-# 7 files, no impossibilities in 1 directories.
+# 10 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -213,12 +219,14 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 15 / storage = 117 B / avg = 7 B
-# current buf: size = 8162 B / used = 117 B / count = 15 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 18 / storage = 151 B / avg = 8 B
+# current buf: size = 8162 B / used = 151 B / count = 18 / avg = 8 B
 
-# strcache performance: lookups = 18 / hit rate = 16%
+# strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
-# Load=15/8192=0%, Rehash=0, Collisions=1/18=6%
-# Finished Make data base on Mon Jul 18 20:41:14 2022
+# Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
+# Finished Make data base on Fri Jul 22 15:04:29 2022
 
  
+make: *** No rule to make target 'all'.  Stop.
+
