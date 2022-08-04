@@ -98,15 +98,15 @@ class HDDManager {
         HDDManager() {}
     private:
         const Port<uint16> _datPort = 0x1F0;
-        const Port<uint8> _errPort = Port<uint8>(0x1F1, Port<uint8>::READ);
-        const Port<uint8> _funcPort = Port<uint8>(0x1F1, Port<uint8>::WRITE);
+        const PortReadOnly<uint8> _errPort = 0x1F1;
+        const PortWriteOnly<uint8> _funcPort = 0x1F1;
         const Port<uint8> _secCntPort = 0x1F2;
         const Port<uint8> _lbaLoPort = 0x1F3;
         const Port<uint8> _lbaMidPort = 0x1F4;
         const Port<uint8> _lbaHiPort = 0x1F5;
         const Port<uint8> _drivePort = 0x1F6;
-        const Port<uint8> _statusPort = Port<uint8>(0x1F7, Port<uint8>::READ);
-        const Port<uint8> _cmdPort = Port<uint8>(0x1F7, Port<uint8>::WRITE);
+        const PortReadOnly<uint8> _statusPort = 0x1F7;
+        const PortWriteOnly<uint8> _cmdPort = 0x1F7;
         bool _readOneSector(uint idx, byte* dst);
         bool _writeOneSector(uint idx, byte* src);
     public:

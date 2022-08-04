@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-07-24 23:11:32
- * LastEditTime : 2022-08-03 18:23:22
+ * LastEditTime : 2022-08-04 15:43:32
  * Description  : 
  */
 
@@ -13,33 +13,40 @@
 template<typename T>
 class Port {
     public:
-        enum ATTR {
-            READ    = 1,
-            WRITE   = 1 << 1
-        };
-    public:
-        Port(uint16 port);
-        Port(uint16 port, ATTR attr);
+        Port(uint16 port): _port(port) {}
     private:
         const uint16 _port;
-        const uint16 _attr;
     public:
         T read() const;
         void write(T data) const;
 };
 
 template<typename T>
-Port<T>::Port(uint16 port): _port(port), _attr(static_cast<uint32>(ATTR::READ) | static_cast<uint32>(ATTR::WRITE)) {}
+class PortWriteOnly {
+    public:
+        PortWriteOnly(uint16 port) : _port(port) {}
+    private:
+        const Port<T> _port;
+    public:
+        void write(T data) const { 
+            _port.write(data);
+        }
+};
 
 template<typename T>
-Port<T>::Port(uint16 port, Port<T>::ATTR attr): _port(port), _attr(static_cast<uint32>(attr)) {}
+class PortReadOnly {
+    public:
+        PortReadOnly(uint16 port) : _port(port) {}
+    private:
+        const Port<T> _port;
+    public:
+        T read() const {
+            return _port.read();
+        }
+};
 
 template<typename T>
 T Port<T>::read() const {
-    if((_attr & static_cast<uint32>(ATTR::READ)) == 0) {
-        return 0;
-    }
-
     T dat;
     if(sizeof(dat) == 1) {
         uint8 _dat = static_cast<uint8>(dat);
@@ -82,10 +89,6 @@ T Port<T>::read() const {
 
 template<typename T>
 void Port<T>::write(T data) const {
-    if((_attr & static_cast<uint32>(ATTR::WRITE)) == 0) {
-        return;
-    }
-
     if(sizeof(data) == 1) {
         asm volatile(
             "movb %[i], %%al \n\t"

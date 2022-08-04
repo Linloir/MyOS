@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-07-26 21:39:22
- * LastEditTime : 2022-08-04 12:17:27
+ * LastEditTime : 2022-08-04 15:14:59
  * Description  : VGA Interface
  */
 
@@ -45,7 +45,7 @@ class VGA {
         VGAChar* _displayMatrix;
         uint32 _displayWidth;
         uint32 _displayHeight;
-        const Port<uint8> _cmdPort = Port<uint8>(0x3D4, Port<uint8>::WRITE);
+        const PortWriteOnly<uint8> _cmdPort = 0x3D4;
         const Port<uint8> _dataPort = 0x3D5;
     public:
         void enableTextCursor(uint8 strtScanLine, uint8 endScanLine);
