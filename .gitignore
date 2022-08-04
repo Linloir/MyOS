@@ -2,9 +2,11 @@
 .vscode/
 
 # Ignore all generated files
-.img
-.o
-.bin
+*.img
+*.o
+*.bin
+*.bin.tags
+*.log
 
 # Ignore gdb history file
 /.gdb_history
