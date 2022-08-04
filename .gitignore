@@ -9,4 +9,4 @@
 *.log
 
 # Ignore gdb history file
-/.gdb_history
+build/.gdb_history
