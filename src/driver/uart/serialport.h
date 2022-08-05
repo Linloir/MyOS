@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-08-04 14:53:03
- * LastEditTime : 2022-08-04 16:49:47
+ * LastEditTime : 2022-08-04 18:04:44
  * Description  : Serial port interface
  */
 
@@ -68,6 +68,7 @@ class SerialPort {
     public:
         void init();
         void send(uint8 data);
+        void send(const char* str);
         uint8 receive();
 };
 

@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-08-04 11:10:39
- * LastEditTime : 2022-08-04 17:30:20
+ * LastEditTime : 2022-08-04 18:19:16
  * Description  : Kernel
  */
 
@@ -15,9 +15,7 @@ extern "C" void kernel() {
     scrn.printString("Enter kernel!");
     SerialPort uart(0x3F8);
     uart.init();
-    char message[19] = "Hello\nworld!\n\r";
-    for(int i = 0; i < 18; i++) {
-        uart.send(message[i]);
-    }
+    uart.send("\n");
+    uart.send("Hello world!\n");
     while(true) {}
 }

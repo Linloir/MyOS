@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-07-24 22:09:52
- * LastEditTime : 2022-08-04 12:23:53
+ * LastEditTime : 2022-08-04 20:59:40
  * Description  : 
  */
 
@@ -9,8 +9,8 @@
 
 extern "C" void kernelLoader() {
     uint32 kernelSize = readKernel();
-    // PageTable* pageTable = enablePaging();
-    // loadKernel(pageTable, kernelSize);
+    PageTable* pageTable = enablePaging();
+    //loadKernel(pageTable, kernelSize);
     boot();
 }
 
@@ -37,7 +37,57 @@ uint32 readKernel() {
 }
 
 PageTable* enablePaging() {
-    return (PageTable*)(0);
+
+    // Map first 1MiB memory
+    uint32 mainTableAddress = 0x0;
+    uint32 subTableAddress = 0x1000;
+    PageTable* mainTable = PageTable::from(mainTableAddress);
+    PageTable* subTable = PageTable::from(subTableAddress);
+    mainTable->at(0) = PageTableEntry(
+        subTableAddress,
+        PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE
+    );
+    for(uint32 i = 0; i < 256; i++) {
+        subTable->at(i) = PageTableEntry(
+            i << 12,
+            PageFlag::PRESENT | PageFlag::WRITABLE
+        );
+    }
+
+    // Map spaces reserved for stack
+    uint32 stackTopAddress = 0;
+    uint32 stackBottomAddress = 0xFFE00000;
+    subTableAddress = 0x2000;
+    subTable = PageTable::from(subTableAddress);
+    // Map subtable for stack in main table entry
+    mainTable->at(stackBottomAddress >> 22) = PageTableEntry(
+        subTableAddress,
+        PageFlag::PRESENT | PageFlag::WRITABLE | PageFlag::USER_ACCESSIBLE
+    );
+    // Map stack
+    uint32 stackFirstEntry = (stackBottomAddress << 10) >> 22;
+    uint32 stackLoaderEntryCnt = (stackTopAddress - stackBottomAddress + 0x1000 - 1) >> 12;
+    for(int i = 0; i < stackLoaderEntryCnt; i++) {
+        uint32 currentEntry = stackFirstEntry + i;
+        uint32 currentAddress = stackBottomAddress + (i << 12);
+        subTable->at(currentEntry) = PageTableEntry(
+            currentAddress,
+            PageFlag::PRESENT | PageFlag::WRITABLE
+        );
+    }
+
+    // Enable paging
+    asm volatile(
+        "movl %[table], %%cr3\n\t"
+        "movl %%cr0, %%eax\n\t"
+        "orl $0x80000000, %%eax\n\t"
+        "movl %%eax, %%cr0"
+        : 
+        : [table]"r"(mainTableAddress)
+        : 
+    );
+
+    return mainTable;
 }
 
 void loadKernel(PageTable* pgtable, uint32 kernelSize) {

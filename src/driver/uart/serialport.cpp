@@ -1,7 +1,7 @@
 /*** 
  * Author       : Linloir
  * Date         : 2022-08-04 15:29:01
- * LastEditTime : 2022-08-04 16:58:00
+ * LastEditTime : 2022-08-04 18:05:10
  * Description  : Serial port interface
  */
 
@@ -111,6 +111,12 @@ void SerialPort::send(uint8 data) {
     while(!_lineStatus().contains(LineStatus::TRANSMISSION_BUFFER_EMPTY)) {}
     //Send data
     _dataPort.write(data);
+}
+
+void SerialPort::send(const char* str) {
+    for(int i = 0; str[i]; i++) {
+        send(str[i]);
+    }
 }
 
 uint8 SerialPort::receive() {
