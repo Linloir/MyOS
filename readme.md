@@ -9,8 +9,10 @@ Every commit corresponds to a chapter of my journal
 ```bash
 clone https://github.com/Linloir/MyOS.git
 cd MyOS/build
-make clean build run
+sudo make clean build && make run
 ```
+
+**Note**: In order to place kernel file inside the file system, losetup and mount command is used in makefile, which required root privilege. Therefore sudo is needed for make build
 
 ## Debug
 
