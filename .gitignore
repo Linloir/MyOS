@@ -10,3 +10,4 @@
 
 # Ignore gdb history file
 build/.gdb_history
+build/stdio
