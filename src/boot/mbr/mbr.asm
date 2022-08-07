@@ -2,6 +2,9 @@
 [org 0x7C00]  ; Indicates codes below starts at 0x7C00
 [bits 16]   ; Indicates codes below run in 16-bit mode
 
+; Reserve space for memory size storage
+dd 0
+
 ; Initialize registers
 xor ax, ax  ; ax = 0
 mov ds, ax  ; ds = 0
@@ -20,6 +23,12 @@ push BOOTLOADER_SECTOR_START_27_16
 push BOOTLOADER_SECTOR_START_15_0
 call read_sectors
 add sp, 8
+
+; Fetch_memory_size
+mov ax, 0xE801
+int 15h
+mov word [0x7C00], ax
+mov word [0x7C00+2], bx
 
 ; Jump to bootloader
 jmp BOOTLOADER_LOAD_ADDRESS

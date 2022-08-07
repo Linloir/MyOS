@@ -17,7 +17,7 @@ KERNEL_SRC := $(shell find '$(SRC_PATH)/kernel' -name '*.cpp')
 KERNEL_OBJ := $(patsubst %.cpp,%.o,$(notdir $(KERNEL_SRC)))
 
 .PHONY:
-build: mbr.bin bootloader.bin kernelloader.bin kernelloaderdebug.o kernel.bin kerneldebug.o
+build: mbr.bin bootloader.bin kernelloader.bin kernelloaderdebug.o kernel.elf
 	qemu-img create $(RUN_PATH)/hd.img 32m
 	dd if=mbr.bin of=$(RUN_PATH)/hd.img bs=512 count=1 seek=0 conv=notrunc
 	dd if=bootloader.bin of=$(RUN_PATH)/hd.img bs=512 count=4 seek=1 conv=notrunc
@@ -30,7 +30,7 @@ build: mbr.bin bootloader.bin kernelloader.bin kernelloaderdebug.o kernel.bin ke
 	mkdir -p /mnt/osimg
 	mount /dev/loop0p1 /mnt/osimg
 	mkdir /mnt/osimg/system
-	cp kernel.bin /mnt/osimg/system/kernel.bin
+	cp kernel.elf /mnt/osimg/system/kernel.elf
 	umount /mnt/osimg
 	rm -rf /mnt/osimg
 	losetup -d /dev/loop0
@@ -45,19 +45,13 @@ bootloader.bin: $(SRC_PATH)/boot/bl/bootloader.asm
 kernelloader.bin: klentry.o kernelloader.o $(LIB_OBJ)
 	$(LINKER) -o $@ $^ -m elf_i386 -N -T boot.ld --oformat binary
 
-kernel.bin: kernelentry.o $(KERNEL_OBJ) $(LIB_OBJ)
-	$(LINKER) -o $@ $^ -m elf_i386 -N -T kernel.ld --oformat binary
+kernel.elf: $(KERNEL_OBJ) $(LIB_OBJ)
+	$(LINKER) -o $@ $^ -m elf_i386 -N -T kernel.ld
 
 kernelloaderdebug.o: klentry.o kernelloader.o $(LIB_OBJ)
 	$(LINKER) -o $@ $^ -m elf_i386 -N -T boot.ld
 
-kerneldebug.o: kernelentry.o $(KERNEL_OBJ) $(LIB_OBJ)
-	$(LINKER) -o $@ $^ -m elf_i386 -N -T kernel.ld
-
 klentry.o: $(SRC_PATH)/boot/kl/klentry.asm
-	$(ASM_COMPILER) -o $@ -g -f elf32 $(INCLUDE_PATH) $^
-
-kernelentry.o: $(SRC_PATH)/kernel/kernelentry.asm
 	$(ASM_COMPILER) -o $@ -g -f elf32 $(INCLUDE_PATH) $^
 
 $(CPP_OBJ): $(CPP_SRC)
