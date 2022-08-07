@@ -8,6 +8,7 @@
 *.tags
 *.txt
 *.log
+*.elf
 
 # Ignore gdb history file
 build/.gdb_history

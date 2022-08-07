@@ -59,7 +59,7 @@ $(CPP_OBJ): $(CPP_SRC)
 
 .PHONY:
 clean:
-	rm -f *.o* *.bin
+	rm -f *.o* *.bin *.elf
 	rm -f $(RUN_PATH)/*.img
 
 .PHONY:
