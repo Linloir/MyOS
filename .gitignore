@@ -5,7 +5,8 @@
 *.img
 *.o
 *.bin
-*.bin.tags
+*.tags
+*.txt
 *.log
 
 # Ignore gdb history file
