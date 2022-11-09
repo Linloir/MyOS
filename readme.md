@@ -1,6 +1,6 @@
 # MyOS
 
-This is the synchronous code of my [Operating System Implementation Journal](https://blog.linloir.xyz/2022/07/15/os-journal-vol-1/).
+This is the synchronous code of my [Operating System Implementation Journal](https://blog.linloir.cn/2022/07/15/os-journal-vol-1/).
 
 Every commit corresponds to a chapter of my journal
 
